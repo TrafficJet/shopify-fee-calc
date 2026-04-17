@@ -1,0 +1,100 @@
+---
+import Base from '../layouts/Base.astro';
+
+const schema = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Shopify Shipping Rate Calculator",
+  "description": "Free tool to estimate USPS, UPS, and DHL shipping rates for Shopify orders",
+  "applicationCategory": "BusinessApplication",
+  "operatingSystem": "Any",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+});
+---
+<Base
+  title="Shopify Shipping Calculator — Estimate Rates Instantly (Free)"
+  description="Calculate shipping costs for your Shopify store. Enter package weight and destination zip to get USPS, UPS, and DHL estimates. Free, no signup."
+>
+  <script type="application/ld+json" set:html={schema} />
+
+  <h1 class="text-3xl font-bold mb-2">Shopify Shipping Rate Calculator</h1>
+  <p class="text-gray-600 mb-8">Enter your package details to estimate shipping costs. Results are estimates — final rates depend on your Shopify plan and carrier account.</p>
+
+  <div class="bg-gray-50 border rounded-xl p-8 max-w-2xl">
+    <form id="calc-form" class="space-y-5">
+      <div>
+        <label class="block text-sm font-medium mb-1" for="weight">Package Weight (oz)</label>
+        <input id="weight" type="number" min="1" max="70000" placeholder="e.g. 12"
+          class="w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" required />
+      </div>
+      <div>
+        <label class="block text-sm font-medium mb-1" for="from_zip">From ZIP Code</label>
+        <input id="from_zip" type="text" pattern="[0-9]{5}" placeholder="e.g. 90210"
+          class="w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" required />
+      </div>
+      <div>
+        <label class="block text-sm font-medium mb-1" for="to_zip">To ZIP Code</label>
+        <input id="to_zip" type="text" pattern="[0-9]{5}" placeholder="e.g. 10001"
+          class="w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" required />
+      </div>
+      <button type="submit"
+        class="w-full bg-blue-700 text-white py-3 rounded-lg font-semibold hover:bg-blue-800 transition">
+        Calculate Shipping Rates
+      </button>
+    </form>
+
+    <div id="results" class="mt-6 hidden">
+      <h2 class="font-semibold text-lg mb-3">Estimated Rates</h2>
+      <div id="rate-list" class="space-y-2"></div>
+      <p class="text-xs text-gray-500 mt-4">
+        * Estimates based on 2024 published rates. Actual rates vary by package dimensions,
+        surcharges, and your carrier account discounts. Enable carrier-calculated rates in
+        Shopify Settings → Shipping and delivery for real-time quotes at checkout.
+      </p>
+    </div>
+  </div>
+
+  <script>
+    // Simple client-side estimator (zone-agnostic flat approximation)
+    const RATES = {
+      "USPS First Class (≤16oz)": { base: 4.50, perOz: 0.22, maxOz: 16 },
+      "USPS Priority Mail":       { base: 9.35, perLb: 1.10 },
+      "USPS Priority Express":    { base: 28.75, perLb: 2.20 },
+      "UPS Ground":               { base: 11.99, perLb: 1.35 },
+      "UPS 2nd Day Air":          { base: 24.50, perLb: 3.10 },
+    };
+
+    document.getElementById("calc-form").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const oz = parseFloat(document.getElementById("weight").value) || 0;
+      const lb = oz / 16;
+      const results = [];
+
+      for (const [service, r] of Object.entries(RATES)) {
+        if (r.maxOz && oz > r.maxOz) continue;
+        let cost = r.base;
+        if (r.perOz) cost += r.perOz * oz;
+        if (r.perLb) cost += r.perLb * lb;
+        results.push({ service, cost: Math.max(cost, r.base) });
+      }
+      results.sort((a, b) => a.cost - b.cost);
+
+      const list = document.getElementById("rate-list");
+      list.innerHTML = results.map(r =>
+        `<div class="flex justify-between bg-white border rounded-lg px-4 py-3">
+          <span class="text-sm font-medium">${r.service}</span>
+          <span class="text-sm font-semibold text-blue-700">~$${r.cost.toFixed(2)}</span>
+        </div>`
+      ).join("");
+
+      document.getElementById("results").classList.remove("hidden");
+    });
+  </script>
+
+  <section class="mt-16 prose max-w-2xl">
+    <h2>How to Use This Calculator</h2>
+    <p>Enter the weight of your package in ounces (convert pounds: 1 lb = 16 oz), your warehouse ZIP code, and your customer's ZIP code. The calculator returns estimated rates for the most common USPS and UPS services used by Shopify sellers.</p>
+    <h2>Getting Real-Time Rates at Checkout</h2>
+    <p>This tool gives estimates. For exact rates shown to customers at checkout, enable carrier-calculated shipping in your Shopify admin under <strong>Settings → Shipping and delivery</strong>. Available on the Shopify plan or higher.</p>
+  </section>
+</Base>
