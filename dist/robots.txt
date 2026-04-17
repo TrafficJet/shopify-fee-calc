@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://shopify-shipping-calc.com/sitemap-index.xml
