@@ -1,0 +1,162 @@
+---
+import { feePages, getFeePageBySlug } from "../../data/fee-pages";
+import Base from "../../layouts/Base.astro";
+
+export function getStaticPaths() {
+  return feePages.map(p => ({ params: { slug: p.slug } }));
+}
+
+const { slug } = Astro.params;
+const page = getFeePageBySlug(slug)!;
+
+const schema = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": page.faq.map(({ q, a }) => ({
+    "@type": "Question",
+    "name": q,
+    "acceptedAnswer": { "@type": "Answer", "text": a }
+  }))
+});
+---
+<Base title={page.metaTitle} description={page.metaDesc}>
+  <script type="application/ld+json" set:html={schema} />
+
+  <h1 class="text-3xl font-bold mb-3">{page.h1}</h1>
+  <p class="text-gray-600 mb-8 text-lg max-w-2xl">{page.intro}</p>
+
+  <div class="bg-gray-50 border rounded-xl p-8 max-w-2xl mb-12">
+    {page.note && (
+      <div class="bg-blue-50 border border-blue-200 rounded-lg px-4 py-3 mb-6 text-sm text-blue-800">
+        💡 {page.note}
+      </div>
+    )}
+    <form id="calc-form" class="space-y-5">
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm font-medium mb-1" for="price">Selling Price ($)</label>
+          <input id="price" type="number" min="0" step="0.01" placeholder="29.99" required
+            class="w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-1" for="cogs">Product Cost / COGS ($)</label>
+          <input id="cogs" type="number" min="0" step="0.01" placeholder="8.00" required
+            class="w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+        </div>
+      </div>
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm font-medium mb-1" for="shipping">Shipping Cost ($)</label>
+          <input id="shipping" type="number" min="0" step="0.01" placeholder="4.50"
+            class="w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-1" for="plan">Shopify Plan</label>
+          <select id="plan" class="w-full border rounded-lg px-4 py-2">
+            <option value="0.02,0.30">Basic — 2% + 30¢</option>
+            <option value="0.01,0.30">Shopify — 1% + 30¢</option>
+            <option value="0.005,0.30">Advanced — 0.5% + 30¢</option>
+          </select>
+        </div>
+      </div>
+      <button type="submit"
+        class="w-full bg-blue-700 text-white py-3 rounded-lg font-semibold hover:bg-blue-800 transition">
+        Calculate My Shopify Fees
+      </button>
+    </form>
+
+    <div id="results" class="mt-6 hidden">
+      <h2 class="font-semibold text-lg mb-4">Fee Breakdown</h2>
+      <div class="space-y-2" id="breakdown"></div>
+      <div class="mt-4 p-4 bg-white border-2 border-blue-700 rounded-xl flex justify-between items-center">
+        <span class="font-semibold">Net Profit</span>
+        <span id="net-profit" class="text-2xl font-bold text-blue-700"></span>
+      </div>
+      <div class="mt-2 p-3 bg-white border rounded-xl flex justify-between">
+        <span class="text-sm text-gray-600">Profit Margin</span>
+        <span id="margin-pct" class="font-semibold"></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="mb-16 bg-gray-50 border rounded-xl p-6 max-w-2xl">
+    <h2 class="text-lg font-semibold mb-4">Shopify Fee Rate by Plan</h2>
+    <table class="w-full text-sm">
+      <thead>
+        <tr class="text-left text-gray-500 border-b">
+          <th class="pb-2 font-medium">Plan</th>
+          <th class="pb-2 font-medium">Monthly</th>
+          <th class="pb-2 font-medium">Transaction Fee</th>
+          <th class="pb-2 font-medium">Processing (online)</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-gray-100">
+        <tr class="py-2"><td class="py-2">Basic</td><td>$39</td><td>2% (0% with SP)</td><td>2.9% + 30¢</td></tr>
+        <tr class="py-2"><td class="py-2">Shopify</td><td>$105</td><td>1% (0% with SP)</td><td>2.6% + 30¢</td></tr>
+        <tr class="py-2"><td class="py-2">Advanced</td><td>$399</td><td>0.5% (0% with SP)</td><td>2.4% + 30¢</td></tr>
+        <tr class="py-2"><td class="py-2">Plus</td><td>$2,300+</td><td>0.15% (0% with SP)</td><td>2.15% + 30¢</td></tr>
+      </tbody>
+    </table>
+    <p class="text-xs text-gray-500 mt-3">SP = Shopify Payments. Enabling Shopify Payments waives the transaction fee.</p>
+  </div>
+
+  <section class="max-w-2xl mb-16">
+    <h2 class="text-2xl font-bold mb-6">Frequently Asked Questions</h2>
+    <div class="space-y-6">
+      {page.faq.map(({ q, a }) => (
+        <div class="border rounded-xl p-6">
+          <h3 class="font-semibold mb-2">{q}</h3>
+          <p class="text-gray-600 text-sm leading-relaxed">{a}</p>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <div class="bg-blue-50 border border-blue-200 rounded-xl p-6 max-w-2xl text-center">
+    <p class="text-sm text-gray-700 mb-3">Also try our full-featured calculators:</p>
+    <div class="flex gap-3 justify-center flex-wrap">
+      <a href="/profit-margin/" class="text-sm text-blue-700 font-medium hover:underline">Profit Margin Calculator</a>
+      <span class="text-gray-300">·</span>
+      <a href="/break-even/" class="text-sm text-blue-700 font-medium hover:underline">Break-Even Calculator</a>
+      <span class="text-gray-300">·</span>
+      <a href="/free-shipping-threshold/" class="text-sm text-blue-700 font-medium hover:underline">Free Shipping Threshold</a>
+    </div>
+  </div>
+</Base>
+
+<script>
+  document.getElementById('calc-form')!.addEventListener('submit', e => {
+    e.preventDefault();
+    const price = parseFloat((document.getElementById('price') as HTMLInputElement).value) || 0;
+    const cogs = parseFloat((document.getElementById('cogs') as HTMLInputElement).value) || 0;
+    const shipping = parseFloat((document.getElementById('shipping') as HTMLInputElement).value) || 0;
+    const [pctStr, flatStr] = (document.getElementById('plan') as HTMLSelectElement).value.split(',');
+    const txPct = parseFloat(pctStr);
+    const txFlat = parseFloat(flatStr);
+
+    const shopifyFee = price * txPct + txFlat;
+    const totalCost = cogs + shipping + shopifyFee;
+    const netProfit = price - totalCost;
+    const margin = price > 0 ? (netProfit / price) * 100 : 0;
+
+    const rows: [string, number][] = [
+      ['Selling Price', price],
+      ['− Product Cost (COGS)', -cogs],
+      ['− Shipping Cost', -shipping],
+      ['− Shopify Transaction + Processing Fee', -shopifyFee],
+    ];
+
+    document.getElementById('breakdown')!.innerHTML = rows.map(([label, val]) =>
+      `<div class="flex justify-between bg-white border rounded-lg px-4 py-2 text-sm">
+        <span class="text-gray-700">${label}</span>
+        <span class="${val >= 0 ? 'text-gray-900' : 'text-red-600'} font-medium">${val >= 0 ? '+' : ''}$${Math.abs(val).toFixed(2)}</span>
+      </div>`
+    ).join('');
+
+    document.getElementById('net-profit')!.textContent = `$${netProfit.toFixed(2)}`;
+    const marginEl = document.getElementById('margin-pct')!;
+    marginEl.textContent = `${margin.toFixed(1)}%`;
+    marginEl.className = `font-semibold ${margin >= 20 ? 'text-green-600' : margin >= 10 ? 'text-yellow-600' : 'text-red-600'}`;
+    document.getElementById('results')!.classList.remove('hidden');
+  });
+</script>
