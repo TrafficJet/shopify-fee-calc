@@ -1,0 +1,141 @@
+---
+import Base from '../layouts/Base.astro';
+
+const schema = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Shopify Break-Even Calculator",
+  "description": "Calculate how many units you need to sell to cover fixed and variable costs on Shopify",
+  "applicationCategory": "BusinessApplication",
+  "operatingSystem": "Any",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+});
+---
+<Base
+  title="Shopify Break-Even Calculator — Units to Sell Before Profit (Free)"
+  description="Find out exactly how many units you need to sell to cover your fixed costs on Shopify. Includes subscription, ads, COGS, and transaction fees. Free tool."
+>
+  <script type="application/ld+json" set:html={schema} />
+
+  <h1 class="text-3xl font-bold mb-2">Shopify Break-Even Calculator</h1>
+  <p class="text-gray-600 mb-8">Enter your fixed monthly costs and per-unit costs to find the minimum number of sales you need to break even each month.</p>
+
+  <div class="bg-gray-50 border rounded-xl p-8 max-w-2xl">
+    <form id="calc-form" class="space-y-5">
+      <div>
+        <p class="text-sm font-semibold text-gray-700 mb-3">Fixed Monthly Costs</p>
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-medium mb-1" for="shopify_plan">Shopify Plan ($)</label>
+            <input id="shopify_plan" type="number" min="0" placeholder="39" value="39"
+              class="w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-1" for="ads">Monthly Ad Spend ($)</label>
+            <input id="ads" type="number" min="0" placeholder="500"
+              class="w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-1" for="apps">Apps & Tools ($)</label>
+            <input id="apps" type="number" min="0" placeholder="50"
+              class="w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-1" for="other_fixed">Other Fixed ($)</label>
+            <input id="other_fixed" type="number" min="0" placeholder="0"
+              class="w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+          </div>
+        </div>
+      </div>
+      <div>
+        <p class="text-sm font-semibold text-gray-700 mb-3">Per-Unit Costs</p>
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-medium mb-1" for="selling_price">Selling Price ($)</label>
+            <input id="selling_price" type="number" min="0" step="0.01" placeholder="49.99" required
+              class="w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-1" for="unit_cogs">Product Cost ($)</label>
+            <input id="unit_cogs" type="number" min="0" step="0.01" placeholder="12.00" required
+              class="w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-1" for="unit_shipping">Shipping ($)</label>
+            <input id="unit_shipping" type="number" min="0" step="0.01" placeholder="5.50"
+              class="w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-1" for="tx_fee">Transaction Fee (%)</label>
+            <input id="tx_fee" type="number" min="0" max="10" step="0.1" placeholder="2" value="2"
+              class="w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+          </div>
+        </div>
+      </div>
+      <button type="submit"
+        class="w-full bg-blue-700 text-white py-3 rounded-lg font-semibold hover:bg-blue-800 transition">
+        Calculate Break-Even Point
+      </button>
+    </form>
+
+    <div id="results" class="mt-6 hidden space-y-3">
+      <h2 class="font-semibold text-lg">Break-Even Analysis</h2>
+      <div class="grid grid-cols-2 gap-3">
+        <div class="bg-white border-2 border-blue-700 rounded-xl p-4 text-center">
+          <div id="be-units" class="text-3xl font-bold text-blue-700"></div>
+          <div class="text-sm text-gray-500 mt-1">Units / Month</div>
+        </div>
+        <div class="bg-white border rounded-xl p-4 text-center">
+          <div id="be-revenue" class="text-3xl font-bold text-gray-800"></div>
+          <div class="text-sm text-gray-500 mt-1">Revenue Needed</div>
+        </div>
+      </div>
+      <div class="bg-white border rounded-xl p-4 text-sm space-y-2" id="cost-breakdown"></div>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('calc-form').addEventListener('submit', e => {
+      e.preventDefault();
+      const fixed = (parseFloat(document.getElementById('shopify_plan').value) || 0)
+        + (parseFloat(document.getElementById('ads').value) || 0)
+        + (parseFloat(document.getElementById('apps').value) || 0)
+        + (parseFloat(document.getElementById('other_fixed').value) || 0);
+
+      const price = parseFloat(document.getElementById('selling_price').value) || 0;
+      const cogs = parseFloat(document.getElementById('unit_cogs').value) || 0;
+      const ship = parseFloat(document.getElementById('unit_shipping').value) || 0;
+      const txPct = (parseFloat(document.getElementById('tx_fee').value) || 0) / 100;
+
+      const varCost = cogs + ship + (price * txPct) + 0.30;
+      const contribution = price - varCost;
+
+      if (contribution <= 0) {
+        document.getElementById('results').classList.remove('hidden');
+        document.getElementById('be-units').textContent = '∞';
+        document.getElementById('be-revenue').textContent = '∞';
+        document.getElementById('cost-breakdown').innerHTML = '<p class="text-red-600">Variable cost exceeds selling price — not profitable at any volume.</p>';
+        return;
+      }
+
+      const beUnits = Math.ceil(fixed / contribution);
+      const beRevenue = beUnits * price;
+
+      document.getElementById('be-units').textContent = beUnits.toLocaleString();
+      document.getElementById('be-revenue').textContent = `$${beRevenue.toLocaleString()}`;
+      document.getElementById('cost-breakdown').innerHTML = `
+        <div class="flex justify-between"><span class="text-gray-600">Total Fixed Costs</span><span>$${fixed.toFixed(2)}/mo</span></div>
+        <div class="flex justify-between"><span class="text-gray-600">Variable Cost per Unit</span><span>$${varCost.toFixed(2)}</span></div>
+        <div class="flex justify-between"><span class="text-gray-600">Contribution Margin per Unit</span><span class="text-green-600">$${contribution.toFixed(2)}</span></div>
+      `;
+      document.getElementById('results').classList.remove('hidden');
+    });
+  </script>
+
+  <section class="mt-16 prose max-w-2xl">
+    <h2>How Break-Even Analysis Works</h2>
+    <p>Break-even point = Fixed Costs ÷ Contribution Margin per Unit. Your contribution margin is the selling price minus all variable costs per order (COGS, shipping, transaction fees).</p>
+    <h2>Using Break-Even to Set Ad Budgets</h2>
+    <p>If your break-even is 100 units and your current ROAS delivers 50 units, you're losing money. Use this calculator to set realistic revenue targets before launching paid campaigns.</p>
+  </section>
+</Base>

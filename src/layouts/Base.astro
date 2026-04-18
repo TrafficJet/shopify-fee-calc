@@ -25,6 +25,7 @@ const GA_ID = 'G-3LG69MHKYE';
   <meta name="twitter:title" content={title} />
   <meta name="twitter:description" content={description} />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
   <link rel="preconnect" href="https://www.googletagmanager.com" />
   <link rel="dns-prefetch" href="https://www.google-analytics.com" />
   <slot name="head" />
@@ -34,9 +35,11 @@ const GA_ID = 'G-3LG69MHKYE';
     <nav class="max-w-5xl mx-auto flex items-center justify-between">
       <a href="/" class="text-lg font-bold text-blue-700">ShopifyCalc</a>
       <ul class="flex gap-6 text-sm text-gray-600">
-        <li><a href="/shipping-calculator/" class="hover:text-blue-700">Shipping Calculator</a></li>
-        <li><a href="/profit-margin/" class="hover:text-blue-700">Profit Margin</a></li>
+        <li><a href="/shipping-calculator/" class="hover:text-blue-700">Shipping</a></li>
+        <li><a href="/profit-margin/" class="hover:text-blue-700">Profit</a></li>
+        <li><a href="/break-even/" class="hover:text-blue-700">Break-Even</a></li>
         <li><a href="/blog/" class="hover:text-blue-700">Blog</a></li>
+        <li><a href="/about/" class="hover:text-blue-700">About</a></li>
       </ul>
     </nav>
   </header>

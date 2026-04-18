@@ -1,0 +1,121 @@
+---
+import Base from '../layouts/Base.astro';
+
+const schema = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Shopify Profit Margin Calculator",
+  "description": "Calculate net profit after Shopify fees, payment processing, COGS, and shipping costs",
+  "applicationCategory": "BusinessApplication",
+  "operatingSystem": "Any",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+});
+---
+<Base
+  title="Shopify Profit Margin Calculator — Net Profit After All Fees (Free)"
+  description="Calculate your true profit margin after Shopify subscription fees, transaction fees, payment processing, COGS, and shipping. Free tool, no signup required."
+>
+  <script type="application/ld+json" set:html={schema} />
+
+  <h1 class="text-3xl font-bold mb-2">Shopify Profit Margin Calculator</h1>
+  <p class="text-gray-600 mb-8">Calculate your real net profit after Shopify fees, payment processing, product cost, and shipping. See exactly where your margin goes.</p>
+
+  <div class="bg-gray-50 border rounded-xl p-8 max-w-2xl">
+    <form id="calc-form" class="space-y-5">
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm font-medium mb-1" for="price">Selling Price ($)</label>
+          <input id="price" type="number" min="0" step="0.01" placeholder="29.99" required
+            class="w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-1" for="cogs">Product Cost / COGS ($)</label>
+          <input id="cogs" type="number" min="0" step="0.01" placeholder="8.00" required
+            class="w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+        </div>
+      </div>
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm font-medium mb-1" for="shipping">Shipping Cost ($)</label>
+          <input id="shipping" type="number" min="0" step="0.01" placeholder="4.50"
+            class="w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-1" for="plan">Shopify Plan</label>
+          <select id="plan" class="w-full border rounded-lg px-4 py-2">
+            <option value="0.02,0.30">Basic — 2% + 30¢</option>
+            <option value="0.01,0.30">Shopify — 1% + 30¢</option>
+            <option value="0.005,0.30">Advanced — 0.5% + 30¢</option>
+          </select>
+        </div>
+      </div>
+      <div>
+        <label class="block text-sm font-medium mb-1" for="other">Other Costs per Order ($)</label>
+        <input id="other" type="number" min="0" step="0.01" placeholder="e.g. ads, packaging (0)"
+          class="w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+      </div>
+      <button type="submit"
+        class="w-full bg-blue-700 text-white py-3 rounded-lg font-semibold hover:bg-blue-800 transition">
+        Calculate Profit Margin
+      </button>
+    </form>
+
+    <div id="results" class="mt-6 hidden">
+      <h2 class="font-semibold text-lg mb-4">Your Margin Breakdown</h2>
+      <div class="space-y-2" id="breakdown"></div>
+      <div class="mt-4 p-4 bg-white border-2 border-blue-700 rounded-xl flex justify-between items-center">
+        <span class="font-semibold">Net Profit</span>
+        <span id="net-profit" class="text-2xl font-bold text-blue-700"></span>
+      </div>
+      <div class="mt-2 p-3 bg-white border rounded-xl flex justify-between">
+        <span class="text-sm text-gray-600">Profit Margin</span>
+        <span id="margin-pct" class="font-semibold"></span>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('calc-form').addEventListener('submit', e => {
+      e.preventDefault();
+      const price = parseFloat(document.getElementById('price').value) || 0;
+      const cogs = parseFloat(document.getElementById('cogs').value) || 0;
+      const shipping = parseFloat(document.getElementById('shipping').value) || 0;
+      const other = parseFloat(document.getElementById('other').value) || 0;
+      const [pctStr, flatStr] = document.getElementById('plan').value.split(',');
+      const txPct = parseFloat(pctStr);
+      const txFlat = parseFloat(flatStr);
+
+      const shopifyFee = price * txPct + txFlat;
+      const totalCost = cogs + shipping + shopifyFee + other;
+      const netProfit = price - totalCost;
+      const margin = price > 0 ? (netProfit / price) * 100 : 0;
+
+      const rows = [
+        ['Selling Price', price],
+        ['− Product Cost (COGS)', -cogs],
+        ['− Shipping Cost', -shipping],
+        ['− Shopify Transaction Fee', -shopifyFee],
+        ['− Other Costs', -other],
+      ];
+
+      document.getElementById('breakdown').innerHTML = rows.map(([label, val]) =>
+        `<div class="flex justify-between bg-white border rounded-lg px-4 py-2 text-sm">
+          <span class="text-gray-700">${label}</span>
+          <span class="${val >= 0 ? 'text-gray-900' : 'text-red-600'} font-medium">${val >= 0 ? '+' : ''}$${val.toFixed(2)}</span>
+        </div>`
+      ).join('');
+
+      document.getElementById('net-profit').textContent = `$${netProfit.toFixed(2)}`;
+      document.getElementById('margin-pct').textContent = `${margin.toFixed(1)}%`;
+      document.getElementById('margin-pct').className = `font-semibold ${margin >= 20 ? 'text-green-600' : margin >= 10 ? 'text-yellow-600' : 'text-red-600'}`;
+      document.getElementById('results').classList.remove('hidden');
+    });
+  </script>
+
+  <section class="mt-16 prose max-w-2xl">
+    <h2>What's Included in the Calculation</h2>
+    <p>Shopify charges a transaction fee on every sale unless you use Shopify Payments. On Basic plan that's 2% of the sale price plus 30¢ for the payment gateway. This calculator shows you the real net profit after all these deductions.</p>
+    <h2>Target Profit Margin for Shopify Stores</h2>
+    <p>Most successful Shopify stores aim for 20–40% net margin. Below 15% is risky — a price increase by a supplier or a spike in ad costs can push you into negative territory.</p>
+  </section>
+</Base>

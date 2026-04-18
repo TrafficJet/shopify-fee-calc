@@ -1,0 +1,104 @@
+---
+import Base from '../layouts/Base.astro';
+
+const schema = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Shopify Free Shipping Threshold Calculator",
+  "description": "Find the optimal free shipping threshold that increases average order value without hurting your margin",
+  "applicationCategory": "BusinessApplication",
+  "operatingSystem": "Any",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+});
+---
+<Base
+  title="Shopify Free Shipping Threshold Calculator — Boost AOV Without Losing Margin"
+  description="Calculate the ideal free shipping threshold for your Shopify store. Find the minimum order value that covers shipping costs and increases average order size. Free tool."
+>
+  <script type="application/ld+json" set:html={schema} />
+
+  <h1 class="text-3xl font-bold mb-2">Free Shipping Threshold Calculator</h1>
+  <p class="text-gray-600 mb-8">Find the ideal free shipping minimum that boosts your average order value while keeping your margins intact.</p>
+
+  <div class="bg-gray-50 border rounded-xl p-8 max-w-2xl">
+    <form id="calc-form" class="space-y-5">
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm font-medium mb-1" for="avg_order">Current Avg Order Value ($)</label>
+          <input id="avg_order" type="number" min="0" step="0.01" placeholder="42.00" required
+            class="w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-1" for="avg_shipping">Avg Shipping Cost ($)</label>
+          <input id="avg_shipping" type="number" min="0" step="0.01" placeholder="6.50" required
+            class="w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+        </div>
+      </div>
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm font-medium mb-1" for="gross_margin">Gross Margin (%)</label>
+          <input id="gross_margin" type="number" min="1" max="100" step="1" placeholder="45" required
+            class="w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-1" for="buffer">Safety Buffer (%)</label>
+          <input id="buffer" type="number" min="0" max="50" step="5" placeholder="15" value="15"
+            class="w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+        </div>
+      </div>
+      <button type="submit"
+        class="w-full bg-blue-700 text-white py-3 rounded-lg font-semibold hover:bg-blue-800 transition">
+        Calculate Free Shipping Threshold
+      </button>
+    </form>
+
+    <div id="results" class="mt-6 hidden space-y-3">
+      <h2 class="font-semibold text-lg">Recommended Thresholds</h2>
+      <div class="grid grid-cols-3 gap-3 text-center">
+        <div class="bg-white border rounded-xl p-3">
+          <div id="min-threshold" class="text-xl font-bold text-gray-700"></div>
+          <div class="text-xs text-gray-500 mt-1">Minimum<br/>(break-even)</div>
+        </div>
+        <div class="bg-white border-2 border-blue-700 rounded-xl p-3">
+          <div id="rec-threshold" class="text-xl font-bold text-blue-700"></div>
+          <div class="text-xs text-gray-500 mt-1">Recommended<br/>(+buffer)</div>
+        </div>
+        <div class="bg-white border rounded-xl p-3">
+          <div id="aov-boost" class="text-xl font-bold text-green-600"></div>
+          <div class="text-xs text-gray-500 mt-1">Expected AOV<br/>Increase</div>
+        </div>
+      </div>
+      <div class="bg-white border rounded-xl p-4 text-sm" id="explanation"></div>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('calc-form').addEventListener('submit', e => {
+      e.preventDefault();
+      const aov = parseFloat(document.getElementById('avg_order').value) || 0;
+      const shipCost = parseFloat(document.getElementById('avg_shipping').value) || 0;
+      const margin = (parseFloat(document.getElementById('gross_margin').value) || 45) / 100;
+      const buffer = (parseFloat(document.getElementById('buffer').value) || 15) / 100;
+
+      const minThreshold = aov + (shipCost / margin);
+      const recThreshold = minThreshold * (1 + buffer);
+      const expectedAOVBoost = recThreshold - aov;
+
+      document.getElementById('min-threshold').textContent = `$${minThreshold.toFixed(0)}`;
+      document.getElementById('rec-threshold').textContent = `$${recThreshold.toFixed(0)}`;
+      document.getElementById('aov-boost').textContent = `+$${expectedAOVBoost.toFixed(0)}`;
+      document.getElementById('explanation').innerHTML = `
+        <p class="text-gray-600">At <strong>$${recThreshold.toFixed(0)}</strong>, customers spending near your current AOV of <strong>$${aov.toFixed(0)}</strong> are incentivized to add ~<strong>$${expectedAOVBoost.toFixed(0)}</strong> more to their cart to unlock free shipping. Your ${(margin * 100).toFixed(0)}% gross margin absorbs the $${shipCost.toFixed(2)} shipping cost on these larger orders.</p>
+        <p class="mt-2 text-gray-500 text-xs">Tip: Round up to a clean number (e.g. $${Math.ceil(recThreshold / 5) * 5}) — psychological pricing makes thresholds more effective.</p>
+      `;
+      document.getElementById('results').classList.remove('hidden');
+    });
+  </script>
+
+  <section class="mt-16 prose max-w-2xl">
+    <h2>Why Free Shipping Thresholds Work</h2>
+    <p>Studies show 93% of online shoppers are more likely to buy if free shipping is included. Setting a threshold just above your average order value encourages customers to add one more item — boosting AOV without you paying for shipping on every order.</p>
+    <h2>How to Set Up Free Shipping in Shopify</h2>
+    <p>Go to Shopify Admin → Settings → Shipping and delivery → Manage rates → Add rate → Free shipping → Set condition "Order price is at least $X". Use the threshold calculated above as your starting point, then A/B test ±10% over 30 days.</p>
+  </section>
+</Base>
