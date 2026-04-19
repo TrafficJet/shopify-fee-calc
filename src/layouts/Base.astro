@@ -3,8 +3,9 @@ interface Props {
   title: string;
   description: string;
   canonicalUrl?: string;
+  ogImage?: string;
 }
-const { title, description, canonicalUrl } = Astro.props;
+const { title, description, canonicalUrl, ogImage } = Astro.props;
 const canon = canonicalUrl || Astro.url.href;
 const finalOgImage = ogImage || 'https://shopify-fee-calc.com/og-default.png';
 const GA_ID = 'G-3LG69MHKYE';
