@@ -6,6 +6,8 @@ description: "2026 Shopify payment processing fees breakdown by plan. Compare ra
 author: "Alex Morgan"
 tags: ["Shopify Payment Processing Fees 2026: Complete Breakdown by Plan"]
 seoTitle: "Shopify Payment Processing Fees 2026 by Plan | Complete Breakdown"
+heroImage: "/images/shopify-payment-processing-fees-2026-complete-breakdown-by-plan/hero.jpg"
+heroImageAlt: "Close-up of credit card being processed through payment terminal at checkout counter"
 ---
 
 # Shopify Payment Processing Fees 2026: Complete Breakdown by Plan
