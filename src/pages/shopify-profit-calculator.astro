@@ -65,11 +65,11 @@ const faqs = [
 
       <!-- Block 1: Revenue -->
       <div class="border dark:border-gray-700 rounded-xl p-5 bg-white dark:bg-gray-900">
-        <h2 class="font-semibold text-xs uppercase tracking-widest text-blue-600 dark:text-blue-400 mb-4">1 — Revenue</h2>
+        <h3 class="font-semibold text-xs uppercase tracking-widest text-blue-600 dark:text-blue-400 mb-4">1 — Revenue</h3>
         <div class="grid grid-cols-2 gap-4">
           <div>
             <label class="block text-sm font-medium mb-1 dark:text-gray-300" for="inp-rev">Monthly Revenue ($)</label>
-            <input id="inp-rev" type="number" min="0" step="100" value="50000"
+            <input id="inp-rev" type="number" min="0" step="100" value="50000" lang="en" inputmode="decimal"
               class="w-full border dark:border-gray-600 rounded-lg px-3 py-2 text-sm bg-white dark:bg-gray-800 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500" />
           </div>
           <div>
@@ -77,7 +77,7 @@ const faqs = [
               Avg Order Value ($)
               <span class="tip" data-tip="Average revenue per order. Used to estimate number of orders per month.">?</span>
             </label>
-            <input id="inp-aov" type="number" min="1" step="1" value="85"
+            <input id="inp-aov" type="number" min="1" step="1" value="85" lang="en" inputmode="decimal"
               class="w-full border dark:border-gray-600 rounded-lg px-3 py-2 text-sm bg-white dark:bg-gray-800 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500" />
           </div>
         </div>
@@ -88,15 +88,15 @@ const faqs = [
 
       <!-- Block 2: COGS -->
       <div class="border dark:border-gray-700 rounded-xl p-5 bg-white dark:bg-gray-900">
-        <h2 class="font-semibold text-xs uppercase tracking-widest text-blue-600 dark:text-blue-400 mb-4">2 — Cost of Goods (COGS)</h2>
+        <h3 class="font-semibold text-xs uppercase tracking-widest text-blue-600 dark:text-blue-400 mb-4">2 — Cost of Goods (COGS)</h3>
         <label class="block text-sm font-medium mb-2 dark:text-gray-300">
           COGS % of Revenue
-          <span class="tip" data-tip="Product cost as % of revenue. Typical: apparel 30-45%, electronics 50-65%, beauty 25-40%.">?</span>
+          <span class="tip" data-tip="Product cost as % of revenue. Benchmarks: apparel 30–45%, electronics 50–65%, beauty 25–40%, jewelry 35–55%, home goods 40–55%.">?</span>
         </label>
         <div class="flex items-center gap-3">
           <input id="inp-cogs-range" type="range" min="0" max="90" step="1" value="35" class="flex-1 accent-blue-600" />
           <div class="flex items-center border dark:border-gray-600 rounded-lg overflow-hidden shrink-0">
-            <input id="inp-cogs" type="number" min="0" max="90" step="1" value="35"
+            <input id="inp-cogs" type="number" min="0" max="90" step="1" value="35" lang="en" inputmode="decimal"
               class="w-14 px-2 py-1.5 text-sm text-right bg-white dark:bg-gray-800 dark:text-gray-100 focus:outline-none" />
             <span class="px-2 py-1.5 text-sm bg-gray-50 dark:bg-gray-700 dark:text-gray-400 border-l dark:border-gray-600">%</span>
           </div>
@@ -108,7 +108,7 @@ const faqs = [
 
       <!-- Block 3: Plan -->
       <div class="border dark:border-gray-700 rounded-xl p-5 bg-white dark:bg-gray-900">
-        <h2 class="font-semibold text-xs uppercase tracking-widest text-blue-600 dark:text-blue-400 mb-4">3 — Shopify Plan</h2>
+        <h3 class="font-semibold text-xs uppercase tracking-widest text-blue-600 dark:text-blue-400 mb-4">3 — Shopify Plan</h3>
         <div class="grid grid-cols-2 gap-2 mb-4">
           <button data-plan="basic" class="plan-btn border dark:border-gray-600 rounded-xl p-3 text-left transition hover:border-blue-400">
             <div class="font-semibold text-sm dark:text-gray-100">Basic</div>
@@ -142,7 +142,7 @@ const faqs = [
 
       <!-- Block 4: Payment -->
       <div class="border dark:border-gray-700 rounded-xl p-5 bg-white dark:bg-gray-900">
-        <h2 class="font-semibold text-xs uppercase tracking-widest text-blue-600 dark:text-blue-400 mb-4">4 — Payment Processor</h2>
+        <h3 class="font-semibold text-xs uppercase tracking-widest text-blue-600 dark:text-blue-400 mb-4">4 — Payment Processor</h3>
         <div class="space-y-2">
           <button data-proc="shopify" class="proc-btn w-full text-left border dark:border-gray-600 rounded-xl px-4 py-3 transition hover:border-blue-400">
             <div class="flex justify-between">
@@ -180,19 +180,22 @@ const faqs = [
 
       <!-- Block 5: Apps -->
       <div class="border dark:border-gray-700 rounded-xl p-5 bg-white dark:bg-gray-900">
-        <h2 class="font-semibold text-xs uppercase tracking-widest text-blue-600 dark:text-blue-400 mb-4">5 — Apps &amp; Subscriptions</h2>
+        <h3 class="font-semibold text-xs uppercase tracking-widest text-blue-600 dark:text-blue-400 mb-4">5 — Apps &amp; Subscriptions</h3>
         <div class="grid grid-cols-2 gap-4">
           <div>
             <label class="block text-sm font-medium mb-1 dark:text-gray-300" for="inp-apps">
               Paid Apps/month ($)
-              <span class="tip" data-tip="Total monthly cost of all paid Shopify apps. Average store: $75–200/mo.">?</span>
+              <span class="tip" data-tip="Total monthly cost of all paid Shopify apps. Average store: $75–200/mo. Year-2 stores often reach $200–$500/mo with email, reviews, upsells, loyalty, and analytics apps.">?</span>
             </label>
-            <input id="inp-apps" type="number" min="0" step="5" value="75"
+            <input id="inp-apps" type="number" min="0" step="5" value="75" lang="en" inputmode="decimal"
               class="w-full border dark:border-gray-600 rounded-lg px-3 py-2 text-sm bg-white dark:bg-gray-800 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500" />
           </div>
           <div>
-            <label class="block text-sm font-medium mb-1 dark:text-gray-300" for="inp-subs">Other Subscriptions ($)</label>
-            <input id="inp-subs" type="number" min="0" step="5" value="50"
+            <label class="block text-sm font-medium mb-1 dark:text-gray-300" for="inp-subs">
+              Other Subscriptions ($)
+              <span class="tip" data-tip="Tools outside the Shopify App Store: Gorgias, Klaviyo upgrades, Postscript, Zipify, Northbeam, Triple Whale, etc.">?</span>
+            </label>
+            <input id="inp-subs" type="number" min="0" step="5" value="50" lang="en" inputmode="decimal"
               class="w-full border dark:border-gray-600 rounded-lg px-3 py-2 text-sm bg-white dark:bg-gray-800 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500" />
           </div>
         </div>
@@ -200,11 +203,14 @@ const faqs = [
 
       <!-- Block 6: Marketing -->
       <div class="border dark:border-gray-700 rounded-xl p-5 bg-white dark:bg-gray-900">
-        <h2 class="font-semibold text-xs uppercase tracking-widest text-blue-600 dark:text-blue-400 mb-4">6 — Marketing</h2>
+        <h3 class="font-semibold text-xs uppercase tracking-widest text-blue-600 dark:text-blue-400 mb-4">6 — Marketing</h3>
         <div class="grid grid-cols-2 gap-4">
           <div>
-            <label class="block text-sm font-medium mb-1 dark:text-gray-300" for="inp-ads">Ad Spend/month ($)</label>
-            <input id="inp-ads" type="number" min="0" step="100" value="5000"
+            <label class="block text-sm font-medium mb-1 dark:text-gray-300" for="inp-ads">
+              Ad Spend/month ($)
+              <span class="tip" data-tip="Meta/Google/TikTok/Pinterest ad spend + agency retainer. Exclude influencers — track those separately below.">?</span>
+            </label>
+            <input id="inp-ads" type="number" min="0" step="100" value="5000" lang="en" inputmode="decimal"
               class="w-full border dark:border-gray-600 rounded-lg px-3 py-2 text-sm bg-white dark:bg-gray-800 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500" />
           </div>
           <div>
@@ -212,7 +218,7 @@ const faqs = [
               Influencer / Content ($)
               <span class="tip" data-tip="Monthly spend on influencers, content creators, affiliates, and content production.">?</span>
             </label>
-            <input id="inp-influencer" type="number" min="0" step="50" value="500"
+            <input id="inp-influencer" type="number" min="0" step="50" value="500" lang="en" inputmode="decimal"
               class="w-full border dark:border-gray-600 rounded-lg px-3 py-2 text-sm bg-white dark:bg-gray-800 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500" />
           </div>
         </div>
@@ -220,31 +226,31 @@ const faqs = [
 
       <!-- Block 7: Operations -->
       <div class="border dark:border-gray-700 rounded-xl p-5 bg-white dark:bg-gray-900">
-        <h2 class="font-semibold text-xs uppercase tracking-widest text-blue-600 dark:text-blue-400 mb-4">7 — Operations</h2>
+        <h3 class="font-semibold text-xs uppercase tracking-widest text-blue-600 dark:text-blue-400 mb-4">7 — Operations</h3>
         <div class="grid grid-cols-2 gap-4 mb-4">
           <div>
             <label class="block text-sm font-medium mb-1 dark:text-gray-300" for="inp-ship">
               Shipping/Order ($)
-              <span class="tip" data-tip="Average outbound shipping cost per order. Enter 0 if you offer free shipping absorbed into price.">?</span>
+              <span class="tip" data-tip="Average outbound shipping cost per order including label + packaging materials. Enter 0 if you price shipping into your product cost.">?</span>
             </label>
-            <input id="inp-ship" type="number" min="0" step="0.5" value="8"
+            <input id="inp-ship" type="number" min="0" step="0.5" value="8" lang="en" inputmode="decimal"
               class="w-full border dark:border-gray-600 rounded-lg px-3 py-2 text-sm bg-white dark:bg-gray-800 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500" />
           </div>
           <div>
             <label class="block text-sm font-medium mb-1 dark:text-gray-300" for="inp-ret-pct">
               Returns Rate (%)
-              <span class="tip" data-tip="% of orders returned. Avg ecommerce: 5–10%. Fashion: 15–30%.">?</span>
+              <span class="tip" data-tip="Benchmarks: apparel 20–30%, footwear 25–30%, beauty 5–10%, electronics 8–12%, home goods 10–15%. Average ecommerce: 8–10%.">?</span>
             </label>
-            <input id="inp-ret-pct" type="number" min="0" max="50" step="0.5" value="5"
+            <input id="inp-ret-pct" type="number" min="0" max="50" step="0.5" value="5" lang="en" inputmode="decimal"
               class="w-full border dark:border-gray-600 rounded-lg px-3 py-2 text-sm bg-white dark:bg-gray-800 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500" />
           </div>
         </div>
         <div>
           <label class="block text-sm font-medium mb-1 dark:text-gray-300" for="inp-ret-cost">
             Return Handling Cost/Return ($)
-            <span class="tip" data-tip="Cost to process each return: labor, restocking, return shipping. Typically $8–20.">?</span>
+            <span class="tip" data-tip="Full cost per return: return shipping label ($5–$10) + staff inspection + repackaging + restocking + damaged inventory write-off. Typical range: $8–$18.">?</span>
           </label>
-          <input id="inp-ret-cost" type="number" min="0" step="1" value="12"
+          <input id="inp-ret-cost" type="number" min="0" step="1" value="12" lang="en" inputmode="decimal"
             class="w-full border dark:border-gray-600 rounded-lg px-3 py-2 text-sm bg-white dark:bg-gray-800 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500" />
         </div>
       </div>
@@ -258,7 +264,7 @@ const faqs = [
           </svg>
           Copy shareable link
         </button>
-        <span id="share-confirm" class="hidden text-xs text-green-600 dark:text-green-400">✓ Copied!</span>
+        <span id="share-confirm" class="hidden text-xs text-green-600 dark:text-green-400">&#10003; Copied!</span>
       </div>
     </div>
 
@@ -269,7 +275,7 @@ const faqs = [
         <!-- P&L card -->
         <div class="border-2 border-blue-600 dark:border-blue-500 rounded-2xl overflow-hidden">
           <div class="bg-blue-600 dark:bg-blue-700 px-5 py-3">
-            <h2 class="text-white font-semibold text-sm">Monthly P&amp;L</h2>
+            <h3 class="text-white font-semibold text-sm">Monthly P&amp;L</h3>
           </div>
           <div class="bg-white dark:bg-gray-900 px-5 py-4 text-sm space-y-1.5" id="results-breakdown">
             <!-- filled by JS -->
@@ -288,12 +294,22 @@ const faqs = [
               <span id="res-per-order" class="font-medium text-gray-800 dark:text-gray-200">—</span>
             </div>
             <div id="res-benchmark" class="text-sm rounded-lg px-3 py-2 text-center font-medium"></div>
+            <!-- Calculation details collapsible -->
+            <details class="mt-3 group">
+              <summary class="text-xs text-blue-600 dark:text-blue-400 cursor-pointer hover:underline list-none flex items-center gap-1">
+                <svg class="w-3 h-3 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                </svg>
+                See calculation details
+              </summary>
+              <div id="calc-details" class="mt-2 text-xs text-gray-500 dark:text-gray-400 space-y-0.5 font-mono bg-gray-50 dark:bg-gray-800 rounded-lg p-3 leading-relaxed"></div>
+            </details>
           </div>
         </div>
 
         <!-- Pie chart card -->
         <div class="border dark:border-gray-700 rounded-2xl p-5 bg-white dark:bg-gray-900">
-          <h2 class="text-sm font-semibold mb-4 text-gray-700 dark:text-gray-300">Where Your Revenue Goes</h2>
+          <h3 class="text-sm font-semibold mb-4 text-gray-700 dark:text-gray-300">Where Your Revenue Goes</h3>
           <div class="flex items-center gap-5">
             <canvas id="pie-chart" width="120" height="120" class="shrink-0"></canvas>
             <div id="pie-legend" class="text-xs space-y-1.5 flex-1 min-w-0"></div>
@@ -304,11 +320,235 @@ const faqs = [
     </div>
   </div>
 
+  <!-- ── Content Section 1: Profit Margin Benchmarks ──────────────────────── -->
+  <div class="mt-16 max-w-3xl">
+    <h2 class="text-2xl font-bold mb-4">What Is a Healthy Profit Margin for a Shopify Store?</h2>
+    <p class="text-gray-700 dark:text-gray-300 mb-5 leading-relaxed">
+      "Healthy margin" depends entirely on your product category, volume, and cost structure. A 15% net margin in apparel is excellent; in consumer electronics, it's a sign something is wrong. Use the table below to benchmark your numbers against category averages — then work backwards through your cost stack to find where you can improve.
+    </p>
+
+    <h3 class="text-lg font-semibold mb-3 text-gray-900 dark:text-gray-100">Profit Margin Benchmarks by Product Category (2026)</h3>
+    <div class="overflow-x-auto rounded-xl border dark:border-gray-700 mb-6">
+      <table class="w-full text-sm">
+        <thead class="bg-gray-50 dark:bg-gray-800 text-left">
+          <tr>
+            <th class="px-4 py-3 font-semibold text-gray-700 dark:text-gray-300">Category</th>
+            <th class="px-4 py-3 font-semibold text-gray-700 dark:text-gray-300">Gross Margin</th>
+            <th class="px-4 py-3 font-semibold text-gray-700 dark:text-gray-300">Typical Net Margin</th>
+            <th class="px-4 py-3 font-semibold text-gray-700 dark:text-gray-300">Primary cost driver</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y dark:divide-gray-700 text-gray-700 dark:text-gray-300">
+          <tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50">
+            <td class="px-4 py-2.5 font-medium">Apparel &amp; Fashion</td>
+            <td class="px-4 py-2.5">50–65%</td>
+            <td class="px-4 py-2.5 text-green-700 dark:text-green-400 font-medium">12–22%</td>
+            <td class="px-4 py-2.5">Returns (20–30% rate)</td>
+          </tr>
+          <tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50">
+            <td class="px-4 py-2.5 font-medium">Beauty &amp; Skincare</td>
+            <td class="px-4 py-2.5">55–75%</td>
+            <td class="px-4 py-2.5 text-green-700 dark:text-green-400 font-medium">18–30%</td>
+            <td class="px-4 py-2.5">Customer acquisition (CAC)</td>
+          </tr>
+          <tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50">
+            <td class="px-4 py-2.5 font-medium">Consumer Electronics</td>
+            <td class="px-4 py-2.5">20–40%</td>
+            <td class="px-4 py-2.5 text-orange-700 dark:text-orange-400 font-medium">3–10%</td>
+            <td class="px-4 py-2.5">COGS + warranty claims</td>
+          </tr>
+          <tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50">
+            <td class="px-4 py-2.5 font-medium">Jewelry &amp; Accessories</td>
+            <td class="px-4 py-2.5">40–60%</td>
+            <td class="px-4 py-2.5 text-green-700 dark:text-green-400 font-medium">15–28%</td>
+            <td class="px-4 py-2.5">Marketing spend</td>
+          </tr>
+          <tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50">
+            <td class="px-4 py-2.5 font-medium">Home &amp; Garden</td>
+            <td class="px-4 py-2.5">35–55%</td>
+            <td class="px-4 py-2.5 text-yellow-700 dark:text-yellow-400 font-medium">8–18%</td>
+            <td class="px-4 py-2.5">Shipping (bulky/heavy)</td>
+          </tr>
+          <tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50">
+            <td class="px-4 py-2.5 font-medium">Sports &amp; Outdoors</td>
+            <td class="px-4 py-2.5">40–55%</td>
+            <td class="px-4 py-2.5 text-yellow-700 dark:text-yellow-400 font-medium">10–20%</td>
+            <td class="px-4 py-2.5">Seasonality + ad costs</td>
+          </tr>
+          <tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50">
+            <td class="px-4 py-2.5 font-medium">Food &amp; Supplements</td>
+            <td class="px-4 py-2.5">50–70%</td>
+            <td class="px-4 py-2.5 text-green-700 dark:text-green-400 font-medium">15–25%</td>
+            <td class="px-4 py-2.5">Subscription churn</td>
+          </tr>
+          <tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50">
+            <td class="px-4 py-2.5 font-medium">Pet Products</td>
+            <td class="px-4 py-2.5">45–65%</td>
+            <td class="px-4 py-2.5 text-green-700 dark:text-green-400 font-medium">14–22%</td>
+            <td class="px-4 py-2.5">App stack (loyalty)</td>
+          </tr>
+          <tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50">
+            <td class="px-4 py-2.5 font-medium">Digital Products</td>
+            <td class="px-4 py-2.5">80–95%</td>
+            <td class="px-4 py-2.5 text-green-700 dark:text-green-400 font-medium">30–60%</td>
+            <td class="px-4 py-2.5">Marketing + support</td>
+          </tr>
+          <tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50">
+            <td class="px-4 py-2.5 font-medium">Dropshipping</td>
+            <td class="px-4 py-2.5">15–35%</td>
+            <td class="px-4 py-2.5 text-red-700 dark:text-red-400 font-medium">3–12%</td>
+            <td class="px-4 py-2.5">Ad cost + supplier variance</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="text-lg font-semibold mb-3 text-gray-900 dark:text-gray-100">5 Rules of Thumb for Shopify Margin Health</h3>
+    <ol class="space-y-3 text-gray-700 dark:text-gray-300">
+      <li class="flex gap-3">
+        <span class="shrink-0 w-6 h-6 rounded-full bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-400 flex items-center justify-center text-xs font-bold">1</span>
+        <div><strong class="text-gray-900 dark:text-gray-100">The 3× rule:</strong> If your COGS is X, your selling price should be at least 3X to survive on paid ads. At 2.5X you're breakeven-or-loss territory on cold traffic.</div>
+      </li>
+      <li class="flex gap-3">
+        <span class="shrink-0 w-6 h-6 rounded-full bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-400 flex items-center justify-center text-xs font-bold">2</span>
+        <div><strong class="text-gray-900 dark:text-gray-100">Payment fees are usually your #2 or #3 cost.</strong> At $50K/mo on Basic with Stripe, you pay ~$2,500/mo in processing — more than most merchants spend on apps and Shopify plan combined.</div>
+      </li>
+      <li class="flex gap-3">
+        <span class="shrink-0 w-6 h-6 rounded-full bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-400 flex items-center justify-center text-xs font-bold">3</span>
+        <div><strong class="text-gray-900 dark:text-gray-100">App creep is real.</strong> Each new app you install typically adds $30–$100/month. Merchants who audit annually find 3–5 apps they pay for but don't actively use.</div>
+      </li>
+      <li class="flex gap-3">
+        <span class="shrink-0 w-6 h-6 rounded-full bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-400 flex items-center justify-center text-xs font-bold">4</span>
+        <div><strong class="text-gray-900 dark:text-gray-100">At $20K+/mo, plan upgrades often pay for themselves.</strong> Moving from Basic ($39) to Advanced ($399) saves 0.4% per transaction — that's $80/mo savings per $20K in revenue, paying for the upgrade at $80K/mo.</div>
+      </li>
+      <li class="flex gap-3">
+        <span class="shrink-0 w-6 h-6 rounded-full bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-400 flex items-center justify-center text-xs font-bold">5</span>
+        <div><strong class="text-gray-900 dark:text-gray-100">Returns are the silent margin killer in fashion.</strong> A 25% return rate with $15 handling cost destroys $3.75 of margin per order — which is why apparel brands price 10–15% higher than they'd need to otherwise.</div>
+      </li>
+    </ol>
+  </div>
+
+  <!-- ── Content Section 2: How the Calculator Works ──────────────────────── -->
+  <div class="mt-14 max-w-3xl">
+    <h2 class="text-2xl font-bold mb-4">How This Shopify Profit Calculator Works</h2>
+    <p class="text-gray-700 dark:text-gray-300 mb-6 leading-relaxed">
+      Every number in the results panel is derived from a transparent, step-by-step formula. Here's exactly how we get from revenue to net profit — no black boxes.
+    </p>
+
+    <div class="space-y-5">
+      <div class="border dark:border-gray-700 rounded-xl p-5 bg-white dark:bg-gray-900">
+        <h3 class="font-semibold text-sm text-gray-900 dark:text-gray-100 mb-1">Step 1 — Estimate Monthly Orders</h3>
+        <p class="text-sm text-gray-600 dark:text-gray-400 mb-3">Monthly revenue divided by your average order value gives the order volume that drives all per-order cost calculations.</p>
+        <pre class="text-xs bg-gray-50 dark:bg-gray-800 rounded-lg p-3 overflow-x-auto text-gray-700 dark:text-gray-300 font-mono"><code>Orders = Monthly Revenue ÷ Avg Order Value</code></pre>
+      </div>
+
+      <div class="border dark:border-gray-700 rounded-xl p-5 bg-white dark:bg-gray-900">
+        <h3 class="font-semibold text-sm text-gray-900 dark:text-gray-100 mb-1">Step 2 — Calculate COGS</h3>
+        <p class="text-sm text-gray-600 dark:text-gray-400 mb-3">Cost of goods is a direct percentage of revenue — your product cost plus any packaging and manufacturing overhead.</p>
+        <pre class="text-xs bg-gray-50 dark:bg-gray-800 rounded-lg p-3 overflow-x-auto text-gray-700 dark:text-gray-300 font-mono"><code>COGS = Monthly Revenue × COGS%</code></pre>
+      </div>
+
+      <div class="border dark:border-gray-700 rounded-xl p-5 bg-white dark:bg-gray-900">
+        <h3 class="font-semibold text-sm text-gray-900 dark:text-gray-100 mb-1">Step 3 — Calculate Payment Processing Fees</h3>
+        <p class="text-sm text-gray-600 dark:text-gray-400 mb-3">This is the full cost: the processor's percentage rate, the per-transaction fee, and the Shopify third-party penalty (only applies if you don't use Shopify Payments).</p>
+        <pre class="text-xs bg-gray-50 dark:bg-gray-800 rounded-lg p-3 overflow-x-auto text-gray-700 dark:text-gray-300 font-mono leading-relaxed"><code>Processing = (Revenue × Rate%) + (Orders × $0.30)
+            + (Revenue × Shopify 3rd-party penalty%)</code></pre>
+      </div>
+
+      <div class="border dark:border-gray-700 rounded-xl p-5 bg-white dark:bg-gray-900">
+        <h3 class="font-semibold text-sm text-gray-900 dark:text-gray-100 mb-1">Step 4 — Calculate Gross Profit</h3>
+        <p class="text-sm text-gray-600 dark:text-gray-400 mb-3">Gross profit is what remains after direct variable costs. It funds all your fixed costs and gives the "upper bound" on how profitable your business can be.</p>
+        <pre class="text-xs bg-gray-50 dark:bg-gray-800 rounded-lg p-3 overflow-x-auto text-gray-700 dark:text-gray-300 font-mono"><code>Gross Profit = Revenue − COGS − Processing Fees − Shipping</code></pre>
+      </div>
+
+      <div class="border dark:border-gray-700 rounded-xl p-5 bg-white dark:bg-gray-900">
+        <h3 class="font-semibold text-sm text-gray-900 dark:text-gray-100 mb-1">Step 5 — Deduct Operating Expenses (OPEX)</h3>
+        <p class="text-sm text-gray-600 dark:text-gray-400 mb-3">OPEX includes your Shopify plan, apps, marketing, and return handling costs. These are mostly fixed or semi-fixed costs that don't scale directly with individual orders.</p>
+        <pre class="text-xs bg-gray-50 dark:bg-gray-800 rounded-lg p-3 overflow-x-auto text-gray-700 dark:text-gray-300 font-mono leading-relaxed"><code>OPEX = Plan Fee + Apps + Subscriptions
+      + Marketing + (Orders × Return Rate × Return Cost)</code></pre>
+      </div>
+
+      <div class="border dark:border-gray-700 rounded-xl p-5 bg-white dark:bg-gray-900">
+        <h3 class="font-semibold text-sm text-gray-900 dark:text-gray-100 mb-1">Step 6 — Net Profit &amp; Margin</h3>
+        <p class="text-sm text-gray-600 dark:text-gray-400 mb-3">Net profit is the final number — what actually flows into your bank account after every cost is paid. Net margin expresses this as a percentage of revenue for easy benchmarking.</p>
+        <pre class="text-xs bg-gray-50 dark:bg-gray-800 rounded-lg p-3 overflow-x-auto text-gray-700 dark:text-gray-300 font-mono leading-relaxed"><code>Net Profit = Gross Profit − OPEX
+Net Margin = Net Profit ÷ Revenue × 100</code></pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Content Section 3: 7 Hidden Costs ────────────────────────────────── -->
+  <div class="mt-14 max-w-3xl">
+    <h2 class="text-2xl font-bold mb-4">7 Hidden Costs Quietly Killing Your Shopify Profit</h2>
+    <p class="text-gray-700 dark:text-gray-300 mb-6 leading-relaxed">
+      These fees aren't secret — they're in Shopify's pricing documentation. But they're scattered, percentage-based, and accumulate silently. Most merchants don't notice them until they do their first real P&amp;L analysis. Here are the seven most commonly missed.
+    </p>
+
+    <div class="space-y-4">
+      <div class="border dark:border-gray-700 rounded-xl p-5 bg-white dark:bg-gray-900">
+        <h3 class="font-semibold text-gray-900 dark:text-gray-100 mb-1 flex items-center gap-2">
+          <span class="text-red-500 font-bold">1.</span> Third-Party Transaction Fee
+        </h3>
+        <p class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">If you use Stripe, PayPal, or any processor other than Shopify Payments, Shopify charges an additional fee on every transaction: 2% on Basic, 1% on Shopify plan, 0.5% on Advanced, 0.15% on Plus. On a $50,000/month store using Stripe on the Basic plan, that's <strong class="text-red-600 dark:text-red-400">$1,000/month</strong> in fees that disappear before you even see the money.</p>
+        <p class="text-xs text-green-700 dark:text-green-400 mt-2 font-medium">Fix: Switch to Shopify Payments to eliminate this fee entirely.</p>
+      </div>
+
+      <div class="border dark:border-gray-700 rounded-xl p-5 bg-white dark:bg-gray-900">
+        <h3 class="font-semibold text-gray-900 dark:text-gray-100 mb-1 flex items-center gap-2">
+          <span class="text-red-500 font-bold">2.</span> App Stack Bloat
+        </h3>
+        <p class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">The average Shopify store at $10K+/month pays $200–$500/month in apps. The problem isn't any single app — it's that merchants install apps to solve problems, fix those problems, and then never uninstall the app. A quarterly app audit typically finds 3–5 apps costing $150–$300/month that are no longer used or could be consolidated.</p>
+        <p class="text-xs text-green-700 dark:text-green-400 mt-2 font-medium">Fix: Audit your Shopify admin → Apps page every 90 days. Uninstall anything with zero usage in 30 days.</p>
+      </div>
+
+      <div class="border dark:border-gray-700 rounded-xl p-5 bg-white dark:bg-gray-900">
+        <h3 class="font-semibold text-gray-900 dark:text-gray-100 mb-1 flex items-center gap-2">
+          <span class="text-red-500 font-bold">3.</span> Currency Conversion Fee (1.5%)
+        </h3>
+        <p class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">Shopify charges 1.5% on every transaction where the customer's currency differs from your store's payout currency — even if you're using Shopify Payments. This is separate from your processing rate. A store doing 20% international revenue on $50K/month pays <strong class="text-red-600 dark:text-red-400">$150/month</strong> in conversion fees that most merchants never notice.</p>
+        <p class="text-xs text-green-700 dark:text-green-400 mt-2 font-medium">Fix: In Shopify Markets, set up a payout currency that matches your largest international market to reduce conversions.</p>
+      </div>
+
+      <div class="border dark:border-gray-700 rounded-xl p-5 bg-white dark:bg-gray-900">
+        <h3 class="font-semibold text-gray-900 dark:text-gray-100 mb-1 flex items-center gap-2">
+          <span class="text-red-500 font-bold">4.</span> True Return Cost vs. "Free Returns"
+        </h3>
+        <p class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">Merchants offering free returns think they're just paying for a return label ($5–$8). The real cost per return is $8–$18 when you include labor for inspection, repackaging, restocking, and damaged-inventory write-offs. At a 20% return rate on 500 orders/month, that's 100 returns × $13 average = <strong class="text-red-600 dark:text-red-400">$1,300/month</strong> in hidden operational costs.</p>
+        <p class="text-xs text-green-700 dark:text-green-400 mt-2 font-medium">Fix: Use a returns management platform to reduce processing time. Consider restocking fees for higher-return SKUs.</p>
+      </div>
+
+      <div class="border dark:border-gray-700 rounded-xl p-5 bg-white dark:bg-gray-900">
+        <h3 class="font-semibold text-gray-900 dark:text-gray-100 mb-1 flex items-center gap-2">
+          <span class="text-red-500 font-bold">5.</span> Dimensional Weight (DIM Weight) Upcharges
+        </h3>
+        <p class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">Carriers (UPS, FedEx, USPS Priority Mail) charge based on whichever is higher: actual weight or dimensional weight (L × W × H ÷ 139 for domestic). A lightweight product in a large box can cost 2–3× what you'd expect. Merchants who don't track DIM weight often find their actual shipping costs 15–40% higher than their per-order estimate.</p>
+        <p class="text-xs text-green-700 dark:text-green-400 mt-2 font-medium">Fix: Right-size your packaging. Add custom box sizes in your carrier settings. Review DIM surcharges in your carrier invoices quarterly.</p>
+      </div>
+
+      <div class="border dark:border-gray-700 rounded-xl p-5 bg-white dark:bg-gray-900">
+        <h3 class="font-semibold text-gray-900 dark:text-gray-100 mb-1 flex items-center gap-2">
+          <span class="text-red-500 font-bold">6.</span> Shopify Email Overage Charges
+        </h3>
+        <p class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">Shopify Email includes 10,000 free emails/month, then $0.001 per email (1,000 emails = $1). A store with a 20,000-subscriber list sending 4 campaigns/month sends 80,000 emails — costing <strong class="text-red-600 dark:text-red-400">$70/month</strong> in email fees that often don't show up until the invoice. Merchants using Shopify Email instead of Klaviyo for large lists often overpay versus switching to a flat-rate plan.</p>
+        <p class="text-xs text-green-700 dark:text-green-400 mt-2 font-medium">Fix: At 15K+ subscribers, compare Shopify Email overage cost vs. Klaviyo or Omnisend flat-rate plans.</p>
+      </div>
+
+      <div class="border dark:border-gray-700 rounded-xl p-5 bg-white dark:bg-gray-900">
+        <h3 class="font-semibold text-gray-900 dark:text-gray-100 mb-1 flex items-center gap-2">
+          <span class="text-red-500 font-bold">7.</span> Chargeback Fees ($15 per dispute)
+        </h3>
+        <p class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">Every chargeback costs $15 in fees — regardless of whether you win or lose the dispute. The industry average chargeback rate is 0.1–0.5% of transactions. A store processing 1,000 orders/month at 0.3% chargeback rate has 3 chargebacks/month = <strong class="text-red-600 dark:text-red-400">$45/month</strong>, plus the lost revenue on disputes you lose. High-risk categories (electronics, supplements) can hit 1%+ rates.</p>
+        <p class="text-xs text-green-700 dark:text-green-400 mt-2 font-medium">Fix: Enable Shopify Protect (fraud analysis). Use clear delivery confirmation and proactive customer communication to reduce disputes.</p>
+      </div>
+    </div>
+  </div>
+
   <!-- Related calculators -->
   <div class="mt-14">
     <h2 class="text-xl font-bold mb-5">Related Calculators</h2>
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
       {[
+        { href: '/shopify-hidden-fees-audit/', title: 'Hidden Fees Audit Tool', desc: 'Full 5-step audit of every Shopify cost' },
         { href: '/break-even/', title: 'Break-Even Calculator', desc: 'Units needed to cover fixed costs' },
         { href: '/profit-margin/', title: 'Profit Margin Calculator', desc: 'Per-product margin after all fees' },
         { href: '/shopify-fees/', title: 'Shopify Fee Calculator', desc: 'Transaction fees by plan and processor' },
@@ -403,14 +643,12 @@ function activatePlan(p: string) {
       ? 'plan-btn border-2 border-blue-600 dark:border-blue-500 bg-blue-50 dark:bg-blue-950 rounded-xl p-3 text-left transition'
       : 'plan-btn border dark:border-gray-600 rounded-xl p-3 text-left transition hover:border-blue-400';
   });
-  // Plus has no annual discount — hide billing toggle
   const isPlus = p === 'plus';
   const wrap = document.getElementById('billing-wrap')!;
   const note = document.getElementById('billing-plus-note')!;
   wrap.classList.toggle('hidden', isPlus);
   note.classList.toggle('hidden', !isPlus);
-  if (isPlus) billing = 'monthly'; // reset to monthly (annual = monthly anyway)
-  // update penalty labels
+  if (isPlus) billing = 'monthly';
   const penalty = PLANS[p].penalty;
   ['stripe','paypal','square'].forEach(k => {
     const el = document.getElementById(`label-${k}`);
@@ -530,13 +768,11 @@ function recalc() {
   const marginPct  = rev > 0 ? (net / rev * 100) : 0;
   const perOrder   = orders > 0 ? net / orders : 0;
 
-  // Derived labels
   ge('d-orders').textContent  = orders.toLocaleString();
   ge('d-cogs').textContent    = fmt(cogsAmt);
   ge('d-plan').textContent    = fmt(planCost) + '/mo';
   ge('d-payment').textContent = fmt(paymentAmt) + ' (' + pct(paymentAmt / (rev || 1) * 100) + ')';
 
-  // Breakdown rows
   const rows: Array<{ label?: string; value?: string; colorClass?: string; bold?: boolean; divider?: boolean }> = [
     { label: 'Revenue', value: fmt(rev), bold: true },
     { label: `COGS (${(cogsPct * 100).toFixed(0)}%)`, value: '−' + fmt(cogsAmt), colorClass: 'text-red-500' },
@@ -582,6 +818,21 @@ function recalc() {
   } else {
     bench.textContent = `🟢 ${pct(marginPct)} — strong margin, ready to scale`;
     bench.className = 'text-sm rounded-lg px-3 py-2 text-center font-medium bg-green-50 dark:bg-green-950 text-green-700 dark:text-green-400';
+  }
+
+  // Calculation details collapsible
+  const details = document.getElementById('calc-details');
+  if (details) {
+    const penLine = penaltyAmt > 0 ? `\n  + ${fmt(penaltyAmt)} (${(pl.penalty*100).toFixed(1)}% 3rd-party penalty)` : '';
+    details.innerHTML = [
+      `Orders: ${orders.toLocaleString()} = ${fmt(rev)} ÷ $${aov.toFixed(0)}`,
+      `COGS: ${fmt(cogsAmt)} = ${(cogsPct*100).toFixed(0)}% × ${fmt(rev)}`,
+      `Processing: ${fmt(paymentAmt)} = ${(payRate*100).toFixed(1)}% × ${fmt(rev)} + $${payPerTxn} × ${orders}${penLine}`,
+      `Shipping: ${fmt(shipAmt)} = $${ship} × ${orders} orders`,
+      `Gross profit: ${fmtS(gross)}`,
+      `Returns: ${fmt(returnsAmt)} = $${retC} × ${(retP*100).toFixed(0)}% × ${orders}`,
+      `OPEX: ${fmt(opex)} = plan + apps + marketing + returns`,
+    ].map(line => `<div>${line}</div>`).join('');
   }
 
   drawPie({ cogs: cogsAmt, mkt: mktAmt, ship: shipAmt, payment: paymentAmt,
