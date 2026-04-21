@@ -1,0 +1,687 @@
+---
+import Base from '../layouts/Base.astro';
+
+const faqSchema = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    { "@type": "Question", "name": "What is a good ROAS for a Shopify store?",
+      "acceptedAnswer": { "@type": "Answer", "text": "A 'good' ROAS depends on your margins. With 35% COGS and Shopify Payments, breakeven ROAS is roughly 2.0–2.5×. A healthy profitable ROAS is 3–4× for most product categories. High-margin products (beauty, supplements) can be profitable at 2×; low-margin electronics need 5×+." } },
+    { "@type": "Question", "name": "How do I calculate breakeven ROAS?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Breakeven ROAS = (Ad Spend + Fixed Costs) ÷ (Ad Spend × Contribution Margin%). Contribution Margin% = 1 − COGS% − Payment Processing Rate − Per-Transaction Fee ÷ AOV. Example: COGS 35%, Shopify Payments on Basic (2.9%+30¢), AOV $85: CM% = 61.7%. With $5,000 ad spend and $500 fixed costs: Breakeven ROAS = $5,500 ÷ ($5,000 × 0.617) = 1.78×." } },
+    { "@type": "Question", "name": "What is the difference between ROAS and ROI?",
+      "acceptedAnswer": { "@type": "Answer", "text": "ROAS (Return on Ad Spend) = Revenue ÷ Ad Spend. ROI (Return on Investment) = Net Profit ÷ Ad Spend. A 3× ROAS means $3 revenue per $1 spent. ROI accounts for all costs — a 3× ROAS with 40% COGS and 2.9% processing produces roughly 70% ROI, not 200%." } },
+    { "@type": "Question", "name": "Why does my Shopify ROAS need to be above 2× to be profitable?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Because COGS + payment fees + fixed costs typically consume 50–65% of revenue. If 60% of every dollar goes to costs, each $1 of ad spend must generate at least $1 ÷ (1−0.60) = $2.50 in revenue just to break even — so your minimum ROAS is 2.5×. Use this calculator to find your exact number." } },
+    { "@type": "Question", "name": "How can I lower my breakeven ROAS on Shopify?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Three levers: (1) Reduce COGS% through better supplier negotiation or product mix shift. (2) Switch to Shopify Payments to eliminate the 0.5–2% third-party penalty. (3) Increase AOV with bundles or upsells — a higher AOV dilutes the fixed per-transaction fee ($0.30÷$150 AOV vs $0.30÷$50 AOV)." } },
+  ]
+});
+
+const appSchema = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Breakeven ROAS Calculator for Shopify",
+  "description": "Free calculator to find your minimum ROAS for Shopify store profitability. Accounts for COGS, Shopify plan, payment processing, and fixed costs. 2026 rates.",
+  "applicationCategory": "BusinessApplication",
+  "operatingSystem": "Web",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+  "url": "https://shopify-fee-calc.com/breakeven-roas-calculator/"
+});
+
+const faqs = [
+  { q: "What is a good ROAS for a Shopify store?",
+    a: "A 'good' ROAS depends on your margins. With 35% COGS and Shopify Payments, breakeven ROAS is roughly 2.0–2.5×. A healthy profitable ROAS is 3–4× for most categories. High-margin products (beauty, supplements) can be profitable at 2×; low-margin electronics need 5×+." },
+  { q: "How do I calculate breakeven ROAS?",
+    a: "Breakeven ROAS = (Ad Spend + Fixed Costs) ÷ (Ad Spend × Contribution Margin%). CM% = 1 − COGS% − Payment Rate − Per-Txn Fee ÷ AOV. Example: COGS 35%, Shopify Payments Basic (2.9%+30¢), AOV $85: CM% = 61.7%. With $5K ad spend + $500 fixed: Breakeven = $5,500 ÷ ($5,000 × 0.617) = 1.78×." },
+  { q: "What is the difference between ROAS and ROI?",
+    a: "ROAS = Revenue ÷ Ad Spend. ROI = Net Profit ÷ Ad Spend. A 3× ROAS means $3 revenue per $1 spent. With 40% COGS and 2.9% processing, that 3× ROAS produces roughly 70% ROI — not 200%." },
+  { q: "Why does my Shopify ROAS need to be above 2× to be profitable?",
+    a: "Because COGS + payment fees + fixed costs typically consume 50–65% of revenue. If 60% of every dollar goes to costs, each $1 of ad spend needs to generate $2.50+ in revenue just to break even, so minimum ROAS is 2.5×. Your exact number depends on your specific cost structure." },
+  { q: "How can I lower my breakeven ROAS on Shopify?",
+    a: "Three levers: (1) Reduce COGS% through supplier negotiation. (2) Switch to Shopify Payments — eliminates the 0.5–2% penalty. (3) Increase AOV with bundles — a higher AOV dilutes the fixed $0.30/transaction fee, improving your contribution margin." },
+];
+---
+<Base
+  title="Breakeven ROAS Calculator — Minimum ROAS for Shopify Profitability (Free 2026)"
+  description="Find your exact breakeven ROAS for Shopify. Enter COGS, Shopify plan, payment processor, and ad spend — get your minimum profitable ROAS with a full sensitivity table."
+  noWebAppSchema={true}
+>
+  <script type="application/ld+json" set:html={faqSchema} />
+  <script type="application/ld+json" set:html={appSchema} />
+
+  <!-- Tailwind safelist -->
+  <div class="hidden bg-blue-50 dark:bg-blue-950 border-2 border-blue-600 dark:border-blue-500 bg-blue-600 text-white bg-white dark:bg-gray-900 dark:bg-gray-800 dark:border-gray-700 dark:border-gray-600 dark:text-gray-100 dark:text-gray-300 dark:text-gray-400 text-green-700 dark:text-green-400 bg-green-50 dark:bg-green-950 text-red-700 dark:text-red-400 bg-red-50 dark:bg-red-950 text-orange-700 dark:text-orange-400 bg-orange-50 dark:bg-orange-950 text-yellow-700 dark:text-yellow-400 bg-yellow-50 dark:bg-yellow-950 text-blue-600 dark:text-blue-400 font-semibold text-gray-800 dark:text-gray-200 text-gray-600 dark:text-gray-400 text-gray-700 dark:text-gray-300 border-green-400 dark:border-green-600 border-red-400 dark:border-red-600"></div>
+
+  <h1 class="text-3xl font-bold mb-2">Breakeven ROAS Calculator</h1>
+  <p class="text-gray-600 dark:text-gray-400 mb-8 max-w-2xl">
+    Find the minimum ROAS your Shopify ads need to break even — accounting for COGS, payment processing, plan fees, and fixed costs. Includes a sensitivity table showing P&amp;L at every ROAS from 1× to 5×.
+  </p>
+
+  <div class="flex flex-col lg:flex-row gap-8 items-start">
+
+    <!-- ── LEFT: Inputs ── -->
+    <div class="flex-1 min-w-0 space-y-4">
+
+      <!-- Block 1: Ad Spend -->
+      <div class="border dark:border-gray-700 rounded-xl p-5 bg-white dark:bg-gray-900">
+        <h3 class="font-semibold text-xs uppercase tracking-widest text-blue-600 dark:text-blue-400 mb-4">1 — Ad Spend</h3>
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-medium mb-1 dark:text-gray-300" for="inp-spend">Monthly Ad Spend ($)</label>
+            <input id="inp-spend" type="number" min="0" step="100" value="5000" lang="en" inputmode="decimal"
+              class="w-full border dark:border-gray-600 rounded-lg px-3 py-2 text-sm bg-white dark:bg-gray-800 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-1 dark:text-gray-300" for="inp-aov">
+              Avg Order Value ($)
+              <span class="tip" data-tip="Average revenue per order. Higher AOV dilutes the fixed $0.30/txn fee, improving your contribution margin.">?</span>
+            </label>
+            <input id="inp-aov" type="number" min="1" step="1" value="85" lang="en" inputmode="decimal"
+              class="w-full border dark:border-gray-600 rounded-lg px-3 py-2 text-sm bg-white dark:bg-gray-800 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+          </div>
+        </div>
+        <!-- Channel breakdown toggle -->
+        <button id="channel-toggle" class="mt-4 text-xs text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-1">
+          <svg id="channel-chevron" class="w-3 h-3 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+          </svg>
+          Break down by channel
+        </button>
+        <div id="channel-inputs" class="hidden mt-4 grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-medium mb-1 dark:text-gray-400">Meta (Facebook/Instagram) ($)</label>
+            <input id="inp-meta" type="number" min="0" step="100" value="0" lang="en" inputmode="decimal"
+              class="w-full border dark:border-gray-600 rounded-lg px-2 py-1.5 text-sm bg-white dark:bg-gray-800 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+          </div>
+          <div>
+            <label class="block text-xs font-medium mb-1 dark:text-gray-400">Google / YouTube ($)</label>
+            <input id="inp-google" type="number" min="0" step="100" value="0" lang="en" inputmode="decimal"
+              class="w-full border dark:border-gray-600 rounded-lg px-2 py-1.5 text-sm bg-white dark:bg-gray-800 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+          </div>
+          <div>
+            <label class="block text-xs font-medium mb-1 dark:text-gray-400">TikTok ($)</label>
+            <input id="inp-tiktok" type="number" min="0" step="100" value="0" lang="en" inputmode="decimal"
+              class="w-full border dark:border-gray-600 rounded-lg px-2 py-1.5 text-sm bg-white dark:bg-gray-800 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+          </div>
+          <div>
+            <label class="block text-xs font-medium mb-1 dark:text-gray-400">Other channels ($)</label>
+            <input id="inp-other-ch" type="number" min="0" step="100" value="0" lang="en" inputmode="decimal"
+              class="w-full border dark:border-gray-600 rounded-lg px-2 py-1.5 text-sm bg-white dark:bg-gray-800 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+          </div>
+          <p class="col-span-2 text-xs text-gray-400 dark:text-gray-500">Channel total: <span id="channel-total" class="font-medium text-gray-600 dark:text-gray-300">$0</span> — updates the monthly spend above</p>
+        </div>
+      </div>
+
+      <!-- Block 2: COGS -->
+      <div class="border dark:border-gray-700 rounded-xl p-5 bg-white dark:bg-gray-900">
+        <h3 class="font-semibold text-xs uppercase tracking-widest text-blue-600 dark:text-blue-400 mb-4">2 — Cost of Goods (COGS)</h3>
+        <label class="block text-sm font-medium mb-2 dark:text-gray-300">
+          COGS % of Revenue
+          <span class="tip" data-tip="Benchmarks: apparel 30–45%, beauty 25–40%, electronics 50–65%, supplements 20–35%, digital 0–10%.">?</span>
+        </label>
+        <div class="flex items-center gap-3">
+          <input id="inp-cogs-range" type="range" min="0" max="90" step="1" value="35" class="flex-1 accent-blue-600" />
+          <div class="flex items-center border dark:border-gray-600 rounded-lg overflow-hidden shrink-0">
+            <input id="inp-cogs" type="number" min="0" max="90" step="1" value="35" lang="en" inputmode="decimal"
+              class="w-14 px-2 py-1.5 text-sm text-right bg-white dark:bg-gray-800 dark:text-gray-100 focus:outline-none" />
+            <span class="px-2 py-1.5 text-sm bg-gray-50 dark:bg-gray-700 dark:text-gray-400 border-l dark:border-gray-600">%</span>
+          </div>
+        </div>
+        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1.5">
+          Gross margin before fees: <span id="d-gm" class="font-semibold text-gray-700 dark:text-gray-300">65.0%</span>
+        </p>
+      </div>
+
+      <!-- Block 3: Plan -->
+      <div class="border dark:border-gray-700 rounded-xl p-5 bg-white dark:bg-gray-900">
+        <h3 class="font-semibold text-xs uppercase tracking-widest text-blue-600 dark:text-blue-400 mb-4">3 — Shopify Plan</h3>
+        <div class="grid grid-cols-2 gap-2 mb-4">
+          <button data-plan="basic" class="plan-btn border dark:border-gray-600 rounded-xl p-3 text-left transition hover:border-blue-400">
+            <div class="font-semibold text-sm dark:text-gray-100">Basic</div>
+            <div class="text-xs text-gray-500 dark:text-gray-400">$39/mo · 2.9%+30¢</div>
+          </button>
+          <button data-plan="shopify" class="plan-btn border dark:border-gray-600 rounded-xl p-3 text-left transition hover:border-blue-400">
+            <div class="font-semibold text-sm dark:text-gray-100">Shopify</div>
+            <div class="text-xs text-gray-500 dark:text-gray-400">$105/mo · 2.7%+30¢</div>
+          </button>
+          <button data-plan="advanced" class="plan-btn border dark:border-gray-600 rounded-xl p-3 text-left transition hover:border-blue-400">
+            <div class="font-semibold text-sm dark:text-gray-100">Advanced</div>
+            <div class="text-xs text-gray-500 dark:text-gray-400">$399/mo · 2.5%+30¢</div>
+          </button>
+          <button data-plan="plus" class="plan-btn border dark:border-gray-600 rounded-xl p-3 text-left transition hover:border-blue-400">
+            <div class="font-semibold text-sm dark:text-gray-100">Plus</div>
+            <div class="text-xs text-gray-500 dark:text-gray-400">$2,300/mo · 1.8%+30¢</div>
+          </button>
+        </div>
+      </div>
+
+      <!-- Block 4: Processor -->
+      <div class="border dark:border-gray-700 rounded-xl p-5 bg-white dark:bg-gray-900">
+        <h3 class="font-semibold text-xs uppercase tracking-widest text-blue-600 dark:text-blue-400 mb-4">4 — Payment Processor</h3>
+        <div class="space-y-2">
+          <button data-proc="shopify" class="proc-btn w-full text-left border dark:border-gray-600 rounded-xl px-4 py-3 transition hover:border-blue-400">
+            <div class="flex justify-between">
+              <span class="font-medium text-sm dark:text-gray-100">Shopify Payments</span>
+              <span class="text-xs text-green-600 dark:text-green-400 font-medium">No penalty</span>
+            </div>
+            <div class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Rate from your plan · best for breakeven ROAS</div>
+          </button>
+          <button data-proc="stripe" class="proc-btn w-full text-left border dark:border-gray-600 rounded-xl px-4 py-3 transition hover:border-blue-400">
+            <div class="flex justify-between">
+              <span class="font-medium text-sm dark:text-gray-100">Stripe / Square</span>
+              <span id="label-penalty" class="text-xs text-orange-500 font-medium">+2% penalty</span>
+            </div>
+            <div class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">2.9% + $0.30/order + Shopify 3rd-party surcharge</div>
+          </button>
+          <button data-proc="paypal" class="proc-btn w-full text-left border dark:border-gray-600 rounded-xl px-4 py-3 transition hover:border-blue-400">
+            <div class="flex justify-between">
+              <span class="font-medium text-sm dark:text-gray-100">PayPal</span>
+              <span id="label-penalty-pp" class="text-xs text-orange-500 font-medium">+2% penalty</span>
+            </div>
+            <div class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">3.49% + $0.49/order + Shopify 3rd-party surcharge</div>
+          </button>
+        </div>
+      </div>
+
+      <!-- Block 5: Fixed costs -->
+      <div class="border dark:border-gray-700 rounded-xl p-5 bg-white dark:bg-gray-900">
+        <h3 class="font-semibold text-xs uppercase tracking-widest text-blue-600 dark:text-blue-400 mb-4">5 — Other Monthly Fixed Costs</h3>
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-medium mb-1 dark:text-gray-300" for="inp-apps">
+              Apps &amp; Subs ($)
+              <span class="tip" data-tip="Total monthly Shopify app subscriptions + external tools. Typical range: $75–$300/mo.">?</span>
+            </label>
+            <input id="inp-apps" type="number" min="0" step="5" value="150" lang="en" inputmode="decimal"
+              class="w-full border dark:border-gray-600 rounded-lg px-3 py-2 text-sm bg-white dark:bg-gray-800 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-1 dark:text-gray-300" for="inp-other">
+              Other Fixed ($)
+              <span class="tip" data-tip="Agency retainer, staff costs, warehouse, software not included above.">?</span>
+            </label>
+            <input id="inp-other" type="number" min="0" step="50" value="0" lang="en" inputmode="decimal"
+              class="w-full border dark:border-gray-600 rounded-lg px-3 py-2 text-sm bg-white dark:bg-gray-800 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+          </div>
+        </div>
+      </div>
+
+      <!-- Share -->
+      <div class="flex items-center gap-3">
+        <button id="share-btn"
+          class="flex items-center gap-2 text-sm text-blue-600 dark:text-blue-400 border border-blue-300 dark:border-blue-700 rounded-lg px-4 py-2 hover:bg-blue-50 dark:hover:bg-blue-950 transition">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/>
+          </svg>
+          Copy shareable link
+        </button>
+        <span id="share-confirm" class="hidden text-xs text-green-600 dark:text-green-400">&#10003; Copied!</span>
+      </div>
+    </div>
+
+    <!-- ── RIGHT: Sticky results ── -->
+    <div class="w-full lg:w-[380px] shrink-0">
+      <div class="lg:sticky lg:top-6 space-y-4">
+
+        <!-- Main result card -->
+        <div class="border-2 border-blue-600 dark:border-blue-500 rounded-2xl overflow-hidden">
+          <div class="bg-blue-600 dark:bg-blue-700 px-5 py-3">
+            <h3 class="text-white font-semibold text-sm">Your Breakeven ROAS</h3>
+          </div>
+          <div class="bg-white dark:bg-gray-900 px-5 py-5">
+            <div class="text-center mb-4">
+              <span id="res-roas" class="text-5xl font-bold text-blue-700 dark:text-blue-400">—</span>
+              <span class="text-xl font-semibold text-blue-600 dark:text-blue-400">×</span>
+              <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">minimum ROAS to break even</p>
+            </div>
+            <div class="grid grid-cols-2 gap-3 text-sm mb-4">
+              <div class="bg-gray-50 dark:bg-gray-800 rounded-lg px-3 py-2.5 text-center">
+                <p class="text-xs text-gray-500 dark:text-gray-400">Contribution Margin</p>
+                <p id="res-cm" class="font-semibold text-gray-800 dark:text-gray-200 mt-0.5">—</p>
+              </div>
+              <div class="bg-gray-50 dark:bg-gray-800 rounded-lg px-3 py-2.5 text-center">
+                <p class="text-xs text-gray-500 dark:text-gray-400">Revenue at B/E</p>
+                <p id="res-rev-be" class="font-semibold text-gray-800 dark:text-gray-200 mt-0.5">—</p>
+              </div>
+            </div>
+            <div id="res-benchmark" class="text-sm rounded-lg px-3 py-2 text-center font-medium"></div>
+          </div>
+        </div>
+
+        <!-- Current ROAS checker -->
+        <div class="border dark:border-gray-700 rounded-2xl p-5 bg-white dark:bg-gray-900">
+          <h3 class="text-sm font-semibold mb-3 text-gray-700 dark:text-gray-300">Check Your Actual ROAS</h3>
+          <div class="flex items-center gap-2 mb-4">
+            <input id="inp-current-roas" type="number" min="0" step="0.1" value="3" lang="en" inputmode="decimal"
+              class="flex-1 border dark:border-gray-600 rounded-lg px-3 py-2 text-sm bg-white dark:bg-gray-800 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+            <span class="text-sm text-gray-500 dark:text-gray-400 font-medium shrink-0">× ROAS</span>
+          </div>
+          <div id="current-roas-result" class="text-sm rounded-lg px-4 py-3 space-y-1.5"></div>
+        </div>
+
+        <!-- Sensitivity table -->
+        <div class="border dark:border-gray-700 rounded-2xl overflow-hidden bg-white dark:bg-gray-900">
+          <div class="px-5 py-3 bg-gray-50 dark:bg-gray-800 border-b dark:border-gray-700">
+            <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-300">P&amp;L at Different ROAS Levels</h3>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-xs">
+              <thead class="text-gray-500 dark:text-gray-400">
+                <tr class="border-b dark:border-gray-700">
+                  <th class="px-4 py-2 text-left font-medium">ROAS</th>
+                  <th class="px-4 py-2 text-right font-medium">Revenue</th>
+                  <th class="px-4 py-2 text-right font-medium">Net Profit</th>
+                  <th class="px-4 py-2 text-right font-medium">Margin</th>
+                </tr>
+              </thead>
+              <tbody id="sensitivity-body" class="divide-y dark:divide-gray-700"></tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SEO Content ── -->
+  <div class="mt-16 max-w-3xl">
+
+    <h2 class="text-2xl font-bold mb-4">What Is ROAS — and Why Your Breakeven Isn't 1.0×</h2>
+    <div class="text-gray-700 dark:text-gray-300 space-y-4 leading-relaxed text-sm">
+      <p>ROAS (Return on Ad Spend) measures how much revenue you generate per dollar spent on advertising. A 3× ROAS means every $1 in ads produces $3 in revenue. Simple math suggests that at 1.0× ROAS you break even — but that's wrong, and it's one of the most expensive misunderstandings in ecommerce.</p>
+      <p>The reason: revenue isn't profit. By the time you pay for product costs, payment processing, your Shopify plan, and app subscriptions, a typical Shopify store keeps only 35–55 cents from every revenue dollar. That means your ads need to generate $2–3 in revenue <em>just to cover their own cost</em>, before any profit appears.</p>
+      <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mt-5 mb-2">The Three Numbers That Define Your Breakeven</h3>
+      <ol class="list-decimal pl-5 space-y-2">
+        <li><strong>Contribution Margin %</strong> — what's left from each revenue dollar after COGS and variable fees (payment processing). This is the most important number in your business. If you sell a $100 item with $35 COGS and $3 in Shopify Payments fees, your CM is 62%.</li>
+        <li><strong>Fixed Cost Load</strong> — your Shopify plan, apps, and other costs that don't scale with orders. At $5K/month in ads, adding $500 in fixed costs raises your breakeven ROAS by ~0.16×.</li>
+        <li><strong>Ad Spend Scale</strong> — as you spend more, fixed costs become a smaller fraction, and your breakeven ROAS drops. This is why profitability often improves at scale even before you optimize creatives.</li>
+      </ol>
+    </div>
+
+    <h2 class="text-2xl font-bold mt-14 mb-4">The Breakeven ROAS Formula — Step by Step</h2>
+    <div class="text-gray-700 dark:text-gray-300 space-y-4 text-sm leading-relaxed">
+      <p>Here's exactly how this calculator arrives at your breakeven ROAS, with a worked example using Shopify Basic + Shopify Payments, $85 AOV, 35% COGS, $5,000 ad spend, $500 fixed costs:</p>
+      <div class="space-y-3">
+        <div class="border dark:border-gray-700 rounded-xl p-4 bg-white dark:bg-gray-900">
+          <h3 class="font-semibold text-gray-900 dark:text-gray-100 mb-2">Step 1: Calculate Contribution Margin %</h3>
+          <pre class="text-xs font-mono bg-gray-50 dark:bg-gray-800 rounded-lg p-3 overflow-x-auto text-gray-700 dark:text-gray-300 leading-relaxed"><code>CM% = 1 − COGS% − Processing Rate − (Per-Txn Fee ÷ AOV)
+CM% = 1 − 0.35 − 0.029 − (0.30 ÷ 85)
+CM% = 1 − 0.35 − 0.029 − 0.00353
+CM% = 0.6175  →  61.75%</code></pre>
+          <p class="mt-2 text-xs text-gray-500 dark:text-gray-400">This means you keep $0.6175 from every $1 of revenue, before fixed costs and ad spend.</p>
+        </div>
+        <div class="border dark:border-gray-700 rounded-xl p-4 bg-white dark:bg-gray-900">
+          <h3 class="font-semibold text-gray-900 dark:text-gray-100 mb-2">Step 2: Calculate Breakeven ROAS</h3>
+          <pre class="text-xs font-mono bg-gray-50 dark:bg-gray-800 rounded-lg p-3 overflow-x-auto text-gray-700 dark:text-gray-300 leading-relaxed"><code>Breakeven ROAS = (Ad Spend + Fixed Costs) ÷ (Ad Spend × CM%)
+Breakeven ROAS = ($5,000 + $500 + $39) ÷ ($5,000 × 0.6175)
+Breakeven ROAS = $5,539 ÷ $3,087.50
+Breakeven ROAS = 1.79×</code></pre>
+        </div>
+        <div class="border dark:border-gray-700 rounded-xl p-4 bg-white dark:bg-gray-900">
+          <h3 class="font-semibold text-gray-900 dark:text-gray-100 mb-2">Step 3: Net Profit at a Given ROAS</h3>
+          <pre class="text-xs font-mono bg-gray-50 dark:bg-gray-800 rounded-lg p-3 overflow-x-auto text-gray-700 dark:text-gray-300 leading-relaxed"><code>Revenue = ROAS × Ad Spend = 3.0 × $5,000 = $15,000
+Net Profit = Revenue × CM% − Fixed Costs − Ad Spend
+Net Profit = $15,000 × 0.6175 − $539 − $5,000
+Net Profit = $9,262 − $539 − $5,000
+Net Profit = $3,723  →  24.8% net margin</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <h2 class="text-2xl font-bold mt-14 mb-4">ROAS Benchmarks by Channel and Product Category (2026)</h2>
+    <p class="text-sm text-gray-700 dark:text-gray-300 mb-5 leading-relaxed">These are industry medians — your breakeven ROAS (from the calculator above) is your real target, not these averages. But knowing channel norms helps identify underperformance.</p>
+
+    <h3 class="text-base font-semibold text-gray-900 dark:text-gray-100 mb-3">By Advertising Channel</h3>
+    <div class="overflow-x-auto rounded-xl border dark:border-gray-700 mb-6">
+      <table class="w-full text-sm">
+        <thead class="bg-gray-50 dark:bg-gray-800 text-left">
+          <tr>
+            <th class="px-4 py-3 font-semibold text-gray-700 dark:text-gray-300">Channel</th>
+            <th class="px-4 py-3 font-semibold text-gray-700 dark:text-gray-300">Median ROAS</th>
+            <th class="px-4 py-3 font-semibold text-gray-700 dark:text-gray-300">Strong ROAS</th>
+            <th class="px-4 py-3 font-semibold text-gray-700 dark:text-gray-300">Notes</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y dark:divide-gray-700 text-gray-700 dark:text-gray-300">
+          <tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50">
+            <td class="px-4 py-2.5 font-medium">Meta (FB/IG)</td>
+            <td class="px-4 py-2.5">2.5–3.5×</td>
+            <td class="px-4 py-2.5 text-green-700 dark:text-green-400">4×+</td>
+            <td class="px-4 py-2.5">Prospecting 1.5–2×, retargeting 4–8×</td>
+          </tr>
+          <tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50">
+            <td class="px-4 py-2.5 font-medium">Google Shopping</td>
+            <td class="px-4 py-2.5">3.0–5.0×</td>
+            <td class="px-4 py-2.5 text-green-700 dark:text-green-400">6×+</td>
+            <td class="px-4 py-2.5">Intent-based; higher ROAS, lower volume</td>
+          </tr>
+          <tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50">
+            <td class="px-4 py-2.5 font-medium">Google Search</td>
+            <td class="px-4 py-2.5">4.0–8.0×</td>
+            <td class="px-4 py-2.5 text-green-700 dark:text-green-400">10×+</td>
+            <td class="px-4 py-2.5">Brand campaigns can hit 20×+ but small volume</td>
+          </tr>
+          <tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50">
+            <td class="px-4 py-2.5 font-medium">TikTok Ads</td>
+            <td class="px-4 py-2.5">1.5–2.5×</td>
+            <td class="px-4 py-2.5 text-green-700 dark:text-green-400">3.5×+</td>
+            <td class="px-4 py-2.5">Lower ROAS, stronger brand building; LTV compensates</td>
+          </tr>
+          <tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50">
+            <td class="px-4 py-2.5 font-medium">Pinterest</td>
+            <td class="px-4 py-2.5">2.0–4.0×</td>
+            <td class="px-4 py-2.5 text-green-700 dark:text-green-400">5×+</td>
+            <td class="px-4 py-2.5">Home, fashion, food categories outperform</td>
+          </tr>
+          <tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50">
+            <td class="px-4 py-2.5 font-medium">Email (owned)</td>
+            <td class="px-4 py-2.5">15–40×</td>
+            <td class="px-4 py-2.5 text-green-700 dark:text-green-400">50×+</td>
+            <td class="px-4 py-2.5">Highest ROAS of any channel — invest in list building</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="text-base font-semibold text-gray-900 dark:text-gray-100 mb-3">Typical Breakeven ROAS by Product Category</h3>
+    <div class="overflow-x-auto rounded-xl border dark:border-gray-700 mb-6">
+      <table class="w-full text-sm">
+        <thead class="bg-gray-50 dark:bg-gray-800 text-left">
+          <tr>
+            <th class="px-4 py-3 font-semibold text-gray-700 dark:text-gray-300">Category</th>
+            <th class="px-4 py-3 font-semibold text-gray-700 dark:text-gray-300">Typical COGS</th>
+            <th class="px-4 py-3 font-semibold text-gray-700 dark:text-gray-300">Breakeven ROAS</th>
+            <th class="px-4 py-3 font-semibold text-gray-700 dark:text-gray-300">Scale target</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y dark:divide-gray-700 text-gray-700 dark:text-gray-300">
+          <tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50">
+            <td class="px-4 py-2.5 font-medium">Beauty &amp; Skincare</td>
+            <td class="px-4 py-2.5">25–35%</td>
+            <td class="px-4 py-2.5 text-green-700 dark:text-green-400">~1.6×</td>
+            <td class="px-4 py-2.5">2.5× profitable, LTV matters most</td>
+          </tr>
+          <tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50">
+            <td class="px-4 py-2.5 font-medium">Supplements / DTC</td>
+            <td class="px-4 py-2.5">20–30%</td>
+            <td class="px-4 py-2.5 text-green-700 dark:text-green-400">~1.5×</td>
+            <td class="px-4 py-2.5">Often willing to break even on first order (LTV)</td>
+          </tr>
+          <tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50">
+            <td class="px-4 py-2.5 font-medium">Apparel &amp; Fashion</td>
+            <td class="px-4 py-2.5">35–50%</td>
+            <td class="px-4 py-2.5 text-yellow-700 dark:text-yellow-400">~2.0–2.3×</td>
+            <td class="px-4 py-2.5">Returns inflate true cost; target 3×+ to be safe</td>
+          </tr>
+          <tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50">
+            <td class="px-4 py-2.5 font-medium">Home &amp; Garden</td>
+            <td class="px-4 py-2.5">40–55%</td>
+            <td class="px-4 py-2.5 text-yellow-700 dark:text-yellow-400">~2.3–2.8×</td>
+            <td class="px-4 py-2.5">Shipping costs further raise breakeven</td>
+          </tr>
+          <tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50">
+            <td class="px-4 py-2.5 font-medium">Consumer Electronics</td>
+            <td class="px-4 py-2.5">55–70%</td>
+            <td class="px-4 py-2.5 text-orange-700 dark:text-orange-400">~3.5–5.0×</td>
+            <td class="px-4 py-2.5">Thin margins require very efficient targeting</td>
+          </tr>
+          <tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50">
+            <td class="px-4 py-2.5 font-medium">Dropshipping</td>
+            <td class="px-4 py-2.5">60–80%</td>
+            <td class="px-4 py-2.5 text-red-700 dark:text-red-400">~5.0–8.0×</td>
+            <td class="px-4 py-2.5">Highest breakeven; requires strong brand moat</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Related calculators -->
+    <h2 class="text-xl font-bold mb-4 mt-12">Related Calculators</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+      {[
+        { href: '/shopify-profit-calculator/', title: 'Real Profit Calculator', desc: 'Full monthly P&L after all fees' },
+        { href: '/shopify-hidden-fees-audit/', title: 'Hidden Fees Audit', desc: "Find every Shopify cost you're paying" },
+        { href: '/break-even/', title: 'Break-Even Calculator', desc: 'Units needed to cover fixed costs' },
+        { href: '/profit-margin/', title: 'Profit Margin Calculator', desc: 'Per-product margin after all fees' },
+      ].map(({ href, title, desc }) => (
+        <a href={href} class="border dark:border-gray-700 rounded-xl p-4 hover:border-blue-400 dark:hover:border-blue-500 transition group">
+          <div class="font-semibold text-sm group-hover:text-blue-600 dark:group-hover:text-blue-400 dark:text-gray-100">{title}</div>
+          <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">{desc}</div>
+        </a>
+      ))}
+    </div>
+
+    <!-- FAQ -->
+    <h2 class="text-2xl font-bold mt-12 mb-6">Frequently Asked Questions</h2>
+    <div class="space-y-3">
+      {faqs.map(({ q, a }) => (
+        <details class="border dark:border-gray-700 rounded-xl overflow-hidden group">
+          <summary class="flex justify-between items-center px-5 py-4 cursor-pointer font-medium text-sm hover:bg-gray-50 dark:hover:bg-gray-800 transition list-none">
+            <span>{q}</span>
+            <svg class="w-4 h-4 text-gray-400 shrink-0 ml-3 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+            </svg>
+          </summary>
+          <div class="px-5 pb-4 text-sm text-gray-600 dark:text-gray-400">{a}</div>
+        </details>
+      ))}
+    </div>
+
+  </div>
+
+  <style>
+    .tip {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 14px; height: 14px; border-radius: 50%;
+      font-size: 9px; font-weight: 700; font-style: normal;
+      background: #d1d5db; color: #374151; cursor: help;
+      vertical-align: middle; margin-left: 3px;
+    }
+    :global(.dark) .tip { background: #374151; color: #d1d5db; }
+  </style>
+
+  <script>
+  const PLANS: Record<string, { monthly: number; rate: number; perTxn: number; penalty: number }> = {
+    basic:    { monthly: 39,   rate: 0.029, perTxn: 0.30, penalty: 0.02 },
+    shopify:  { monthly: 105,  rate: 0.027, perTxn: 0.30, penalty: 0.01 },
+    advanced: { monthly: 399,  rate: 0.025, perTxn: 0.30, penalty: 0.005 },
+    plus:     { monthly: 2300, rate: 0.018, perTxn: 0.30, penalty: 0.0015 },
+  };
+  const PROCS: Record<string, { rate: number | null; perTxn: number | null; penalty: boolean }> = {
+    shopify: { rate: null,   perTxn: null,  penalty: false },
+    stripe:  { rate: 0.029,  perTxn: 0.30,  penalty: true },
+    paypal:  { rate: 0.0349, perTxn: 0.49,  penalty: true },
+  };
+
+  let plan = 'basic', proc = 'shopify';
+
+  const ge = (id: string) => document.getElementById(id) as HTMLElement;
+  const gv = (id: string) => parseFloat((document.getElementById(id) as HTMLInputElement).value) || 0;
+  const fmt = (n: number) => '$' + Math.abs(n).toLocaleString('en-US', { maximumFractionDigits: 0 });
+  const fmtS = (n: number) => (n < 0 ? '−' : '+') + fmt(n);
+
+  // COGS range/number sync
+  const cogsRange = document.getElementById('inp-cogs-range') as HTMLInputElement;
+  const cogsNum   = document.getElementById('inp-cogs') as HTMLInputElement;
+  cogsRange.addEventListener('input', () => { cogsNum.value = cogsRange.value; recalc(); });
+  cogsNum.addEventListener('input',   () => { cogsRange.value = cogsNum.value; recalc(); });
+
+  // Plan buttons
+  function activatePlan(p: string) {
+    plan = p;
+    document.querySelectorAll<HTMLElement>('.plan-btn').forEach(btn => {
+      const on = btn.dataset.plan === p;
+      btn.className = on
+        ? 'plan-btn border-2 border-blue-600 dark:border-blue-500 bg-blue-50 dark:bg-blue-950 rounded-xl p-3 text-left transition'
+        : 'plan-btn border dark:border-gray-600 rounded-xl p-3 text-left transition hover:border-blue-400';
+    });
+    const penalty = PLANS[p].penalty;
+    const lp = document.getElementById('label-penalty');
+    const lpp = document.getElementById('label-penalty-pp');
+    if (lp) lp.textContent = `+${(penalty * 100)}% penalty`;
+    if (lpp) lpp.textContent = `+${(penalty * 100)}% penalty`;
+  }
+  document.querySelectorAll<HTMLElement>('.plan-btn').forEach(btn =>
+    btn.addEventListener('click', () => { activatePlan(btn.dataset.plan!); recalc(); })
+  );
+
+  // Processor buttons
+  function activateProc(p: string) {
+    proc = p;
+    document.querySelectorAll<HTMLElement>('.proc-btn').forEach(btn => {
+      const on = btn.dataset.proc === p;
+      btn.className = on
+        ? 'proc-btn w-full text-left border-2 border-blue-600 dark:border-blue-500 bg-blue-50 dark:bg-blue-950 rounded-xl px-4 py-3 transition'
+        : 'proc-btn w-full text-left border dark:border-gray-600 rounded-xl px-4 py-3 transition hover:border-blue-400';
+    });
+  }
+  document.querySelectorAll<HTMLElement>('.proc-btn').forEach(btn =>
+    btn.addEventListener('click', () => { activateProc(btn.dataset.proc!); recalc(); })
+  );
+
+  // Channel breakdown toggle
+  let channelOpen = false;
+  document.getElementById('channel-toggle')!.addEventListener('click', () => {
+    channelOpen = !channelOpen;
+    document.getElementById('channel-inputs')!.classList.toggle('hidden', !channelOpen);
+    document.getElementById('channel-chevron')!.style.transform = channelOpen ? 'rotate(180deg)' : '';
+  });
+  ['inp-meta','inp-google','inp-tiktok','inp-other-ch'].forEach(id => {
+    document.getElementById(id)?.addEventListener('input', () => {
+      const total = ['inp-meta','inp-google','inp-tiktok','inp-other-ch'].reduce((s,i) => s + gv(i), 0);
+      (document.getElementById('inp-spend') as HTMLInputElement).value = String(total);
+      ge('channel-total').textContent = fmt(total);
+      recalc();
+    });
+  });
+
+  function calcMetrics(roas: number, adSpend: number, cm: number, fixedCosts: number) {
+    const revenue = roas * adSpend;
+    const net = revenue * cm - fixedCosts - adSpend;
+    const margin = revenue > 0 ? (net / revenue * 100) : 0;
+    return { revenue, net, margin };
+  }
+
+  function recalc() {
+    const adSpend = gv('inp-spend');
+    const aov     = Math.max(gv('inp-aov'), 1);
+    const cogsPct = parseFloat(cogsNum.value) / 100;
+    const apps    = gv('inp-apps');
+    const other   = gv('inp-other');
+
+    const pl = PLANS[plan];
+    const pr = PROCS[proc];
+    const payRate   = pr.rate  ?? pl.rate;
+    const payPerTxn = pr.perTxn ?? pl.perTxn;
+    const penaltyRate = pr.penalty ? pl.penalty : 0;
+
+    // Contribution margin
+    const cm = 1 - cogsPct - payRate - payPerTxn / aov - penaltyRate;
+    const fixedCosts = pl.monthly + apps + other;
+
+    // Breakeven ROAS
+    const beRoas = cm > 0 ? (adSpend + fixedCosts) / (adSpend * cm) : Infinity;
+
+    // Update displays
+    ge('d-gm').textContent = ((1 - cogsPct) * 100).toFixed(1) + '%';
+    ge('res-roas').textContent = isFinite(beRoas) ? beRoas.toFixed(2) : '∞';
+    ge('res-cm').textContent = (cm * 100).toFixed(1) + '%';
+    const beRevenue = beRoas * adSpend;
+    ge('res-rev-be').textContent = isFinite(beRevenue) ? fmt(beRevenue) : '—';
+
+    // Benchmark
+    const bench = ge('res-benchmark');
+    if (!isFinite(beRoas) || beRoas > 8) {
+      bench.textContent = '🔴 Very high breakeven — margin too thin for paid ads';
+      bench.className = 'text-sm rounded-lg px-3 py-2 text-center font-medium bg-red-50 dark:bg-red-950 text-red-700 dark:text-red-400';
+    } else if (beRoas > 4) {
+      bench.textContent = '🟠 High breakeven — needs strong targeting to hit';
+      bench.className = 'text-sm rounded-lg px-3 py-2 text-center font-medium bg-orange-50 dark:bg-orange-950 text-orange-700 dark:text-orange-400';
+    } else if (beRoas > 2.5) {
+      bench.textContent = '🟡 Moderate — achievable with good creatives';
+      bench.className = 'text-sm rounded-lg px-3 py-2 text-center font-medium bg-yellow-50 dark:bg-yellow-950 text-yellow-700 dark:text-yellow-400';
+    } else {
+      bench.textContent = '🟢 Low breakeven — healthy margin for paid growth';
+      bench.className = 'text-sm rounded-lg px-3 py-2 text-center font-medium bg-green-50 dark:bg-green-950 text-green-700 dark:text-green-400';
+    }
+
+    // Current ROAS checker
+    const currentRoas = gv('inp-current-roas');
+    const { revenue: curRev, net: curNet, margin: curMargin } = calcMetrics(currentRoas, adSpend, cm, fixedCosts);
+    const isProfitable = curNet >= 0;
+    const crEl = ge('current-roas-result');
+    crEl.className = `text-sm rounded-lg px-4 py-3 space-y-1.5 ${isProfitable ? 'bg-green-50 dark:bg-green-950' : 'bg-red-50 dark:bg-red-950'}`;
+    crEl.innerHTML = `
+      <div class="flex justify-between"><span class="${isProfitable ? 'text-green-700 dark:text-green-400' : 'text-red-700 dark:text-red-400'}">Revenue</span><span class="font-semibold ${isProfitable ? 'text-green-800 dark:text-green-300' : 'text-red-800 dark:text-red-300'}">${fmt(curRev)}</span></div>
+      <div class="flex justify-between"><span class="${isProfitable ? 'text-green-700 dark:text-green-400' : 'text-red-700 dark:text-red-400'}">Net Profit</span><span class="font-semibold ${isProfitable ? 'text-green-800 dark:text-green-300' : 'text-red-800 dark:text-red-300'}">${fmtS(curNet)}</span></div>
+      <div class="flex justify-between"><span class="${isProfitable ? 'text-green-700 dark:text-green-400' : 'text-red-700 dark:text-red-400'}">Net Margin</span><span class="font-semibold ${isProfitable ? 'text-green-800 dark:text-green-300' : 'text-red-800 dark:text-red-300'}">${curMargin.toFixed(1)}%</span></div>
+      <div class="pt-1 text-xs ${isProfitable ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'} font-medium">${isProfitable ? `✓ Profitable — ${(currentRoas / beRoas).toFixed(2)}× above breakeven` : `✗ Below breakeven by ${(beRoas - currentRoas).toFixed(2)}× ROAS`}</div>
+    `;
+
+    // Sensitivity table
+    const roasPoints = [1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 5.0];
+    const tbody = ge('sensitivity-body');
+    tbody.innerHTML = roasPoints.map(r => {
+      const { revenue, net, margin } = calcMetrics(r, adSpend, cm, fixedCosts);
+      const isBreakeven = Math.abs(r - beRoas) < 0.26;
+      const isProfit = net >= 0;
+      const rowClass = isBreakeven
+        ? 'bg-blue-50 dark:bg-blue-950 border-b dark:border-gray-700'
+        : 'border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800/50';
+      const valClass = isProfit ? 'text-green-600 dark:text-green-400' : 'text-red-500 dark:text-red-400';
+      return `<tr class="${rowClass}">
+        <td class="px-4 py-2 font-semibold ${isBreakeven ? 'text-blue-700 dark:text-blue-400' : 'text-gray-800 dark:text-gray-200'}">${r.toFixed(1)}×${isBreakeven ? ' ≈B/E' : ''}</td>
+        <td class="px-4 py-2 text-right text-gray-600 dark:text-gray-400">${fmt(revenue)}</td>
+        <td class="px-4 py-2 text-right font-medium ${valClass}">${fmtS(net)}</td>
+        <td class="px-4 py-2 text-right ${valClass}">${margin.toFixed(1)}%</td>
+      </tr>`;
+    }).join('');
+  }
+
+  // Share link
+  ge('share-btn').addEventListener('click', () => {
+    const d = btoa(JSON.stringify({
+      spend: (document.getElementById('inp-spend') as HTMLInputElement).value,
+      aov:   (document.getElementById('inp-aov') as HTMLInputElement).value,
+      cogs:  cogsNum.value,
+      apps:  (document.getElementById('inp-apps') as HTMLInputElement).value,
+      other: (document.getElementById('inp-other') as HTMLInputElement).value,
+      cr:    (document.getElementById('inp-current-roas') as HTMLInputElement).value,
+      plan, proc,
+    }));
+    navigator.clipboard.writeText(location.origin + location.pathname + '?d=' + d).then(() => {
+      const c = ge('share-confirm');
+      c.classList.remove('hidden');
+      setTimeout(() => c.classList.add('hidden'), 2000);
+    });
+  });
+
+  // Load from URL
+  const urlParam = new URLSearchParams(location.search).get('d');
+  if (urlParam) {
+    try {
+      const data = JSON.parse(atob(urlParam));
+      const sv = (id: string, v: string | undefined) => { if (v) (document.getElementById(id) as HTMLInputElement).value = v; };
+      sv('inp-spend', data.spend); sv('inp-aov', data.aov); sv('inp-apps', data.apps);
+      sv('inp-other', data.other); sv('inp-current-roas', data.cr);
+      if (data.cogs) { cogsNum.value = data.cogs; cogsRange.value = data.cogs; }
+      if (data.plan) activatePlan(data.plan);
+      if (data.proc) activateProc(data.proc);
+    } catch {}
+  }
+
+  // Input listeners
+  let debounce: ReturnType<typeof setTimeout>;
+  document.querySelectorAll<HTMLInputElement>('#inp-spend,#inp-aov,#inp-apps,#inp-other,#inp-current-roas').forEach(el =>
+    el.addEventListener('input', () => { clearTimeout(debounce); debounce = setTimeout(recalc, 150); })
+  );
+  document.getElementById('inp-current-roas')!.addEventListener('input', recalc);
+
+  new MutationObserver(recalc).observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+
+  activatePlan('basic');
+  activateProc('shopify');
+  recalc();
+  </script>
+</Base>
