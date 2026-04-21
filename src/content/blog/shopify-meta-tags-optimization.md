@@ -51,7 +51,7 @@ Google rewrites roughly 61% of title tags when they don't match the page's H1 or
 
 Target **120 to 155 characters**. Google cuts off anything longer. Descriptions under 120 characters can look thin on desktop search results.
 
-Put your primary keyword naturally in the first sentence. Google bolds matching query terms in meta descriptions. This draws the eye and signals relevance. After the keyword, add a clear CTA: "Shop now," "Free US shipping over $50," or "In stock and ready to ship."
+Put your primary keyword naturally in the first sentence. Google bolds matching query terms in meta descriptions, which draws the eye and signals relevance. After the keyword, add a clear CTA: "Shop now," "Free US shipping over $50," or "In stock and ready to ship."
 
 **Real example:** US Shopify store Beardbrand rewrote their product meta descriptions to include specific ingredients and a shipping CTA. Their beard oil collection page went from "Shop our beard oil collection" to "Premium beard oils with argan & jojoba. Softens and conditions in one wash. Free shipping over $40." According to Beardbrand's published case study (2024), that change produced a 34% CTR increase within 60 days across their top 15 collection pages.
 
