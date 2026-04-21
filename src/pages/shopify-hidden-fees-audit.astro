@@ -1,0 +1,670 @@
+---
+import Base from '../layouts/Base.astro';
+
+const faqSchema = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    { "@type": "Question", "name": "What are Shopify hidden fees?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Shopify hidden fees include third-party transaction fees (2% on Basic), credit card processing on non-Shopify-Payments processors, app subscriptions (avg $200–$500/mo for growing stores), currency conversion fees (1.5%), chargeback fees ($15 each), and POS hardware costs. Most merchants underestimate total costs by 30–50%." } },
+    { "@type": "Question", "name": "How much does Shopify really cost per month?",
+      "acceptedAnswer": { "@type": "Answer", "text": "A store on Shopify Basic doing $20K/month typically pays: $39 plan + ~$580 payment processing + $150–300 in apps + $50–100 shipping + domain/email = $850–1,100/month in true total cost before COGS or marketing." } },
+    { "@type": "Question", "name": "What is Shopify's currency conversion fee?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Shopify charges 1.5% on all transactions where the customer's currency differs from your payout currency. This applies even if you use Shopify Payments. It's often missed by merchants selling internationally." } },
+    { "@type": "Question", "name": "How do I reduce Shopify transaction fees?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Switch to Shopify Payments to eliminate the third-party transaction fee (saves 0.5–2% per transaction). Upgrade your plan if volume justifies it. On Advanced, processing drops from 2.9%+30¢ to 2.5%+30¢ — saving $200/mo on a $50K/mo store." } },
+  ]
+});
+
+const appSchema = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Shopify Hidden Fees Audit Tool",
+  "description": "Free 5-step audit to find all hidden Shopify costs: transaction fees, apps, currency conversion, chargebacks, and more. Get a full PDF report.",
+  "applicationCategory": "BusinessApplication",
+  "operatingSystem": "Web",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+  "url": "https://shopify-fee-calc.com/shopify-hidden-fees-audit/"
+});
+
+const faqs = [
+  { q: "What are Shopify hidden fees?",
+    a: "Shopify hidden fees include third-party transaction fees (2% on Basic), app subscriptions (avg $200–$500/mo), currency conversion fees (1.5%), chargeback fees ($15 each), and more. Most merchants underestimate total costs by 30–50%." },
+  { q: "How much does Shopify really cost per month?",
+    a: "A Basic store doing $20K/month typically pays: $39 plan + ~$580 processing + $150–300 apps + $50–100 shipping + domain/email = $850–1,100/month before COGS or marketing." },
+  { q: "What is Shopify's currency conversion fee?",
+    a: "Shopify charges 1.5% on transactions where the customer's currency differs from your payout currency — even with Shopify Payments. Often missed by merchants selling internationally." },
+  { q: "How do I reduce Shopify transaction fees?",
+    a: "Switch to Shopify Payments to eliminate the third-party fee (saves 0.5–2% per sale). Upgrade your plan if volume justifies it — Advanced saves $200/mo on a $50K/mo store vs Basic." },
+];
+---
+<Base
+  title="Shopify Hidden Fees Audit — Find Your True Monthly Cost (Free 2026)"
+  description="Free 5-step audit reveals all Shopify hidden fees: transaction charges, app costs, currency conversion, chargebacks, and more. Get your full PDF cost report."
+>
+  <script type="application/ld+json" set:html={faqSchema} />
+  <script type="application/ld+json" set:html={appSchema} />
+
+  <!-- Tailwind safelist -->
+  <div class="hidden bg-blue-600 border-blue-600 dark:border-blue-500 border-2 text-white bg-white dark:bg-gray-900 dark:bg-gray-800 dark:bg-gray-950 dark:border-gray-700 dark:border-gray-600 dark:text-gray-100 dark:text-gray-300 dark:text-gray-400 text-green-700 dark:text-green-400 bg-green-50 dark:bg-green-950 text-red-700 dark:text-red-400 bg-red-50 dark:bg-red-950 text-orange-700 dark:text-orange-400 bg-orange-50 dark:bg-orange-950 text-yellow-700 dark:text-yellow-400 bg-yellow-50 dark:bg-yellow-950 bg-blue-50 dark:bg-blue-950 text-blue-700 dark:text-blue-400 text-gray-500 dark:text-gray-500 border-gray-200 dark:border-gray-700 font-semibold text-sm text-xs"></div>
+
+  <h1 class="text-3xl font-bold mb-2">Shopify Hidden Fees Audit</h1>
+  <p class="text-gray-600 dark:text-gray-400 mb-8 max-w-2xl">
+    Answer 5 quick questions about your store. We'll calculate every fee you're paying — including the ones Shopify doesn't advertise. Get a printable PDF cost report.
+  </p>
+
+  <!-- ── WIZARD ── -->
+  <div id="wizard" class="max-w-2xl">
+
+    <!-- Progress bar -->
+    <div class="flex items-center gap-2 mb-8" id="progress-wrap">
+      {[1,2,3,4,5].map(n => (
+        <div class="flex items-center gap-2">
+          <div id={`dot-${n}`} class="w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold transition-all duration-200 bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400">{n}</div>
+          {n < 5 && <div id={`line-${n}`} class="flex-1 h-1 w-8 rounded bg-gray-200 dark:bg-gray-700 transition-all duration-200"></div>}
+        </div>
+      ))}
+      <span id="step-label" class="ml-2 text-sm text-gray-500 dark:text-gray-400">Step 1 of 5</span>
+    </div>
+
+    <!-- Step 1: Basics -->
+    <div id="step-1" class="border dark:border-gray-700 rounded-xl p-6 bg-white dark:bg-gray-900">
+      <h2 class="font-semibold text-xs uppercase tracking-widest text-blue-600 dark:text-blue-400 mb-4">1 — Store Basics</h2>
+      <div class="space-y-5">
+        <div>
+          <label class="block text-sm font-medium mb-2 dark:text-gray-300">Monthly Revenue</label>
+          <div class="grid grid-cols-2 sm:grid-cols-3 gap-2" id="rev-btns">
+            {[["under-5k","Under $5K"],["5k-20k","$5K–$20K"],["20k-50k","$20K–$50K"],["50k-100k","$50K–$100K"],["100k-plus","$100K+"],["not-sure","Not sure"]].map(([v,l]) => (
+              <button data-group="rev" data-val={v} class="opt-btn border dark:border-gray-600 rounded-lg px-3 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:border-blue-500 transition-colors">{l}</button>
+            ))}
+          </div>
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-2 dark:text-gray-300">How long have you been on Shopify?</label>
+          <div class="grid grid-cols-2 sm:grid-cols-3 gap-2" id="age-btns">
+            {[["new","Just starting"],["under-1y","Under 1 year"],["1-3y","1–3 years"],["3y-plus","3+ years"]].map(([v,l]) => (
+              <button data-group="age" data-val={v} class="opt-btn border dark:border-gray-600 rounded-lg px-3 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:border-blue-500 transition-colors">{l}</button>
+            ))}
+          </div>
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-2 dark:text-gray-300">Do you sell internationally?</label>
+          <div class="grid grid-cols-3 gap-2">
+            {[["no","No"],["some","Some (<20%)"],["yes","Yes (20%+)"]].map(([v,l]) => (
+              <button data-group="intl" data-val={v} class="opt-btn border dark:border-gray-600 rounded-lg px-3 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:border-blue-500 transition-colors">{l}</button>
+            ))}
+          </div>
+        </div>
+      </div>
+      <div class="mt-6 flex justify-end">
+        <button id="next-1" class="px-5 py-2.5 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors disabled:opacity-40 disabled:cursor-not-allowed" disabled>Next →</button>
+      </div>
+    </div>
+
+    <!-- Step 2: Plan & Payments -->
+    <div id="step-2" class="hidden border dark:border-gray-700 rounded-xl p-6 bg-white dark:bg-gray-900">
+      <h2 class="font-semibold text-xs uppercase tracking-widest text-blue-600 dark:text-blue-400 mb-4">2 — Plan &amp; Payments</h2>
+      <div class="space-y-5">
+        <div>
+          <label class="block text-sm font-medium mb-2 dark:text-gray-300">Your Shopify Plan</label>
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+            {[["basic","Basic — $39"],["shopify","Shopify — $105"],["advanced","Advanced — $399"],["plus","Plus — $2,300"]].map(([v,l]) => (
+              <button data-group="plan" data-val={v} class="opt-btn border dark:border-gray-600 rounded-lg px-3 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:border-blue-500 transition-colors">{l}</button>
+            ))}
+          </div>
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-2 dark:text-gray-300">Payment Processor</label>
+          <div class="grid grid-cols-2 gap-2">
+            {[["shopify-pay","Shopify Payments"],["stripe","Stripe"],["paypal","PayPal"],["other","Other 3rd party"]].map(([v,l]) => (
+              <button data-group="processor" data-val={v} class="opt-btn border dark:border-gray-600 rounded-lg px-3 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:border-blue-500 transition-colors">{l}</button>
+            ))}
+          </div>
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-2 dark:text-gray-300">Average Chargebacks Per Month</label>
+          <div class="grid grid-cols-4 gap-2">
+            {[["0","0"],["1-2","1–2"],["3-5","3–5"],["5-plus","5+"]].map(([v,l]) => (
+              <button data-group="chargebacks" data-val={v} class="opt-btn border dark:border-gray-600 rounded-lg px-3 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:border-blue-500 transition-colors">{l}</button>
+            ))}
+          </div>
+        </div>
+      </div>
+      <div class="mt-6 flex justify-between">
+        <button id="back-2" class="px-5 py-2.5 border dark:border-gray-600 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">← Back</button>
+        <button id="next-2" class="px-5 py-2.5 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors disabled:opacity-40 disabled:cursor-not-allowed" disabled>Next →</button>
+      </div>
+    </div>
+
+    <!-- Step 3: Shipping & Fulfillment -->
+    <div id="step-3" class="hidden border dark:border-gray-700 rounded-xl p-6 bg-white dark:bg-gray-900">
+      <h2 class="font-semibold text-xs uppercase tracking-widest text-blue-600 dark:text-blue-400 mb-4">3 — Shipping &amp; Fulfillment</h2>
+      <div class="space-y-5">
+        <div>
+          <label class="block text-sm font-medium mb-2 dark:text-gray-300">How do you fulfill orders?</label>
+          <div class="grid grid-cols-2 gap-2">
+            {[["self","Self-fulfill (in-house)"],["3pl","3PL / Warehouse"],["dropship","Dropshipping"],["digital","Digital products"]].map(([v,l]) => (
+              <button data-group="fulfill" data-val={v} class="opt-btn border dark:border-gray-600 rounded-lg px-3 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:border-blue-500 transition-colors">{l}</button>
+            ))}
+          </div>
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-2 dark:text-gray-300">Do you offer free shipping?</label>
+          <div class="grid grid-cols-3 gap-2">
+            {[["no","No"],["sometimes","Sometimes"],["always","Always"]].map(([v,l]) => (
+              <button data-group="freeship" data-val={v} class="opt-btn border dark:border-gray-600 rounded-lg px-3 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:border-blue-500 transition-colors">{l}</button>
+            ))}
+          </div>
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-2 dark:text-gray-300">Monthly Return Rate</label>
+          <div class="grid grid-cols-4 gap-2">
+            {[["low","<5%"],["med","5–15%"],["high","15–30%"],["very-high","30%+"]].map(([v,l]) => (
+              <button data-group="returns" data-val={v} class="opt-btn border dark:border-gray-600 rounded-lg px-3 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:border-blue-500 transition-colors">{l}</button>
+            ))}
+          </div>
+        </div>
+      </div>
+      <div class="mt-6 flex justify-between">
+        <button id="back-3" class="px-5 py-2.5 border dark:border-gray-600 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">← Back</button>
+        <button id="next-3" class="px-5 py-2.5 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors disabled:opacity-40 disabled:cursor-not-allowed" disabled>Next →</button>
+      </div>
+    </div>
+
+    <!-- Step 4: App Stack -->
+    <div id="step-4" class="hidden border dark:border-gray-700 rounded-xl p-6 bg-white dark:bg-gray-900">
+      <h2 class="font-semibold text-xs uppercase tracking-widest text-blue-600 dark:text-blue-400 mb-4">4 — App Stack</h2>
+      <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">Select all app categories you pay for (monthly):</p>
+      <div class="grid grid-cols-2 gap-2" id="apps-grid">
+        {[
+          ["email","Email marketing ($20–$300)"],
+          ["reviews","Reviews app ($15–$100)"],
+          ["upsell","Upsell / cross-sell ($20–$100)"],
+          ["loyalty","Loyalty / rewards ($30–$150)"],
+          ["subscription","Subscriptions ($100–$400)"],
+          ["pagebuilder","Page builder ($30–$80)"],
+          ["seo-app","SEO app ($10–$50)"],
+          ["inventory","Inventory / sync ($30–$150)"],
+          ["chat","Live chat / helpdesk ($30–$100)"],
+          ["analytics","Advanced analytics ($30–$200)"],
+          ["returns-app","Returns management ($20–$100)"],
+          ["other-app","Other paid apps"],
+        ].map(([v,l]) => (
+          <button data-group="apps" data-val={v} data-multi="true" class="opt-btn border dark:border-gray-600 rounded-lg px-3 py-2.5 text-sm text-left text-gray-700 dark:text-gray-300 hover:border-blue-500 transition-colors">{l}</button>
+        ))}
+      </div>
+      <p class="text-xs text-gray-400 dark:text-gray-500 mt-3">Select all that apply. Click again to deselect.</p>
+      <div class="mt-6 flex justify-between">
+        <button id="back-4" class="px-5 py-2.5 border dark:border-gray-600 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">← Back</button>
+        <button id="next-4" class="px-5 py-2.5 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors">Next →</button>
+      </div>
+    </div>
+
+    <!-- Step 5: Other costs -->
+    <div id="step-5" class="hidden border dark:border-gray-700 rounded-xl p-6 bg-white dark:bg-gray-900">
+      <h2 class="font-semibold text-xs uppercase tracking-widest text-blue-600 dark:text-blue-400 mb-4">5 — Other Costs</h2>
+      <div class="space-y-5">
+        <div>
+          <label class="block text-sm font-medium mb-2 dark:text-gray-300">Do you have a custom domain?</label>
+          <div class="grid grid-cols-3 gap-2">
+            {[["no","No (using .myshopify)"],["yes","Yes (~$15/yr)"],["premium","Premium domain ($100+/yr)"]].map(([v,l]) => (
+              <button data-group="domain" data-val={v} class="opt-btn border dark:border-gray-600 rounded-lg px-3 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:border-blue-500 transition-colors">{l}</button>
+            ))}
+          </div>
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-2 dark:text-gray-300">Business email hosting?</label>
+          <div class="grid grid-cols-3 gap-2">
+            {[["no","No / free"],["shopify-email","Shopify Email ($1+/mo)"],["gsuite","Google Workspace ($12+/mo/user)"]].map(([v,l]) => (
+              <button data-group="email-host" data-val={v} class="opt-btn border dark:border-gray-600 rounded-lg px-3 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:border-blue-500 transition-colors">{l}</button>
+            ))}
+          </div>
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-2 dark:text-gray-300">Multi-currency / multi-market?</label>
+          <div class="grid grid-cols-3 gap-2">
+            {[["no","No"],["markets","Shopify Markets (free)"],["currencies","Multi-currency active"]].map(([v,l]) => (
+              <button data-group="multicurrency" data-val={v} class="opt-btn border dark:border-gray-600 rounded-lg px-3 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:border-blue-500 transition-colors">{l}</button>
+            ))}
+          </div>
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-2 dark:text-gray-300">Do you sell in-person (POS)?</label>
+          <div class="grid grid-cols-3 gap-2">
+            {[["no","No"],["pos-lite","POS Lite (free)"],["pos-pro","POS Pro ($89/mo/location)"]].map(([v,l]) => (
+              <button data-group="pos" data-val={v} class="opt-btn border dark:border-gray-600 rounded-lg px-3 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:border-blue-500 transition-colors">{l}</button>
+            ))}
+          </div>
+        </div>
+      </div>
+      <div class="mt-6 flex justify-between">
+        <button id="back-5" class="px-5 py-2.5 border dark:border-gray-600 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">← Back</button>
+        <button id="calc-btn" class="px-6 py-2.5 bg-green-600 text-white rounded-lg text-sm font-semibold hover:bg-green-700 transition-colors disabled:opacity-40 disabled:cursor-not-allowed" disabled>Generate My Report →</button>
+      </div>
+    </div>
+
+  </div><!-- /wizard -->
+
+  <!-- ── REPORT ── -->
+  <div id="report" class="hidden max-w-2xl">
+
+    <div class="flex items-center justify-between mb-6 print:hidden">
+      <h2 class="text-2xl font-bold">Your Hidden Fees Report</h2>
+      <div class="flex gap-3">
+        <button id="share-btn" class="flex items-center gap-1.5 px-4 py-2 border dark:border-gray-600 rounded-lg text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/></svg>
+          Share
+        </button>
+        <button id="pdf-btn" class="flex items-center gap-1.5 px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+          Download PDF
+        </button>
+      </div>
+    </div>
+
+    <!-- Print header (hidden on screen) -->
+    <div class="hidden print:block mb-6">
+      <h2 class="text-2xl font-bold">Shopify Hidden Fees Report</h2>
+      <p class="text-sm text-gray-500">Generated at shopify-fee-calc.com</p>
+    </div>
+
+    <!-- Share copied toast -->
+    <div id="share-toast" class="hidden fixed bottom-6 left-1/2 -translate-x-1/2 bg-gray-900 text-white text-sm px-4 py-2 rounded-lg shadow-lg z-50">Link copied to clipboard!</div>
+
+    <!-- Summary card -->
+    <div id="summary-card" class="rounded-xl p-6 mb-6 border-2"></div>
+
+    <!-- Fee breakdown -->
+    <div class="border dark:border-gray-700 rounded-xl overflow-hidden mb-6">
+      <div class="px-5 py-3 bg-gray-50 dark:bg-gray-800 border-b dark:border-gray-700">
+        <h3 class="font-semibold text-sm text-gray-700 dark:text-gray-300">Fee Breakdown by Category</h3>
+      </div>
+      <div id="breakdown-rows" class="divide-y dark:divide-gray-700"></div>
+    </div>
+
+    <!-- Savings opportunities -->
+    <div id="savings-section" class="border dark:border-gray-700 rounded-xl overflow-hidden mb-6">
+      <div class="px-5 py-3 bg-green-50 dark:bg-green-950 border-b dark:border-gray-700">
+        <h3 class="font-semibold text-sm text-green-700 dark:text-green-400">Savings Opportunities</h3>
+      </div>
+      <div id="savings-rows" class="divide-y dark:divide-gray-700"></div>
+    </div>
+
+    <!-- Actions -->
+    <div class="flex gap-3 print:hidden">
+      <button id="restart-btn" class="px-5 py-2.5 border dark:border-gray-600 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">← Start Over</button>
+      <a href="/shopify-profit-calculator/" class="px-5 py-2.5 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors">Full P&amp;L Calculator →</a>
+    </div>
+
+    <!-- PDF footer (print only) -->
+    <div class="hidden print:block mt-10 pt-6 border-t border-gray-200 text-xs text-gray-400 text-center">
+      Generated by shopify-fee-calc.com — Free Shopify fee calculators &amp; cost guides<br/>
+      Rates are estimates based on 2026 Shopify published pricing. Always verify with Shopify directly.
+    </div>
+
+  </div><!-- /report -->
+
+  <!-- ── SEO Content ── -->
+  <div class="mt-16 max-w-2xl">
+    <h2 class="text-2xl font-bold mb-6">What Are Shopify's Hidden Fees?</h2>
+    <div class="prose prose-sm dark:prose-invert max-w-none text-gray-700 dark:text-gray-300">
+      <p>Most Shopify merchants see the plan price — $39, $105, or $399/month — and assume that's close to their total platform cost. In reality, the plan fee is often less than 10% of what you actually pay to run your store each month.</p>
+      <h3>The Real Cost Stack</h3>
+      <ul>
+        <li><strong>Payment processing fees</strong> — 1.8%–2.9% + $0.30 per transaction, every sale</li>
+        <li><strong>Third-party transaction fees</strong> — 0.5%–2% extra if you don't use Shopify Payments</li>
+        <li><strong>App subscriptions</strong> — average Shopify store pays $200–$500/month in apps by year 2</li>
+        <li><strong>Currency conversion</strong> — 1.5% on all cross-currency transactions (often missed)</li>
+        <li><strong>Chargeback fees</strong> — $15 per chargeback, win or lose</li>
+        <li><strong>Shopify Email overages</strong> — $0.001 per email after free tier (adds up fast for large lists)</li>
+        <li><strong>POS Pro</strong> — $89/month per location if you sell in-person</li>
+        <li><strong>Domain + hosting</strong> — custom domain $10–$20/year, premium domains much more</li>
+      </ul>
+      <h3>Why These Fees Are "Hidden"</h3>
+      <p>None of these fees are hidden in a deceptive sense — they're all documented in Shopify's pricing pages. They're "hidden" because they're scattered across separate billing sections, appear as percentages rather than dollar amounts, and accumulate gradually as you add apps and grow volume. A merchant doing $50K/month can easily have $3,000–$5,000 in monthly platform costs without realizing it.</p>
+    </div>
+
+    <!-- FAQ -->
+    <h2 class="text-2xl font-bold mt-12 mb-6">Frequently Asked Questions</h2>
+    <div class="space-y-3">
+      {faqs.map((f, i) => (
+        <details class="group border dark:border-gray-700 rounded-xl overflow-hidden">
+          <summary class="flex items-center justify-between px-5 py-4 cursor-pointer font-medium text-sm text-gray-900 dark:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors list-none">
+            {f.q}
+            <svg class="w-4 h-4 shrink-0 text-gray-400 ml-4 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+            </svg>
+          </summary>
+          <div class="px-5 pb-4 text-sm text-gray-600 dark:text-gray-400 leading-relaxed">{f.a}</div>
+        </details>
+      ))}
+    </div>
+  </div>
+
+  <style>
+    @media print {
+      header, footer, nav, #wizard, .print\:hidden { display: none !important; }
+      #report { display: block !important; }
+      body { background: white; color: black; }
+      .dark\:bg-gray-900, .dark\:bg-gray-800, .dark\:bg-gray-950 { background: white !important; }
+    }
+  </style>
+
+  <script>
+    // ── State ──────────────────────────────────────────────────────────────────
+    type State = {
+      rev: string; age: string; intl: string;
+      plan: string; processor: string; chargebacks: string;
+      fulfill: string; freeship: string; returns: string;
+      apps: string[];
+      domain: string; 'email-host': string; multicurrency: string; pos: string;
+    };
+
+    const state: Partial<State> = { apps: [] };
+    let currentStep = 1;
+
+    // ── Revenue midpoints for calcs ────────────────────────────────────────────
+    const REV_MID: Record<string, number> = {
+      'under-5k': 2500, '5k-20k': 12500, '20k-50k': 35000,
+      '50k-100k': 75000, '100k-plus': 150000, 'not-sure': 10000,
+    };
+    const PLAN_COST: Record<string, number> = {
+      basic: 39, shopify: 105, advanced: 399, plus: 2300
+    };
+    const PLAN_RATE: Record<string, number> = {
+      basic: 0.029, shopify: 0.027, advanced: 0.025, plus: 0.018
+    };
+    const PLAN_PENALTY: Record<string, number> = {
+      basic: 0.02, shopify: 0.01, advanced: 0.005, plus: 0.0015
+    };
+    const APP_COST_MID: Record<string, number> = {
+      email: 80, reviews: 40, upsell: 50, loyalty: 80, subscription: 200,
+      pagebuilder: 50, 'seo-app': 25, inventory: 70, chat: 60,
+      analytics: 80, 'returns-app': 50, 'other-app': 50,
+    };
+
+    // ── DOM helpers ────────────────────────────────────────────────────────────
+    function $(id: string) { return document.getElementById(id)!; }
+
+    function showStep(n: number) {
+      [1,2,3,4,5].forEach(i => {
+        const el = $(`step-${i}`);
+        el.classList.toggle('hidden', i !== n);
+      });
+      currentStep = n;
+      updateProgress(n);
+    }
+
+    function updateProgress(n: number) {
+      $('step-label').textContent = `Step ${n} of 5`;
+      [1,2,3,4,5].forEach(i => {
+        const dot = $(`dot-${i}`);
+        if (i < n) {
+          dot.className = 'w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold transition-all duration-200 bg-blue-600 text-white';
+        } else if (i === n) {
+          dot.className = 'w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold transition-all duration-200 border-2 border-blue-600 text-blue-600 dark:text-blue-400';
+        } else {
+          dot.className = 'w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold transition-all duration-200 bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400';
+        }
+        if (i < 5) {
+          const line = $(`line-${i}`);
+          line.className = `flex-1 h-1 w-8 rounded transition-all duration-200 ${i < n ? 'bg-blue-600' : 'bg-gray-200 dark:bg-gray-700'}`;
+        }
+      });
+    }
+
+    // ── Option button clicks ───────────────────────────────────────────────────
+    document.querySelectorAll('.opt-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const group = (btn as HTMLElement).dataset.group!;
+        const val = (btn as HTMLElement).dataset.val!;
+        const isMulti = (btn as HTMLElement).dataset.multi === 'true';
+
+        if (isMulti) {
+          // Toggle in array
+          const arr = (state as any).apps as string[];
+          const idx = arr.indexOf(val);
+          if (idx >= 0) {
+            arr.splice(idx, 1);
+            btn.classList.remove('border-blue-600', 'dark:border-blue-500', 'bg-blue-50', 'dark:bg-blue-950', 'text-blue-700', 'dark:text-blue-400');
+            btn.classList.add('border', 'dark:border-gray-600', 'text-gray-700', 'dark:text-gray-300');
+          } else {
+            arr.push(val);
+            btn.classList.remove('border', 'dark:border-gray-600', 'text-gray-700', 'dark:text-gray-300');
+            btn.classList.add('border-blue-600', 'dark:border-blue-500', 'bg-blue-50', 'dark:bg-blue-950', 'text-blue-700', 'dark:text-blue-400');
+          }
+        } else {
+          // Single select
+          document.querySelectorAll(`.opt-btn[data-group="${group}"]`).forEach(b => {
+            b.classList.remove('border-blue-600', 'dark:border-blue-500', 'bg-blue-50', 'dark:bg-blue-950', 'text-blue-700', 'dark:text-blue-400', 'border-2');
+            b.classList.add('border', 'dark:border-gray-600', 'text-gray-700', 'dark:text-gray-300');
+          });
+          btn.classList.remove('border', 'text-gray-700', 'dark:text-gray-300');
+          btn.classList.add('border-blue-600', 'dark:border-blue-500', 'bg-blue-50', 'dark:bg-blue-950', 'text-blue-700', 'dark:text-blue-400');
+          (state as any)[group] = val;
+        }
+        checkNextButton(currentStep);
+      });
+    });
+
+    // Required fields per step (apps step is optional — multi-select)
+    const REQUIRED: Record<number, string[]> = {
+      1: ['rev', 'age', 'intl'],
+      2: ['plan', 'processor', 'chargebacks'],
+      3: ['fulfill', 'freeship', 'returns'],
+      4: [],
+      5: ['domain', 'email-host', 'multicurrency', 'pos'],
+    };
+
+    function checkNextButton(step: number) {
+      const reqs = REQUIRED[step];
+      const allFilled = reqs.every(k => (state as any)[k]);
+      const btn = step === 5 ? $('calc-btn') : $(`next-${step}`);
+      (btn as HTMLButtonElement).disabled = !allFilled;
+    }
+
+    // ── Navigation ─────────────────────────────────────────────────────────────
+    $('next-1').addEventListener('click', () => showStep(2));
+    $('next-2').addEventListener('click', () => showStep(3));
+    $('next-3').addEventListener('click', () => showStep(4));
+    $('next-4').addEventListener('click', () => showStep(5));
+    $('back-2').addEventListener('click', () => showStep(1));
+    $('back-3').addEventListener('click', () => showStep(2));
+    $('back-4').addEventListener('click', () => showStep(3));
+    $('back-5').addEventListener('click', () => showStep(4));
+
+    $('calc-btn').addEventListener('click', generateReport);
+    $('restart-btn').addEventListener('click', () => {
+      location.href = location.pathname;
+    });
+    $('pdf-btn').addEventListener('click', () => window.print());
+    $('share-btn').addEventListener('click', shareReport);
+
+    // ── Calculations ───────────────────────────────────────────────────────────
+    function generateReport() {
+      const rev = REV_MID[state.rev!] ?? 10000;
+      const plan = state.plan!;
+      const proc = state.processor!;
+      const s = state as Required<State>;
+
+      // Plan cost
+      const planCost = PLAN_COST[plan] ?? 39;
+
+      // Payment processing
+      const procRate = PLAN_RATE[plan] ?? 0.029;
+      const estimatedOrders = Math.round(rev / 75); // assume ~$75 AOV
+      const processingCost = Math.round(rev * procRate + estimatedOrders * 0.30);
+
+      // Third-party transaction fee
+      const useThirdParty = proc !== 'shopify-pay';
+      const txnPenalty = useThirdParty ? Math.round(rev * PLAN_PENALTY[plan]) : 0;
+
+      // Chargeback fees
+      const cbMap: Record<string, number> = { '0': 0, '1-2': 22, '3-5': 60, '5-plus': 112 };
+      const chargebackCost = cbMap[s.chargebacks] ?? 0;
+
+      // Currency conversion
+      const intlPct: Record<string, number> = { no: 0, some: 0.08, yes: 0.25 };
+      const intlRev = rev * (intlPct[s.intl] ?? 0);
+      const currencyFee = Math.round(intlRev * 0.015);
+
+      // Apps
+      const appsCost = (s.apps ?? []).reduce((sum, a) => sum + (APP_COST_MID[a] ?? 50), 0);
+
+      // Domain
+      const domainMap: Record<string, number> = { no: 0, yes: 1.25, premium: 10 };
+      const domainCost = domainMap[s.domain] ?? 0;
+
+      // Email hosting
+      const emailMap: Record<string, number> = { no: 0, 'shopify-email': 5, gsuite: 24 };
+      const emailCost = emailMap[s['email-host']] ?? 0;
+
+      // POS
+      const posMap: Record<string, number> = { no: 0, 'pos-lite': 0, 'pos-pro': 89 };
+      const posCost = posMap[s.pos] ?? 0;
+
+      // Shipping (estimate based on fulfillment type)
+      const shipMap: Record<string, number> = {
+        self: Math.round(rev * 0.10),
+        '3pl': Math.round(rev * 0.12),
+        dropship: Math.round(rev * 0.02),
+        digital: 0,
+      };
+      const shippingCost = shipMap[s.fulfill] ?? 0;
+
+      // Returns handling
+      const retMap: Record<string, number> = { low: Math.round(rev * 0.005), med: Math.round(rev * 0.02), high: Math.round(rev * 0.04), 'very-high': Math.round(rev * 0.07) };
+      const returnCost = retMap[s.returns] ?? 0;
+
+      const total = planCost + processingCost + txnPenalty + chargebackCost + currencyFee + appsCost + domainCost + emailCost + posCost + returnCost;
+      const pct = ((total / rev) * 100).toFixed(1);
+
+      // ── Build report UI ───────────────────────────────────────────────────
+      const card = $('summary-card');
+      const isHigh = parseFloat(pct) > 20;
+      const isMed = parseFloat(pct) > 12;
+      const colorClass = isHigh ? 'border-red-400 dark:border-red-600 bg-red-50 dark:bg-red-950'
+        : isMed ? 'border-orange-400 dark:border-orange-600 bg-orange-50 dark:bg-orange-950'
+        : 'border-green-400 dark:border-green-600 bg-green-50 dark:bg-green-950';
+      const textClass = isHigh ? 'text-red-700 dark:text-red-400' : isMed ? 'text-orange-700 dark:text-orange-400' : 'text-green-700 dark:text-green-400';
+      const rating = isHigh ? '⚠️ High cost structure — action needed' : isMed ? '📊 Moderate — room to optimize' : '✅ Healthy cost structure';
+
+      card.className = `rounded-xl p-6 mb-6 border-2 ${colorClass}`;
+      card.innerHTML = `
+        <div class="flex items-start justify-between gap-4">
+          <div>
+            <p class="text-3xl font-bold ${textClass}">$${total.toLocaleString()}<span class="text-lg font-medium">/mo</span></p>
+            <p class="text-sm ${textClass} mt-1">Total platform cost — <strong>${pct}%</strong> of your $${rev.toLocaleString()} revenue</p>
+          </div>
+          <div class="text-right shrink-0">
+            <p class="text-xs font-medium ${textClass}">${rating}</p>
+          </div>
+        </div>
+      `;
+
+      // Breakdown rows
+      const rows: [string, number, string][] = [
+        ['Shopify Plan', planCost, 'Monthly subscription fee'],
+        ['Payment Processing', processingCost, `${(procRate*100).toFixed(1)}%+$0.30 × ~${estimatedOrders} orders`],
+        ...(txnPenalty > 0 ? [['Third-Party Transaction Fee', txnPenalty, `${(PLAN_PENALTY[plan]*100).toFixed(1)}% Shopify surcharge for using ${proc}`] as [string, number, string]] : []),
+        ...(chargebackCost > 0 ? [['Chargeback Fees', chargebackCost, '$15 per chargeback (dispute win or lose)'] as [string, number, string]] : []),
+        ...(currencyFee > 0 ? [['Currency Conversion (1.5%)', currencyFee, `On ~$${intlRev.toLocaleString()} international revenue`] as [string, number, string]] : []),
+        ...(appsCost > 0 ? [['App Subscriptions', appsCost, `${(s.apps ?? []).length} app categories — estimated midpoint`] as [string, number, string]] : []),
+        ...(shippingCost > 0 ? [['Shipping / Fulfillment', shippingCost, `Estimated based on ${s.fulfill} fulfillment model`] as [string, number, string]] : []),
+        ...(returnCost > 0 ? [['Returns Handling', returnCost, `Processing costs for ${s.returns} return rate`] as [string, number, string]] : []),
+        ...(domainCost > 0 ? [['Domain', domainCost, 'Prorated monthly cost'] as [string, number, string]] : []),
+        ...(emailCost > 0 ? [['Email Hosting', emailCost, 'Business email subscription'] as [string, number, string]] : []),
+        ...(posCost > 0 ? [['POS Pro', posCost, '$89/month per location'] as [string, number, string]] : []),
+      ];
+
+      const bRows = $('breakdown-rows');
+      bRows.innerHTML = rows.map(([label, cost, note]) => `
+        <div class="flex items-center justify-between px-5 py-3 gap-4">
+          <div class="min-w-0">
+            <p class="text-sm font-medium text-gray-800 dark:text-gray-200">${label}</p>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">${note}</p>
+          </div>
+          <p class="text-sm font-semibold shrink-0 text-gray-800 dark:text-gray-200">$${cost.toLocaleString()}</p>
+        </div>
+      `).join('') + `
+        <div class="flex items-center justify-between px-5 py-3 bg-gray-50 dark:bg-gray-800 border-t dark:border-gray-700 font-semibold">
+          <p class="text-sm text-gray-900 dark:text-gray-100">Total Monthly Platform Cost</p>
+          <p class="text-sm text-gray-900 dark:text-gray-100">$${total.toLocaleString()}</p>
+        </div>
+      `;
+
+      // Savings
+      const savings: [string, string, string][] = [];
+      if (useThirdParty) {
+        savings.push(['Switch to Shopify Payments', `Save ~$${txnPenalty}/mo in transaction fees`, 'Eliminating the third-party surcharge is usually the highest-ROI single change on Basic/Shopify plans.']);
+      }
+      if (plan === 'basic' && rev >= 20000) {
+        const advancedSaving = Math.round(rev * (0.029 - 0.025));
+        savings.push([`Consider upgrading to Advanced ($399)`, `Save ~$${Math.max(0, advancedSaving - 360)}/mo net on processing`, 'At $20K+/mo, lower processing rates on the Advanced plan often pay for the plan upgrade itself.']);
+      }
+      if ((s.apps ?? []).length >= 4) {
+        savings.push(['Audit your app stack annually', `You pay ~$${appsCost}/mo in apps`, 'Remove unused apps, replace multiple single-function apps with all-in-one platforms, and negotiate annual pricing.']);
+      }
+      if (currencyFee > 50) {
+        savings.push(['Review multi-currency setup', `You pay ~$${currencyFee}/mo in conversion fees`, 'Consider adding a payout currency that matches your primary international market to reduce conversion frequency.']);
+      }
+      if (savings.length === 0) {
+        savings.push(['Your cost structure looks efficient', 'Keep monitoring as you scale', 'Revisit this audit when your monthly revenue grows by 50%+ to check if a plan upgrade makes sense.']);
+      }
+
+      const sRows = $('savings-rows');
+      sRows.innerHTML = savings.map(([title, saving, tip]) => `
+        <div class="px-5 py-4">
+          <div class="flex items-start gap-3">
+            <div class="w-5 h-5 rounded-full bg-green-100 dark:bg-green-900 flex items-center justify-center shrink-0 mt-0.5">
+              <svg class="w-3 h-3 text-green-600 dark:text-green-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+            </div>
+            <div>
+              <p class="text-sm font-medium text-gray-800 dark:text-gray-200">${title}</p>
+              <p class="text-sm text-green-700 dark:text-green-400 font-medium">${saving}</p>
+              <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">${tip}</p>
+            </div>
+          </div>
+        </div>
+      `).join('');
+
+      // Show report, hide wizard
+      $('wizard').classList.add('hidden');
+      $('report').classList.remove('hidden');
+
+      // Save share URL
+      saveShareUrl();
+    }
+
+    // ── Share URL ──────────────────────────────────────────────────────────────
+    function saveShareUrl() {
+      try {
+        const encoded = btoa(JSON.stringify(state));
+        const url = `${location.origin}${location.pathname}?d=${encodeURIComponent(encoded)}`;
+        history.replaceState(null, '', url);
+      } catch {}
+    }
+
+    function shareReport() {
+      navigator.clipboard?.writeText(location.href).then(() => {
+        const toast = $('share-toast');
+        toast.classList.remove('hidden');
+        setTimeout(() => toast.classList.add('hidden'), 2500);
+      });
+    }
+
+    // ── Load from URL ──────────────────────────────────────────────────────────
+    function loadFromUrl() {
+      try {
+        const params = new URLSearchParams(location.search);
+        const d = params.get('d');
+        if (!d) return;
+        const loaded = JSON.parse(atob(decodeURIComponent(d)));
+        Object.assign(state, loaded);
+        generateReport();
+      } catch {}
+    }
+
+    loadFromUrl();
+  </script>
+</Base>
