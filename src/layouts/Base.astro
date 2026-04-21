@@ -4,8 +4,9 @@ interface Props {
   description: string;
   canonicalUrl?: string;
   ogImage?: string;
+  noWebAppSchema?: boolean;
 }
-const { title, description, canonicalUrl, ogImage } = Astro.props;
+const { title, description, canonicalUrl, ogImage, noWebAppSchema } = Astro.props;
 const canon = canonicalUrl || Astro.url.href;
 const finalOgImage = ogImage || 'https://shopify-fee-calc.com/og-default.png';
 const GA_ID = 'G-3LG69MHKYE';
@@ -35,9 +36,9 @@ const GA_ID = 'G-3LG69MHKYE';
   <link rel="preconnect" href="https://www.googletagmanager.com" />
   <link rel="dns-prefetch" href="https://www.google-analytics.com" />
   <slot name="head" />
-  <script type="application/ld+json" is:inline>
+  {!noWebAppSchema && <script type="application/ld+json" is:inline>
   {"@context": "https://schema.org", "@type": "WebApplication", "name": "Shopify Fee Calculator", "url": "https://shopify-fee-calc.com/", "description": "Free Shopify fee calculator. Estimate transaction fees, payment processing costs, and profit margins for your Shopify store.", "applicationCategory": "UtilityApplication", "operatingSystem": "Web", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}}
-  </script>
+  </script>}
   <!-- Anti-FOUC: apply dark mode before paint -->
   <script is:inline>
     (function() {
