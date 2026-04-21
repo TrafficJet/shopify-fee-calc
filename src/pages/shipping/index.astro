@@ -3,11 +3,11 @@ import Base from "../../layouts/Base.astro";
 import { states } from "../../data/states-cities";
 
 const regionColors: Record<string, string> = {
-  northeast: 'bg-blue-50 border-blue-200',
-  southeast: 'bg-green-50 border-green-200',
-  midwest:   'bg-yellow-50 border-yellow-200',
-  southwest: 'bg-orange-50 border-orange-200',
-  west:      'bg-purple-50 border-purple-200',
+  northeast: 'bg-blue-50 dark:bg-blue-950 border-blue-200 dark:border-blue-800',
+  southeast: 'bg-green-50 dark:bg-green-950 border-green-200 dark:border-green-800',
+  midwest:   'bg-yellow-50 dark:bg-yellow-950 border-yellow-200 dark:border-yellow-800',
+  southwest: 'bg-orange-50 dark:bg-orange-950 border-orange-200 dark:border-orange-800',
+  west:      'bg-purple-50 dark:bg-purple-950 border-purple-200 dark:border-purple-800',
 };
 
 const regionLabels: Record<string, string> = {
@@ -29,22 +29,22 @@ const regionOrder = ['northeast', 'southeast', 'midwest', 'southwest', 'west'];
   description="Compare USPS, UPS, FedEx, and DHL shipping rates from every US city. Zone-based pricing for all major carriers. Updated 2026."
 >
   <h1 class="text-3xl font-bold mb-3">Shipping Cost by State & City (2026)</h1>
-  <p class="text-gray-600 mb-8 max-w-2xl text-lg">
+  <p class="text-gray-600 dark:text-gray-400 mb-8 max-w-2xl text-lg">
     Compare USPS, UPS, FedEx, and DHL shipping rates from any US city. Select your state to see per-city rate calculators with all carrier options.
   </p>
 
   <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-12">
     {regionOrder.map(region => {
       const statesInRegion = grouped[region] ?? [];
-      const cls = regionColors[region] ?? 'bg-gray-50 border-gray-200';
+      const cls = regionColors[region] ?? 'bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-700';
       return (
         <div class={`border rounded-xl p-5 ${cls}`}>
           <h2 class="font-semibold text-base mb-3">{regionLabels[region]}</h2>
           <ul class="space-y-1">
             {statesInRegion.map(s => (
               <li>
-                <a href={`/shipping/${s.slug}/`} class="text-sm text-blue-700 hover:underline">
-                  {s.name} <span class="text-gray-400">({s.cities.length} cities)</span>
+                <a href={`/shipping/${s.slug}/`} class="text-sm text-blue-700 dark:text-blue-400 hover:underline">
+                  {s.name} <span class="text-gray-400 dark:text-gray-500">({s.cities.length} cities)</span>
                 </a>
               </li>
             ))}
@@ -54,9 +54,9 @@ const regionOrder = ['northeast', 'southeast', 'midwest', 'southwest', 'west'];
     })}
   </div>
 
-  <div class="bg-blue-50 border border-blue-200 rounded-xl p-6 max-w-3xl mb-12">
+  <div class="bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 rounded-xl p-6 max-w-3xl mb-12">
     <h2 class="font-semibold text-lg mb-3">What's on Each City Page</h2>
-    <ul class="text-sm text-gray-700 space-y-2">
+    <ul class="text-sm text-gray-700 dark:text-gray-300 space-y-2">
       <li>✅ Live rate calculator — enter weight, select destination</li>
       <li>✅ Full rate table: USPS Ground Advantage, Priority Mail, Priority Express</li>
       <li>✅ UPS Ground, 2nd Day Air, Next Day Air</li>
@@ -68,12 +68,12 @@ const regionOrder = ['northeast', 'southeast', 'midwest', 'southwest', 'west'];
 
   <div class="max-w-3xl">
     <h2 class="text-xl font-bold mb-4">How Shipping Zones Work</h2>
-    <p class="text-gray-600 text-sm mb-4">
+    <p class="text-gray-600 dark:text-gray-400 text-sm mb-4">
       USPS, UPS, and FedEx all use <strong>zones</strong> to calculate rates — the farther your package travels, the higher the zone (1–8) and the higher the cost. Zone 1 is the closest (same region), Zone 8 is the farthest (opposite coast or Alaska/Hawaii).
     </p>
     <div class="overflow-x-auto">
-      <table class="w-full text-sm border rounded-xl overflow-hidden">
-        <thead class="bg-gray-50">
+      <table class="w-full text-sm border dark:border-gray-700 rounded-xl overflow-hidden">
+        <thead class="bg-gray-50 dark:bg-gray-800">
           <tr>
             <th class="text-left px-4 py-2 font-medium">From \ To</th>
             <th class="px-3 py-2 font-medium">NE</th>
@@ -83,7 +83,7 @@ const regionOrder = ['northeast', 'southeast', 'midwest', 'southwest', 'west'];
             <th class="px-3 py-2 font-medium">West</th>
           </tr>
         </thead>
-        <tbody class="divide-y">
+        <tbody class="divide-y dark:divide-gray-700">
           {[
             ['Northeast', [2,4,5,7,8]],
             ['Southeast', [4,2,4,5,7]],
@@ -91,10 +91,10 @@ const regionOrder = ['northeast', 'southeast', 'midwest', 'southwest', 'west'];
             ['Southwest', [7,5,4,2,3]],
             ['West',      [8,7,6,3,2]],
           ].map(([label, zones]: any) => (
-            <tr>
+            <tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50">
               <td class="px-4 py-2 font-medium">{label}</td>
               {(zones as number[]).map(z => (
-                <td class={`px-3 py-2 text-center ${z <= 3 ? 'text-green-700 font-medium' : z >= 7 ? 'text-red-600' : 'text-gray-700'}`}>{z}</td>
+                <td class={`px-3 py-2 text-center ${z <= 3 ? 'text-green-600 dark:text-green-400 font-medium' : z >= 7 ? 'text-red-600 dark:text-red-400' : 'text-gray-700 dark:text-gray-300'}`}>{z}</td>
               ))}
             </tr>
           ))}
