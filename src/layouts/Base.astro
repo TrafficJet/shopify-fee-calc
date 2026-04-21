@@ -59,12 +59,23 @@ const GA_ID = 'G-3LG69MHKYE';
   </main>
 
   <footer class="border-t border-gray-200 px-6 py-8 mt-16 text-sm text-gray-500">
-    <div class="max-w-5xl mx-auto flex justify-between">
-      <span>© {new Date().getFullYear()} ShopifyCalc. Not affiliated with Shopify Inc.</span>
-      <ul class="flex gap-4">
-        <li><a href="/privacy" class="hover:text-blue-700">Privacy</a></li>
-        <li><a href="/terms" class="hover:text-blue-700">Terms</a></li>
-      </ul>
+    <div class="max-w-5xl mx-auto">
+      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-4">
+        <span>© {new Date().getFullYear()} ShopifyCalc — independent tool, not affiliated with Shopify Inc., USPS, UPS, FedEx, or DHL.</span>
+        <ul class="flex gap-4 shrink-0">
+          <li><a href="/privacy/" class="hover:text-blue-700">Privacy</a></li>
+          <li><a href="/terms/" class="hover:text-blue-700">Terms</a></li>
+          <li><a href="/about/" class="hover:text-blue-700">About</a></li>
+        </ul>
+      </div>
+      <p class="text-xs text-gray-400 leading-relaxed">
+        Shipping rates shown on this site are approximate estimates based on publicly available carrier schedules and are provided for informational purposes only.
+        Always verify current rates at <a href="https://www.usps.com" target="_blank" rel="noopener nofollow" class="hover:text-blue-600">usps.com</a>,
+        <a href="https://www.ups.com" target="_blank" rel="noopener nofollow" class="hover:text-blue-600">ups.com</a>,
+        <a href="https://www.fedex.com" target="_blank" rel="noopener nofollow" class="hover:text-blue-600">fedex.com</a>, or
+        <a href="https://www.dhl.com" target="_blank" rel="noopener nofollow" class="hover:text-blue-600">dhl.com</a>
+        before shipping. Shopify® is a registered trademark of Shopify Inc. UPS® is a trademark of United Parcel Service, Inc. FedEx® is a trademark of Federal Express Corp. DHL® is a trademark of Deutsche Post AG.
+      </p>
     </div>
   </footer>
   <script defer src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}></script>

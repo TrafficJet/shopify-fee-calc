@@ -33,6 +33,22 @@ function cheapestCarrier(weightOz: number, zone: number) {
   return compareRates(weightOz, zone).filter(x => x.rate !== null)[0];
 }
 
+function zoneBgClass(z: number): string {
+  if (z < 4) return 'bg-green-50 border-green-300 text-green-800';
+  if (z < 6) return 'bg-yellow-50 border-yellow-300 text-yellow-800';
+  return 'bg-red-50 border-red-300 text-red-800';
+}
+
+function zoneTextClass(z: number): string {
+  if (z < 4) return 'text-green-700';
+  if (z < 7) return 'text-gray-700';
+  return 'text-red-600';
+}
+
+function fmtWeight(oz: number): string {
+  return oz >= 16 ? `${(oz / 16).toFixed(1)} lb` : `${oz} oz`;
+}
+
 // Pre-compute category cards (cheapest carrier + rate for typical weight, zone = avg)
 const categoryCards = productCategories.map(cat => {
   const zone = midZone;
@@ -102,13 +118,18 @@ const schema = JSON.stringify({
   </nav>
 
   <h1 class="text-3xl font-bold mb-2">Shipping from {cityData.name}, {stateData.abbr}</h1>
-  <p class="text-gray-500 mb-8 text-sm">ZIP {cityData.zip} · Region: <span class="capitalize font-medium text-gray-700">{originRegion}</span> · 2026 Rates · All major carriers</p>
+  <p class="text-gray-500 mb-4 text-sm">ZIP {cityData.zip} · Region: <span class="capitalize font-medium text-gray-700">{originRegion}</span> · 2026 Rates · All major carriers</p>
+
+  <div class="bg-amber-50 border border-amber-200 rounded-lg px-4 py-2.5 mb-6 text-xs text-amber-800 flex items-start gap-2">
+    <span class="mt-0.5 shrink-0">⚠️</span>
+    <span>Rates are <strong>approximate estimates</strong> based on published 2026 carrier schedules. Actual rates vary by account type, surcharges, and package dimensions. <a href="/terms/" class="underline hover:text-amber-900">See full disclaimer →</a></span>
+  </div>
 
   <!-- ── Zone quick-reference ─────────────────────────────────────────────── -->
   <div class="grid grid-cols-5 gap-2 mb-8 max-w-2xl">
     {regions.map(r => {
       const z = zoneMap[r];
-      const colorClass = z <= 3 ? 'bg-green-50 border-green-300 text-green-800' : z <= 5 ? 'bg-yellow-50 border-yellow-300 text-yellow-800' : 'bg-red-50 border-red-300 text-red-800';
+      const colorClass = zoneBgClass(z);
       return (
         <div class={`border rounded-lg p-3 text-center ${colorClass}`}>
           <div class="text-lg font-bold">Z{z}</div>
@@ -181,7 +202,7 @@ const schema = JSON.stringify({
                 <span class="text-xl">{cat.icon}</span>
                 <h3 class="font-semibold text-sm">{cat.name}</h3>
               </div>
-              <span class="text-xs text-gray-400">~{cat.typicalWeightOz >= 16 ? `${(cat.typicalWeightOz/16).toFixed(1)} lb` : `${cat.typicalWeightOz} oz`}</span>
+              <span class="text-xs text-gray-400">~{fmtWeight(cat.typicalWeightOz)}</span>
             </div>
 
             <div class="bg-green-50 rounded-lg px-3 py-2 mb-3">
@@ -250,14 +271,13 @@ const schema = JSON.stringify({
                 </thead>
                 <tbody class="divide-y divide-gray-100">
                   {cat.products.map(prod => {
-                    const weightLabel = prod.weightOz >= 16 ? `${(prod.weightOz/16).toFixed(1)} lb` : `${prod.weightOz} oz`;
                     return (
                       <tr class="hover:bg-gray-50">
                         <td class="py-2.5 font-medium pr-2">
                           {prod.name}
                           {prod.notes && <div class="text-xs text-orange-600">{prod.notes}</div>}
                         </td>
-                        <td class="py-2.5 text-center text-gray-600 whitespace-nowrap">{weightLabel}</td>
+                        <td class="py-2.5 text-center text-gray-600 whitespace-nowrap">{fmtWeight(prod.weightOz)}</td>
                         <td class="py-2.5 text-center text-gray-500 text-xs whitespace-nowrap">{prod.priceRange}</td>
                         {regions.map(r => {
                           const z = zoneMap[r];
@@ -288,13 +308,14 @@ const schema = JSON.stringify({
                     );
                   })}
                 </tbody>
+
               </table>
             </div>
 
             <!-- Carrier comparison for this category's typical weight -->
             <div class="mt-5">
               <div class="text-xs font-medium text-gray-500 mb-2 uppercase tracking-wide">
-                Carrier comparison — typical weight ({cat.typicalWeightOz >= 16 ? `${(cat.typicalWeightOz/16).toFixed(1)} lb` : `${cat.typicalWeightOz} oz`}) · all destinations
+                Carrier comparison — typical weight ({fmtWeight(cat.typicalWeightOz)}) · all destinations
               </div>
               <div class="overflow-x-auto">
                 <table class="w-full text-xs">
