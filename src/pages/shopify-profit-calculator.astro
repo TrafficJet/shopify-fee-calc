@@ -768,7 +768,7 @@ function recalc() {
   const marginPct  = rev > 0 ? (net / rev * 100) : 0;
   const perOrder   = orders > 0 ? net / orders : 0;
 
-  ge('d-orders').textContent  = orders.toLocaleString();
+  ge('d-orders').textContent  = orders.toLocaleString('en-US');
   ge('d-cogs').textContent    = fmt(cogsAmt);
   ge('d-plan').textContent    = fmt(planCost) + '/mo';
   ge('d-payment').textContent = fmt(paymentAmt) + ' (' + pct(paymentAmt / (rev || 1) * 100) + ')';
@@ -825,7 +825,7 @@ function recalc() {
   if (details) {
     const penLine = penaltyAmt > 0 ? `\n  + ${fmt(penaltyAmt)} (${(pl.penalty*100).toFixed(1)}% 3rd-party penalty)` : '';
     details.innerHTML = [
-      `Orders: ${orders.toLocaleString()} = ${fmt(rev)} ÷ $${aov.toFixed(0)}`,
+      `Orders: ${orders.toLocaleString('en-US')} = ${fmt(rev)} ÷ $${aov.toFixed(0)}`,
       `COGS: ${fmt(cogsAmt)} = ${(cogsPct*100).toFixed(0)}% × ${fmt(rev)}`,
       `Processing: ${fmt(paymentAmt)} = ${(payRate*100).toFixed(1)}% × ${fmt(rev)} + $${payPerTxn} × ${orders}${penLine}`,
       `Shipping: ${fmt(shipAmt)} = $${ship} × ${orders} orders`,

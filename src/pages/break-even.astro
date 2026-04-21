@@ -124,8 +124,8 @@ const schema = JSON.stringify({
       const beRevenue = beUnits * price;
       const dark = isDark();
 
-      document.getElementById('be-units').textContent = beUnits.toLocaleString();
-      document.getElementById('be-revenue').textContent = `$${beRevenue.toLocaleString()}`;
+      document.getElementById('be-units').textContent = beUnits.toLocaleString('en-US');
+      document.getElementById('be-revenue').textContent = `$${beRevenue.toLocaleString('en-US')}`;
       document.getElementById('cost-breakdown').innerHTML = `
         <div class="flex justify-between"><span class="${dark ? 'text-gray-400' : 'text-gray-600'}">Total Fixed Costs</span><span class="${dark ? 'text-gray-200' : ''}">$${fixed.toFixed(2)}/mo</span></div>
         <div class="flex justify-between"><span class="${dark ? 'text-gray-400' : 'text-gray-600'}">Variable Cost per Unit</span><span class="${dark ? 'text-gray-200' : ''}">$${varCost.toFixed(2)}</span></div>

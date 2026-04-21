@@ -512,7 +512,7 @@ const faqs = [
       const appsCost = (s.apps ?? []).reduce((sum, a) => sum + (APP_COST_MID[a] ?? 50), 0);
 
       // Domain
-      const domainMap: Record<string, number> = { no: 0, yes: 1.25, premium: 10 };
+      const domainMap: Record<string, number> = { no: 0, yes: 1, premium: 10 };
       const domainCost = domainMap[s.domain] ?? 0;
 
       // Email hosting
@@ -553,8 +553,8 @@ const faqs = [
       card.innerHTML = `
         <div class="flex items-start justify-between gap-4">
           <div>
-            <p class="text-3xl font-bold ${textClass}">$${total.toLocaleString()}<span class="text-lg font-medium">/mo</span></p>
-            <p class="text-sm ${textClass} mt-1">Total platform cost — <strong>${pct}%</strong> of your $${rev.toLocaleString()} revenue</p>
+            <p class="text-3xl font-bold ${textClass}">$${total.toLocaleString('en-US')}<span class="text-lg font-medium">/mo</span></p>
+            <p class="text-sm ${textClass} mt-1">Total platform cost — <strong>${pct}%</strong> of your $${rev.toLocaleString('en-US')} revenue</p>
           </div>
           <div class="text-right shrink-0">
             <p class="text-xs font-medium ${textClass}">${rating}</p>
@@ -568,7 +568,7 @@ const faqs = [
         ['Payment Processing', processingCost, `${(procRate*100).toFixed(1)}%+$0.30 × ~${estimatedOrders} orders`],
         ...(txnPenalty > 0 ? [['Third-Party Transaction Fee', txnPenalty, `${(PLAN_PENALTY[plan]*100).toFixed(1)}% Shopify surcharge for using ${proc}`] as [string, number, string]] : []),
         ...(chargebackCost > 0 ? [['Chargeback Fees', chargebackCost, '$15 per chargeback (dispute win or lose)'] as [string, number, string]] : []),
-        ...(currencyFee > 0 ? [['Currency Conversion (1.5%)', currencyFee, `On ~$${intlRev.toLocaleString()} international revenue`] as [string, number, string]] : []),
+        ...(currencyFee > 0 ? [['Currency Conversion (1.5%)', currencyFee, `On ~$${intlRev.toLocaleString('en-US')} international revenue`] as [string, number, string]] : []),
         ...(appsCost > 0 ? [['App Subscriptions', appsCost, `${(s.apps ?? []).length} app categories — estimated midpoint`] as [string, number, string]] : []),
         ...(shippingCost > 0 ? [['Shipping / Fulfillment', shippingCost, `Estimated based on ${s.fulfill} fulfillment model`] as [string, number, string]] : []),
         ...(returnCost > 0 ? [['Returns Handling', returnCost, `Processing costs for ${s.returns} return rate`] as [string, number, string]] : []),
@@ -584,12 +584,12 @@ const faqs = [
             <p class="text-sm font-medium text-gray-800 dark:text-gray-200">${label}</p>
             <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">${note}</p>
           </div>
-          <p class="text-sm font-semibold shrink-0 text-gray-800 dark:text-gray-200">$${cost.toLocaleString()}</p>
+          <p class="text-sm font-semibold shrink-0 text-gray-800 dark:text-gray-200">$${cost.toLocaleString('en-US')}</p>
         </div>
       `).join('') + `
         <div class="flex items-center justify-between px-5 py-3 bg-gray-50 dark:bg-gray-800 border-t dark:border-gray-700 font-semibold">
           <p class="text-sm text-gray-900 dark:text-gray-100">Total Monthly Platform Cost</p>
-          <p class="text-sm text-gray-900 dark:text-gray-100">$${total.toLocaleString()}</p>
+          <p class="text-sm text-gray-900 dark:text-gray-100">$${total.toLocaleString('en-US')}</p>
         </div>
       `;
 
