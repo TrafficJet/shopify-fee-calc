@@ -69,7 +69,7 @@ const faqs = [
 
     <!-- Step 1: Basics -->
     <div id="step-1" class="border dark:border-gray-700 rounded-xl p-6 bg-white dark:bg-gray-900">
-      <h2 class="font-semibold text-xs uppercase tracking-widest text-blue-600 dark:text-blue-400 mb-4">1 — Store Basics</h2>
+      <h3 class="font-semibold text-xs uppercase tracking-widest text-blue-600 dark:text-blue-400 mb-4">1 — Store Basics</h3>
       <div class="space-y-5">
         <div>
           <label class="block text-sm font-medium mb-2 dark:text-gray-300">Monthly Revenue</label>
@@ -103,7 +103,7 @@ const faqs = [
 
     <!-- Step 2: Plan & Payments -->
     <div id="step-2" class="hidden border dark:border-gray-700 rounded-xl p-6 bg-white dark:bg-gray-900">
-      <h2 class="font-semibold text-xs uppercase tracking-widest text-blue-600 dark:text-blue-400 mb-4">2 — Plan &amp; Payments</h2>
+      <h3 class="font-semibold text-xs uppercase tracking-widest text-blue-600 dark:text-blue-400 mb-4">2 — Plan &amp; Payments</h3>
       <div class="space-y-5">
         <div>
           <label class="block text-sm font-medium mb-2 dark:text-gray-300">Your Shopify Plan</label>
@@ -138,7 +138,7 @@ const faqs = [
 
     <!-- Step 3: Shipping & Fulfillment -->
     <div id="step-3" class="hidden border dark:border-gray-700 rounded-xl p-6 bg-white dark:bg-gray-900">
-      <h2 class="font-semibold text-xs uppercase tracking-widest text-blue-600 dark:text-blue-400 mb-4">3 — Shipping &amp; Fulfillment</h2>
+      <h3 class="font-semibold text-xs uppercase tracking-widest text-blue-600 dark:text-blue-400 mb-4">3 — Shipping &amp; Fulfillment</h3>
       <div class="space-y-5">
         <div>
           <label class="block text-sm font-medium mb-2 dark:text-gray-300">How do you fulfill orders?</label>
@@ -173,7 +173,7 @@ const faqs = [
 
     <!-- Step 4: App Stack -->
     <div id="step-4" class="hidden border dark:border-gray-700 rounded-xl p-6 bg-white dark:bg-gray-900">
-      <h2 class="font-semibold text-xs uppercase tracking-widest text-blue-600 dark:text-blue-400 mb-4">4 — App Stack</h2>
+      <h3 class="font-semibold text-xs uppercase tracking-widest text-blue-600 dark:text-blue-400 mb-4">4 — App Stack</h3>
       <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">Select all app categories you pay for (monthly):</p>
       <div class="grid grid-cols-2 gap-2" id="apps-grid">
         {[
@@ -202,7 +202,7 @@ const faqs = [
 
     <!-- Step 5: Other costs -->
     <div id="step-5" class="hidden border dark:border-gray-700 rounded-xl p-6 bg-white dark:bg-gray-900">
-      <h2 class="font-semibold text-xs uppercase tracking-widest text-blue-600 dark:text-blue-400 mb-4">5 — Other Costs</h2>
+      <h3 class="font-semibold text-xs uppercase tracking-widest text-blue-600 dark:text-blue-400 mb-4">5 — Other Costs</h3>
       <div class="space-y-5">
         <div>
           <label class="block text-sm font-medium mb-2 dark:text-gray-300">Do you have a custom domain?</label>
@@ -306,11 +306,12 @@ const faqs = [
 
   <!-- ── SEO Content ── -->
   <div class="mt-16 max-w-2xl">
-    <h2 class="text-2xl font-bold mb-6">What Are Shopify's Hidden Fees?</h2>
-    <div class="prose prose-sm dark:prose-invert max-w-none text-gray-700 dark:text-gray-300">
-      <p>Most Shopify merchants see the plan price — $39, $105, or $399/month — and assume that's close to their total platform cost. In reality, the plan fee is often less than 10% of what you actually pay to run your store each month.</p>
-      <h3>The Real Cost Stack</h3>
-      <ul>
+
+    <h2 class="text-2xl font-bold mb-4">What Are Shopify's Hidden Fees?</h2>
+    <div class="text-gray-700 dark:text-gray-300 space-y-4 leading-relaxed">
+      <p class="text-sm">Most Shopify merchants see the plan price — $39, $105, or $399/month — and assume that's close to their total platform cost. In reality, the plan fee is often less than 10% of what you actually pay to run your store each month.</p>
+      <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mt-4 mb-2">The Real Cost Stack</h3>
+      <ul class="space-y-1.5 list-disc pl-5 text-sm">
         <li><strong>Payment processing fees</strong> — 1.8%–2.9% + $0.30 per transaction, every sale</li>
         <li><strong>Third-party transaction fees</strong> — 0.5%–2% extra if you don't use Shopify Payments</li>
         <li><strong>App subscriptions</strong> — average Shopify store pays $200–$500/month in apps by year 2</li>
@@ -320,12 +321,125 @@ const faqs = [
         <li><strong>POS Pro</strong> — $89/month per location if you sell in-person</li>
         <li><strong>Domain + hosting</strong> — custom domain $10–$20/year, premium domains much more</li>
       </ul>
-      <h3>Why These Fees Are "Hidden"</h3>
-      <p>None of these fees are hidden in a deceptive sense — they're all documented in Shopify's pricing pages. They're "hidden" because they're scattered across separate billing sections, appear as percentages rather than dollar amounts, and accumulate gradually as you add apps and grow volume. A merchant doing $50K/month can easily have $3,000–$5,000 in monthly platform costs without realizing it.</p>
+      <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mt-4 mb-2">Why These Fees Are "Hidden"</h3>
+      <p class="text-sm">None of these fees are hidden in a deceptive sense — they're all documented in Shopify's pricing pages. They're "hidden" because they're scattered across separate billing sections, appear as percentages rather than dollar amounts, and accumulate gradually as you add apps and grow volume. A merchant doing $50K/month can easily have $3,000–$5,000 in monthly platform costs without realizing it.</p>
+    </div>
+
+    <!-- Section 2: True cost by tier -->
+    <h2 class="text-2xl font-bold mt-14 mb-4">Shopify True Monthly Cost by Plan and Revenue Tier</h2>
+    <p class="text-sm text-gray-700 dark:text-gray-300 mb-5 leading-relaxed">The table below shows estimated total monthly platform costs — plan fee + Shopify Payments processing + median app spend — at four revenue levels. These are realistic midpoints, not worst-case numbers.</p>
+    <div class="overflow-x-auto rounded-xl border dark:border-gray-700 mb-4">
+      <table class="w-full text-sm">
+        <thead class="bg-gray-50 dark:bg-gray-800 text-left">
+          <tr>
+            <th class="px-4 py-3 font-semibold text-gray-700 dark:text-gray-300">Plan</th>
+            <th class="px-4 py-3 font-semibold text-gray-700 dark:text-gray-300">$5K/mo</th>
+            <th class="px-4 py-3 font-semibold text-gray-700 dark:text-gray-300">$20K/mo</th>
+            <th class="px-4 py-3 font-semibold text-gray-700 dark:text-gray-300">$50K/mo</th>
+            <th class="px-4 py-3 font-semibold text-gray-700 dark:text-gray-300">$100K/mo</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y dark:divide-gray-700 text-gray-700 dark:text-gray-300">
+          <tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50">
+            <td class="px-4 py-2.5 font-medium">Basic ($39)</td>
+            <td class="px-4 py-2.5">~$340</td>
+            <td class="px-4 py-2.5">~$920</td>
+            <td class="px-4 py-2.5">~$2,100</td>
+            <td class="px-4 py-2.5">~$4,000</td>
+          </tr>
+          <tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50">
+            <td class="px-4 py-2.5 font-medium">Shopify ($105)</td>
+            <td class="px-4 py-2.5">~$390</td>
+            <td class="px-4 py-2.5">~$950</td>
+            <td class="px-4 py-2.5">~$2,050</td>
+            <td class="px-4 py-2.5">~$3,900</td>
+          </tr>
+          <tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50">
+            <td class="px-4 py-2.5 font-medium">Advanced ($399)</td>
+            <td class="px-4 py-2.5">~$630</td>
+            <td class="px-4 py-2.5">~$1,080</td>
+            <td class="px-4 py-2.5">~$2,050</td>
+            <td class="px-4 py-2.5">~$3,750</td>
+          </tr>
+          <tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50">
+            <td class="px-4 py-2.5 font-medium">Plus ($2,300)</td>
+            <td class="px-4 py-2.5">~$2,490</td>
+            <td class="px-4 py-2.5">~$2,760</td>
+            <td class="px-4 py-2.5">~$3,500</td>
+            <td class="px-4 py-2.5">~$5,100</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="text-xs text-gray-500 dark:text-gray-400 mb-3">Includes plan fee, Shopify Payments processing, and estimated app spend ($150/mo at low volume, scaling to $400/mo at $100K). Excludes COGS, shipping, marketing, and returns.</p>
+    <p class="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">The key upgrade inflection points: <strong>Basic → Advanced</strong> pays off at ~$80K/month when the 0.4% processing savings exceed the $360/month plan cost difference. <strong>Advanced → Plus</strong> rarely pays off on processing alone — it's justified by operational needs (unlimited staff accounts, custom checkout, dedicated support) above ~$500K/year in revenue.</p>
+
+    <!-- Section 3: How to read the report -->
+    <h2 class="text-2xl font-bold mt-14 mb-4">How to Read Your Hidden Fees Report</h2>
+    <p class="text-sm text-gray-700 dark:text-gray-300 mb-5 leading-relaxed">The audit report has three sections. Here's what each tells you and what action to take.</p>
+    <div class="space-y-4">
+      <div class="border dark:border-gray-700 rounded-xl p-5 bg-white dark:bg-gray-900">
+        <h3 class="font-semibold text-gray-900 dark:text-gray-100 mb-2">Summary Banner</h3>
+        <p class="text-sm text-gray-600 dark:text-gray-400">Shows your total estimated monthly platform cost and the percentage of revenue it consumes. Color coding: green = under 12% (healthy), orange = 12–20% (review recommended), red = over 20% (action needed). Platform costs above 20% of revenue typically mean a plan-processor mismatch, excessive app spend, or a high-returns category needing process improvement.</p>
+      </div>
+      <div class="border dark:border-gray-700 rounded-xl p-5 bg-white dark:bg-gray-900">
+        <h3 class="font-semibold text-gray-900 dark:text-gray-100 mb-2">Fee Breakdown</h3>
+        <p class="text-sm text-gray-600 dark:text-gray-400">Line-by-line costs with the formula shown for each item. Identify your top 2–3 cost categories — those are always the highest-ROI optimization targets. For most stores, payment processing is #1, followed by app subscriptions or shipping. Attacking the biggest line items first is the only effective cost-reduction strategy; shaving $5/month off domain costs when you're paying $1,000/month in unnecessary transaction fees is wasted effort.</p>
+      </div>
+      <div class="border dark:border-gray-700 rounded-xl p-5 bg-white dark:bg-gray-900">
+        <h3 class="font-semibold text-gray-900 dark:text-gray-100 mb-2">Savings Opportunities</h3>
+        <p class="text-sm text-gray-600 dark:text-gray-400">Personalized recommendations based on your specific inputs, ranked by estimated monthly savings. Re-run this audit after making changes — it takes less than 2 minutes and confirms whether the optimization actually moved the needle. The best merchants run this audit quarterly as revenue and app stack evolve.</p>
+      </div>
+    </div>
+
+    <!-- Section 4: 5 ways to reduce costs -->
+    <h2 class="text-2xl font-bold mt-14 mb-4">5 Ways to Reduce Your Shopify Platform Costs</h2>
+    <p class="text-sm text-gray-700 dark:text-gray-300 mb-6 leading-relaxed">Most stores can cut 15–30% from platform costs within 60 days. These five strategies are ordered by typical ROI — start at the top.</p>
+    <div class="space-y-5">
+      <div class="flex gap-4">
+        <div class="shrink-0 w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-950 flex items-center justify-center font-bold text-blue-700 dark:text-blue-400 text-sm">1</div>
+        <div>
+          <h3 class="font-semibold text-gray-900 dark:text-gray-100 mb-1">Switch to Shopify Payments</h3>
+          <p class="text-sm text-gray-600 dark:text-gray-400">If you use Stripe, PayPal, or Square, this is almost certainly your single biggest optimization. On the Basic plan you're paying a 2% surcharge on every transaction — $1,000/month on $50K revenue — on top of Stripe's own 2.9%+30¢. Shopify Payments eliminates the surcharge. The only exception: your business type is restricted or you operate in a country where Shopify Payments isn't available.</p>
+        </div>
+      </div>
+      <div class="flex gap-4">
+        <div class="shrink-0 w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-950 flex items-center justify-center font-bold text-blue-700 dark:text-blue-400 text-sm">2</div>
+        <div>
+          <h3 class="font-semibold text-gray-900 dark:text-gray-100 mb-1">Quarterly app audit</h3>
+          <p class="text-sm text-gray-600 dark:text-gray-400">Set a recurring calendar event: first Monday of each quarter, 30 minutes, review every paid app. For each one: used in last 30 days? Could it be replaced by a free alternative or a feature in another app you already pay for? Most merchants find 2–4 redundant apps. Uninstalling three $40/month apps saves $1,440/year — the cost of half an Advanced plan upgrade.</p>
+        </div>
+      </div>
+      <div class="flex gap-4">
+        <div class="shrink-0 w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-950 flex items-center justify-center font-bold text-blue-700 dark:text-blue-400 text-sm">3</div>
+        <div>
+          <h3 class="font-semibold text-gray-900 dark:text-gray-100 mb-1">Upgrade plan at the right revenue threshold</h3>
+          <p class="text-sm text-gray-600 dark:text-gray-400">Basic → Shopify (saves 0.2% on processing, costs $66/mo more) breaks even at $33K/month revenue. Shopify → Advanced (saves 0.2% more, costs $294/mo more) breaks even at $147K/month. Don't upgrade before hitting these thresholds — you'll pay more, not less. The calculator on this page shows you exactly where you stand.</p>
+        </div>
+      </div>
+      <div class="flex gap-4">
+        <div class="shrink-0 w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-950 flex items-center justify-center font-bold text-blue-700 dark:text-blue-400 text-sm">4</div>
+        <div>
+          <h3 class="font-semibold text-gray-900 dark:text-gray-100 mb-1">Negotiate annual pricing on apps</h3>
+          <p class="text-sm text-gray-600 dark:text-gray-400">Many apps offer 10–20% discounts for annual billing but don't surface this in their pricing page. Email support for any app you've used 6+ months: "Do you offer an annual plan or a loyalty discount?" Klaviyo, Gorgias, and ReCharge all have negotiated pricing for established accounts. On $300/month in apps, a 15% annual discount saves $540/year.</p>
+        </div>
+      </div>
+      <div class="flex gap-4">
+        <div class="shrink-0 w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-950 flex items-center justify-center font-bold text-blue-700 dark:text-blue-400 text-sm">5</div>
+        <div>
+          <h3 class="font-semibold text-gray-900 dark:text-gray-100 mb-1">Reduce returns by 2–3 percentage points</h3>
+          <p class="text-sm text-gray-600 dark:text-gray-400">Each return costs $8–$18 to process, plus the refunded revenue. A 20% return rate on 500 orders/month = $1,300/month in handling costs alone. Highest-ROI interventions: better product photography (reduces expectation mismatch), detailed size guides (cuts apparel returns 5–8%), and post-purchase expectation-setting emails (reduces buyer's remorse returns by 15–20%).</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-8 p-5 border border-blue-200 dark:border-blue-800 bg-blue-50 dark:bg-blue-950 rounded-xl">
+      <p class="font-medium text-blue-900 dark:text-blue-300 mb-1 text-sm">Want the complete picture?</p>
+      <p class="text-sm text-blue-800 dark:text-blue-400">After this audit, use the <a href="/shopify-profit-calculator/" class="underline font-medium">Real Profit Calculator</a> to factor in COGS, marketing, and shipping too — and see your true net margin with a live pie chart breakdown.</p>
     </div>
 
     <!-- FAQ -->
-    <h2 class="text-2xl font-bold mt-12 mb-6">Frequently Asked Questions</h2>
+    <h2 class="text-2xl font-bold mt-14 mb-6">Frequently Asked Questions</h2>
     <div class="space-y-3">
       {faqs.map((f, i) => (
         <details class="group border dark:border-gray-700 rounded-xl overflow-hidden">
