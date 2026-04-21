@@ -1,0 +1,232 @@
+---
+import Base from "../../../layouts/Base.astro";
+import { states, ZONE_MATRIX } from "../../../data/states-cities";
+import { carriers, compareRates } from "../../../data/carriers-rates";
+
+export function getStaticPaths() {
+  return states.flatMap(s =>
+    s.cities.map(c => ({
+      params: { state: s.slug, city: c.slug },
+    }))
+  );
+}
+
+const { state: stateSlug, city: citySlug } = Astro.params;
+const stateData = states.find(s => s.slug === stateSlug)!;
+const cityData = stateData.cities.find(c => c.slug === citySlug)!;
+const originRegion = cityData.region;
+
+// Weight brackets to show in table
+const weightBrackets = [
+  { label: '1 oz', oz: 1 },
+  { label: '8 oz', oz: 8 },
+  { label: '1 lb', oz: 16 },
+  { label: '2 lb', oz: 32 },
+  { label: '5 lb', oz: 80 },
+  { label: '10 lb', oz: 160 },
+  { label: '20 lb', oz: 320 },
+];
+
+const regions = ['northeast', 'southeast', 'midwest', 'southwest', 'west'] as const;
+
+// Pre-compute cheapest option for 1 lb to each region
+const cheapestByRegion = regions.map(dest => {
+  const zone = ZONE_MATRIX[originRegion][dest];
+  const sorted = compareRates(16, zone).filter(x => x.rate !== null);
+  return { dest, zone, cheapest: sorted[0] };
+});
+
+const schema = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": `Shipping Rates from ${cityData.name}, ${stateData.abbr}`,
+  "description": `2026 shipping rates from ${cityData.name}, ${stateData.name}. Compare USPS, UPS, FedEx, DHL for any package weight.`,
+  "url": `https://shopify-fee-calc.com/shipping/${stateData.slug}/${cityData.slug}/`,
+});
+---
+<Base
+  title={`Shipping Rates from ${cityData.name}, ${stateData.abbr} — USPS, UPS, FedEx 2026`}
+  description={`Compare 2026 shipping rates from ${cityData.name}, ${stateData.name}. USPS Ground Advantage, Priority Mail, UPS Ground, FedEx Ground, DHL — all carriers, all weights.`}
+  canonicalUrl={`https://shopify-fee-calc.com/shipping/${stateData.slug}/${cityData.slug}/`}
+>
+  <script type="application/ld+json" set:html={schema} />
+
+  <nav class="text-sm text-gray-500 mb-4">
+    <a href="/" class="hover:text-blue-700">Home</a>
+    <span class="mx-2">›</span>
+    <a href="/shipping/" class="hover:text-blue-700">Shipping</a>
+    <span class="mx-2">›</span>
+    <a href={`/shipping/${stateData.slug}/`} class="hover:text-blue-700">{stateData.name}</a>
+    <span class="mx-2">›</span>
+    <span class="text-gray-900">{cityData.name}</span>
+  </nav>
+
+  <h1 class="text-3xl font-bold mb-2">Shipping Rates from {cityData.name}, {stateData.abbr}</h1>
+  <p class="text-gray-500 mb-6 text-sm">ZIP Code: {cityData.zip} · Region: <span class="capitalize">{originRegion}</span> · 2026 Rates</p>
+
+  <!-- Rate Calculator -->
+  <div class="bg-gray-50 border rounded-xl p-6 max-w-2xl mb-10">
+    <h2 class="font-semibold text-lg mb-4">Shipping Rate Calculator</h2>
+    <div class="grid grid-cols-2 gap-4 mb-4">
+      <div>
+        <label class="block text-sm font-medium mb-1" for="pkg-weight">Package Weight</label>
+        <div class="flex gap-2">
+          <input id="pkg-weight" type="number" min="0.1" step="0.1" value="1"
+            class="flex-1 border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
+          <select id="weight-unit" class="border rounded-lg px-2 py-2 text-sm">
+            <option value="oz">oz</option>
+            <option value="lb" selected>lb</option>
+          </select>
+        </div>
+      </div>
+      <div>
+        <label class="block text-sm font-medium mb-1" for="dest-region">Destination</label>
+        <select id="dest-region" class="w-full border rounded-lg px-3 py-2 text-sm">
+          {regions.map(r => {
+            const zone = ZONE_MATRIX[originRegion][r];
+            return <option value={`${r}:${zone}`}>{r.charAt(0).toUpperCase() + r.slice(1)} (Zone {zone})</option>;
+          })}
+        </select>
+      </div>
+    </div>
+    <button id="calc-btn"
+      class="w-full bg-blue-700 text-white py-2.5 rounded-lg font-semibold text-sm hover:bg-blue-800 transition">
+      Compare All Carriers
+    </button>
+
+    <div id="calc-results" class="mt-5 hidden">
+      <h3 class="font-medium text-sm mb-3">Rates from {cityData.name} — sorted cheapest first</h3>
+      <div id="rates-list" class="space-y-2"></div>
+    </div>
+  </div>
+
+  <!-- Full Rate Table by Carrier -->
+  <div class="mb-12">
+    <h2 class="text-xl font-bold mb-5">2026 Rate Tables by Carrier</h2>
+    {carriers.map(carrier => {
+      const defaultRegion = 'midwest';
+      const defaultZone = ZONE_MATRIX[originRegion][defaultRegion];
+      return (
+        <div class="mb-8">
+          <div class="flex items-center gap-3 mb-3">
+            <div class="w-3 h-3 rounded-full" style={`background:${carrier.color}`}></div>
+            <h3 class="font-semibold">{carrier.name}</h3>
+            <span class="text-xs text-gray-500 bg-gray-100 px-2 py-0.5 rounded">{carrier.speed}</span>
+            <span class="text-xs text-gray-500">Includes {carrier.insuranceIncluded} insurance</span>
+          </div>
+          <p class="text-sm text-gray-600 mb-3 max-w-2xl">{carrier.description}</p>
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm border rounded-xl overflow-hidden">
+              <thead class="bg-gray-50">
+                <tr>
+                  <th class="text-left px-4 py-2 font-medium w-20">Weight</th>
+                  {regions.map(r => {
+                    const z = ZONE_MATRIX[originRegion][r];
+                    return <th class="px-3 py-2 font-medium text-right capitalize">{r.slice(0,2).toUpperCase()} (Z{z})</th>;
+                  })}
+                </tr>
+              </thead>
+              <tbody class="divide-y">
+                {carrier.rates.map(row => (
+                  <tr class="hover:bg-gray-50">
+                    <td class="px-4 py-2 font-medium">{row.label}</td>
+                    {regions.map(r => {
+                      const z = ZONE_MATRIX[originRegion][r];
+                      const price = row.zones[z];
+                      return (
+                        <td class="px-3 py-2 text-right">
+                          {price ? `$${price.toFixed(2)}` : '—'}
+                        </td>
+                      );
+                    })}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      );
+    })}
+  </div>
+
+  <!-- Cheapest by Destination -->
+  <div class="max-w-2xl mb-12">
+    <h2 class="text-xl font-bold mb-4">Cheapest Option — 1 lb Package</h2>
+    <div class="space-y-2">
+      {cheapestByRegion.map(({ dest, zone, cheapest }) => (
+        <div class="flex items-center justify-between border rounded-lg px-4 py-3 bg-gray-50">
+          <div>
+            <span class="font-medium capitalize">{dest}</span>
+            <span class="text-xs text-gray-500 ml-2">Zone {zone}</span>
+          </div>
+          <div class="text-right">
+            {cheapest ? (
+              <>
+                <span class="font-semibold text-green-700">${cheapest.rate!.toFixed(2)}</span>
+                <span class="text-xs text-gray-500 ml-2">{cheapest.carrier.name}</span>
+              </>
+            ) : <span class="text-gray-400">—</span>}
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+
+  <!-- Other cities in state -->
+  <div class="max-w-2xl mb-8">
+    <h2 class="text-lg font-semibold mb-3">Other Cities in {stateData.name}</h2>
+    <div class="flex flex-wrap gap-2">
+      {stateData.cities.filter(c => c.slug !== cityData.slug).map(c => (
+        <a href={`/shipping/${stateData.slug}/${c.slug}/`}
+          class="text-sm text-blue-700 border border-blue-200 rounded-lg px-3 py-1 hover:bg-blue-50">
+          {c.name}
+        </a>
+      ))}
+    </div>
+  </div>
+
+  <div class="flex gap-4 text-sm flex-wrap">
+    <a href={`/shipping/${stateData.slug}/`} class="text-blue-700 hover:underline">← {stateData.name} Overview</a>
+    <a href="/shipping/" class="text-blue-700 hover:underline">All States</a>
+    <a href="/shipping-calculator/" class="text-blue-700 hover:underline">Full Calculator</a>
+  </div>
+</Base>
+
+<script define:vars={{ originRegion, ZONE_MATRIX: JSON.stringify(ZONE_MATRIX), carriersData: JSON.stringify(carriers) }}>
+  const zm = JSON.parse(ZONE_MATRIX);
+  const allCarriers = JSON.parse(carriersData);
+
+  function getRateForZone(carrier, weightOz, zone) {
+    const z = Math.min(Math.max(zone, 1), 8);
+    const sorted = [...carrier.rates].sort((a, b) => a.oz - b.oz);
+    const bracket = sorted.find(r => r.oz >= weightOz) || sorted[sorted.length - 1];
+    return bracket?.zones?.[z] ?? null;
+  }
+
+  document.getElementById('calc-btn').addEventListener('click', () => {
+    const weightVal = parseFloat(document.getElementById('pkg-weight').value) || 1;
+    const unit = document.getElementById('weight-unit').value;
+    const weightOz = unit === 'lb' ? weightVal * 16 : weightVal;
+    const [destRegion, zoneStr] = document.getElementById('dest-region').value.split(':');
+    const zone = parseInt(zoneStr, 10);
+
+    const results = allCarriers
+      .map(c => ({ carrier: c, rate: getRateForZone(c, weightOz, zone) }))
+      .filter(x => x.rate !== null)
+      .sort((a, b) => a.rate - b.rate);
+
+    const list = document.getElementById('rates-list');
+    list.innerHTML = results.map((r, i) =>
+      `<div class="flex items-center justify-between border rounded-lg px-4 py-3 ${i === 0 ? 'bg-green-50 border-green-300' : 'bg-white'}">
+        <div>
+          ${i === 0 ? '<span class="text-xs font-medium text-green-700 bg-green-100 rounded px-1.5 mr-2">Cheapest</span>' : ''}
+          <span class="font-medium text-sm">${r.carrier.name}</span>
+          <span class="text-xs text-gray-500 ml-2">${r.carrier.speed}</span>
+        </div>
+        <span class="font-bold ${i === 0 ? 'text-green-700' : 'text-gray-900'}">$${r.rate.toFixed(2)}</span>
+      </div>`
+    ).join('');
+
+    document.getElementById('calc-results').classList.remove('hidden');
+  });
+</script>

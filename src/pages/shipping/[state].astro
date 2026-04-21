@@ -1,0 +1,107 @@
+---
+import Base from "../../layouts/Base.astro";
+import { states, ZONE_MATRIX } from "../../data/states-cities";
+import { carriers } from "../../data/carriers-rates";
+
+export function getStaticPaths() {
+  return states.map(s => ({ params: { state: s.slug } }));
+}
+
+const { state: stateSlug } = Astro.params;
+const stateData = states.find(s => s.slug === stateSlug)!;
+const firstCity = stateData.cities[0];
+const originRegion = firstCity.region;
+
+// Cheapest carrier for 1lb package to each destination region
+const sampleWeight = 16; // 1 lb in oz
+const regions = ['northeast', 'southeast', 'midwest', 'southwest', 'west'] as const;
+---
+<Base
+  title={`Shipping Rates from ${stateData.name} — USPS, UPS, FedEx 2026 | ShopifyCalc`}
+  description={`Compare shipping rates from ${stateData.name} cities. USPS, UPS, FedEx, and DHL rates for packages of all sizes. Free zone calculator.`}
+  canonicalUrl={`https://shopify-fee-calc.com/shipping/${stateData.slug}/`}
+>
+  <nav class="text-sm text-gray-500 mb-4">
+    <a href="/" class="hover:text-blue-700">Home</a>
+    <span class="mx-2">›</span>
+    <a href="/shipping/" class="hover:text-blue-700">Shipping by State</a>
+    <span class="mx-2">›</span>
+    <span class="text-gray-900">{stateData.name}</span>
+  </nav>
+
+  <h1 class="text-3xl font-bold mb-3">Shipping Rates from {stateData.name} ({stateData.abbr})</h1>
+  <p class="text-gray-600 mb-8 text-lg max-w-2xl">
+    Select a city in {stateData.name} to see detailed shipping rates from USPS, UPS, FedEx, and DHL — with a live rate calculator for any package weight.
+  </p>
+
+  <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 mb-12">
+    {stateData.cities.map(city => (
+      <a
+        href={`/shipping/${stateData.slug}/${city.slug}/`}
+        class="border rounded-xl p-4 hover:border-blue-400 hover:bg-blue-50 transition group"
+      >
+        <div class="font-medium text-sm group-hover:text-blue-700">{city.name}</div>
+        <div class="text-xs text-gray-500 mt-0.5">ZIP {city.zip}</div>
+        <div class="text-xs text-gray-400 mt-1 capitalize">{city.region}</div>
+      </a>
+    ))}
+  </div>
+
+  <div class="max-w-3xl mb-12">
+    <h2 class="text-xl font-bold mb-4">Shipping Zones from {stateData.name}</h2>
+    <p class="text-sm text-gray-600 mb-4">
+      {stateData.name} is in the <strong class="capitalize">{originRegion}</strong> region.
+      Zone determines your rate — closer destinations have lower zones and cheaper shipping.
+    </p>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm border rounded-xl overflow-hidden">
+        <thead class="bg-gray-50">
+          <tr>
+            <th class="text-left px-4 py-2 font-medium">Destination</th>
+            <th class="px-3 py-2 font-medium">Zone</th>
+            <th class="px-3 py-2 font-medium text-right">USPS GA 1lb</th>
+            <th class="px-3 py-2 font-medium text-right">UPS Ground 1lb</th>
+            <th class="px-3 py-2 font-medium text-right">FedEx Ground 1lb</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y">
+          {regions.map(destRegion => {
+            const zone = ZONE_MATRIX[originRegion][destRegion];
+            const uspsGA = carriers.find(c => c.id === 'usps-ground-advantage');
+            const upsG  = carriers.find(c => c.id === 'ups-ground');
+            const fedG  = carriers.find(c => c.id === 'fedex-ground');
+            const uspsRate = uspsGA?.rates.find(r => r.oz >= 16)?.zones[zone];
+            const upsRate  = upsG?.rates.find(r => r.oz >= 16)?.zones[zone];
+            const fedRate  = fedG?.rates.find(r => r.oz >= 16)?.zones[zone];
+            return (
+              <tr>
+                <td class="px-4 py-2 font-medium capitalize">{destRegion.replace('-', ' ')}</td>
+                <td class={`px-3 py-2 text-center font-semibold ${zone <= 3 ? 'text-green-700' : zone >= 7 ? 'text-red-600' : 'text-gray-700'}`}>
+                  {zone}
+                </td>
+                <td class="px-3 py-2 text-right">{uspsRate ? `$${uspsRate.toFixed(2)}` : '—'}</td>
+                <td class="px-3 py-2 text-right">{upsRate  ? `$${upsRate.toFixed(2)}`  : '—'}</td>
+                <td class="px-3 py-2 text-right">{fedRate  ? `$${fedRate.toFixed(2)}`  : '—'}</td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+    </div>
+    <p class="text-xs text-gray-400 mt-2">* Rates shown are 2026 approximate commercial rates for a 1 lb package.</p>
+  </div>
+
+  <div class="bg-gray-50 border rounded-xl p-6 max-w-2xl mb-8">
+    <h2 class="font-semibold mb-2">State Tax Info</h2>
+    <p class="text-sm text-gray-600">
+      {stateData.name} state sales tax rate: <strong>{stateData.taxRate}%</strong>.
+      {stateData.taxRate === 0 ? 'No state sales tax applies to online sales originating here.' : 'May apply to certain product categories sold to in-state customers.'}
+    </p>
+  </div>
+
+  <div class="flex gap-3 flex-wrap text-sm">
+    <a href="/shipping/" class="text-blue-700 hover:underline">← All States</a>
+    <a href="/shipping-calculator/" class="text-blue-700 hover:underline">Full Shipping Calculator</a>
+    <a href="/china-shipping/" class="text-blue-700 hover:underline">China Shipping Rates</a>
+  </div>
+</Base>

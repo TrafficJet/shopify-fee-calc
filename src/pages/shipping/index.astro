@@ -1,0 +1,105 @@
+---
+import Base from "../../layouts/Base.astro";
+import { states } from "../../data/states-cities";
+
+const regionColors: Record<string, string> = {
+  northeast: 'bg-blue-50 border-blue-200',
+  southeast: 'bg-green-50 border-green-200',
+  midwest:   'bg-yellow-50 border-yellow-200',
+  southwest: 'bg-orange-50 border-orange-200',
+  west:      'bg-purple-50 border-purple-200',
+};
+
+const regionLabels: Record<string, string> = {
+  northeast: 'Northeast', southeast: 'Southeast',
+  midwest: 'Midwest', southwest: 'Southwest', west: 'West',
+};
+
+const grouped = states.reduce((acc, s) => {
+  const region = s.cities[0]?.region ?? 'west';
+  if (!acc[region]) acc[region] = [];
+  acc[region].push(s);
+  return acc;
+}, {} as Record<string, typeof states>);
+
+const regionOrder = ['northeast', 'southeast', 'midwest', 'southwest', 'west'];
+---
+<Base
+  title="Shipping Cost by State & City — All US Carriers 2026 | ShopifyCalc"
+  description="Compare USPS, UPS, FedEx, and DHL shipping rates from every US city. Zone-based pricing for all major carriers. Updated 2026."
+>
+  <h1 class="text-3xl font-bold mb-3">Shipping Cost by State & City (2026)</h1>
+  <p class="text-gray-600 mb-8 max-w-2xl text-lg">
+    Compare USPS, UPS, FedEx, and DHL shipping rates from any US city. Select your state to see per-city rate calculators with all carrier options.
+  </p>
+
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-12">
+    {regionOrder.map(region => {
+      const statesInRegion = grouped[region] ?? [];
+      const cls = regionColors[region] ?? 'bg-gray-50 border-gray-200';
+      return (
+        <div class={`border rounded-xl p-5 ${cls}`}>
+          <h2 class="font-semibold text-base mb-3">{regionLabels[region]}</h2>
+          <ul class="space-y-1">
+            {statesInRegion.map(s => (
+              <li>
+                <a href={`/shipping/${s.slug}/`} class="text-sm text-blue-700 hover:underline">
+                  {s.name} <span class="text-gray-400">({s.cities.length} cities)</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      );
+    })}
+  </div>
+
+  <div class="bg-blue-50 border border-blue-200 rounded-xl p-6 max-w-3xl mb-12">
+    <h2 class="font-semibold text-lg mb-3">What's on Each City Page</h2>
+    <ul class="text-sm text-gray-700 space-y-2">
+      <li>✅ Live rate calculator — enter weight, select destination</li>
+      <li>✅ Full rate table: USPS Ground Advantage, Priority Mail, Priority Express</li>
+      <li>✅ UPS Ground, 2nd Day Air, Next Day Air</li>
+      <li>✅ FedEx Ground, 2Day, Priority Overnight</li>
+      <li>✅ DHL eCommerce rates</li>
+      <li>✅ Cheapest carrier recommendation per weight bracket</li>
+    </ul>
+  </div>
+
+  <div class="max-w-3xl">
+    <h2 class="text-xl font-bold mb-4">How Shipping Zones Work</h2>
+    <p class="text-gray-600 text-sm mb-4">
+      USPS, UPS, and FedEx all use <strong>zones</strong> to calculate rates — the farther your package travels, the higher the zone (1–8) and the higher the cost. Zone 1 is the closest (same region), Zone 8 is the farthest (opposite coast or Alaska/Hawaii).
+    </p>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm border rounded-xl overflow-hidden">
+        <thead class="bg-gray-50">
+          <tr>
+            <th class="text-left px-4 py-2 font-medium">From \ To</th>
+            <th class="px-3 py-2 font-medium">NE</th>
+            <th class="px-3 py-2 font-medium">SE</th>
+            <th class="px-3 py-2 font-medium">MW</th>
+            <th class="px-3 py-2 font-medium">SW</th>
+            <th class="px-3 py-2 font-medium">West</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y">
+          {[
+            ['Northeast', [2,4,5,7,8]],
+            ['Southeast', [4,2,4,5,7]],
+            ['Midwest',   [5,4,2,4,6]],
+            ['Southwest', [7,5,4,2,3]],
+            ['West',      [8,7,6,3,2]],
+          ].map(([label, zones]: any) => (
+            <tr>
+              <td class="px-4 py-2 font-medium">{label}</td>
+              {(zones as number[]).map(z => (
+                <td class={`px-3 py-2 text-center ${z <= 3 ? 'text-green-700 font-medium' : z >= 7 ? 'text-red-600' : 'text-gray-700'}`}>{z}</td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</Base>

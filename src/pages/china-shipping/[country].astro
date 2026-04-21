@@ -1,0 +1,195 @@
+---
+import Base from "../../layouts/Base.astro";
+import { chinaMethods, countryRates, getCountriesByRegion, calcChinaRate } from "../../data/china-shipping";
+
+export function getStaticPaths() {
+  return countryRates.map(c => ({ params: { country: c.slug } }));
+}
+
+const { country: countrySlug } = Astro.params;
+const countryData = countryRates.find(c => c.slug === countrySlug)!;
+
+// Common weight samples (kg)
+const weightSamples = [0.1, 0.25, 0.5, 1, 2, 5, 10];
+
+const schema = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": `What is the cheapest way to ship from China to ${countryData.name}?`,
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": `For small packages under 2 kg, China Post ePacket is typically the cheapest tracked option to ${countryData.name}. For urgent shipments, DHL Express offers the fastest delivery at a higher cost.`,
+      },
+    },
+    {
+      "@type": "Question",
+      "name": `How long does shipping from China to ${countryData.name} take?`,
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": `Transit times from China to ${countryData.name}: ePacket 7–20 days, China EMS 5–15 days, DHL Express 2–5 days, FedEx International Economy 5–10 days.`,
+      },
+    },
+  ],
+});
+
+// Find cheapest available method
+const cheapestMethod = chinaMethods
+  .map(m => {
+    const rate = calcChinaRate(countrySlug, m.id, 0.5);
+    return rate !== null ? { method: m, rate } : null;
+  })
+  .filter(Boolean)
+  .sort((a, b) => a!.rate - b!.rate)[0];
+---
+<Base
+  title={`Shipping from China to ${countryData.name} — Rates & Methods 2026 | ShopifyCalc`}
+  description={`2026 shipping rates from China to ${countryData.name}. Compare ePacket, China EMS, DHL Express, FedEx, and UPS. Transit times and cost calculator.`}
+  canonicalUrl={`https://shopify-fee-calc.com/china-shipping/${countryData.slug}/`}
+>
+  <script type="application/ld+json" set:html={schema} />
+
+  <nav class="text-sm text-gray-500 mb-4">
+    <a href="/" class="hover:text-blue-700">Home</a>
+    <span class="mx-2">›</span>
+    <a href="/china-shipping/" class="hover:text-blue-700">China Shipping</a>
+    <span class="mx-2">›</span>
+    <span class="text-gray-900">{countryData.flag} {countryData.name}</span>
+  </nav>
+
+  <h1 class="text-3xl font-bold mb-2">
+    Shipping from China to {countryData.flag} {countryData.name}
+  </h1>
+  <p class="text-gray-500 mb-6 text-sm">Region: {countryData.region} · 2026 Rates (from Shenzhen/Shanghai)</p>
+
+  {cheapestMethod && (
+    <div class="bg-green-50 border border-green-200 rounded-xl p-4 max-w-2xl mb-8 flex items-center gap-4">
+      <div class="text-2xl">💡</div>
+      <div>
+        <div class="font-semibold text-green-800">Cheapest option for 0.5 kg: {cheapestMethod.method.name}</div>
+        <div class="text-sm text-green-700">~${cheapestMethod.rate.toFixed(2)} USD · {cheapestMethod.method.transitDays}</div>
+      </div>
+    </div>
+  )}
+
+  <!-- Calculator -->
+  <div class="bg-gray-50 border rounded-xl p-6 max-w-2xl mb-10">
+    <h2 class="font-semibold text-lg mb-4">Shipping Rate Calculator</h2>
+    <div class="flex gap-3 mb-4">
+      <div class="flex-1">
+        <label class="block text-sm font-medium mb-1" for="weight-kg">Package Weight (kg)</label>
+        <input id="weight-kg" type="number" min="0.1" step="0.1" value="0.5"
+          class="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
+      </div>
+      <div class="flex items-end">
+        <button id="calc-btn"
+          class="bg-blue-700 text-white px-5 py-2 rounded-lg font-semibold text-sm hover:bg-blue-800 transition">
+          Calculate
+        </button>
+      </div>
+    </div>
+    <div id="results" class="space-y-2 hidden"></div>
+  </div>
+
+  <!-- Full rate table -->
+  <div class="mb-12 overflow-x-auto">
+    <h2 class="text-xl font-bold mb-4">2026 Rate Table — China to {countryData.name}</h2>
+    <table class="w-full text-sm border rounded-xl overflow-hidden">
+      <thead class="bg-gray-50">
+        <tr>
+          <th class="text-left px-4 py-2 font-medium">Shipping Method</th>
+          <th class="px-3 py-2 font-medium">Transit</th>
+          <th class="px-3 py-2 font-medium">Tracking</th>
+          {weightSamples.map(w => (
+            <th class="px-3 py-2 font-medium text-right">{w < 1 ? `${w*1000}g` : `${w}kg`}</th>
+          ))}
+        </tr>
+      </thead>
+      <tbody class="divide-y">
+        {chinaMethods.map(m => {
+          const available = countryData.rates[m.id] !== null;
+          return (
+            <tr class={`hover:bg-gray-50 ${!available ? 'opacity-40' : ''}`}>
+              <td class="px-4 py-2 font-medium">
+                {m.name}
+                {!available && <span class="text-xs text-red-500 ml-1">(unavailable)</span>}
+              </td>
+              <td class="px-3 py-2 text-gray-600 text-xs">
+                {countryData.transit?.[m.id] ?? m.transitDays}
+              </td>
+              <td class="px-3 py-2 text-center text-xs">
+                {m.trackingLevel === 'full' ? '✅' : m.trackingLevel === 'limited' ? '⚠️' : '❌'}
+              </td>
+              {weightSamples.map(w => {
+                const r = available ? calcChinaRate(countrySlug, m.id, w) : null;
+                return (
+                  <td class="px-3 py-2 text-right">
+                    {r !== null ? `$${r.toFixed(2)}` : '—'}
+                  </td>
+                );
+              })}
+            </tr>
+          );
+        })}
+      </tbody>
+    </table>
+    <p class="text-xs text-gray-400 mt-2">Rates are approximate 2026 retail/commercial estimates from major Chinese shipping hubs.</p>
+  </div>
+
+  <!-- Method details -->
+  <div class="max-w-2xl mb-12">
+    <h2 class="text-xl font-bold mb-4">About Each Shipping Method</h2>
+    <div class="space-y-4">
+      {chinaMethods.filter(m => countryData.rates[m.id] !== null).map(m => (
+        <div class="border rounded-xl p-4">
+          <div class="flex justify-between items-start mb-1">
+            <h3 class="font-semibold">{m.name}</h3>
+            <span class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded">{m.transitDays}</span>
+          </div>
+          <p class="text-sm text-gray-600 mb-1">{m.description}</p>
+          <p class="text-xs text-gray-500">Best for: {m.bestFor}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+
+  <div class="flex gap-4 text-sm flex-wrap">
+    <a href="/china-shipping/" class="text-blue-700 hover:underline">← All Countries</a>
+    <a href="/shipping/" class="text-blue-700 hover:underline">US Domestic Shipping</a>
+  </div>
+</Base>
+
+<script define:vars={{ methodsData: JSON.stringify(chinaMethods), ratesData: JSON.stringify(countryData.rates), slug: countrySlug }}>
+  const methods = JSON.parse(methodsData);
+  const rates = JSON.parse(ratesData);
+
+  document.getElementById('calc-btn').addEventListener('click', () => {
+    const kg = parseFloat(document.getElementById('weight-kg').value) || 0.5;
+
+    const results = methods
+      .map(m => {
+        const r = rates[m.id];
+        if (!r) return null;
+        const cost = Math.max(r.minCharge, r.perKg * kg);
+        return { method: m, cost };
+      })
+      .filter(Boolean)
+      .sort((a, b) => a.cost - b.cost);
+
+    const el = document.getElementById('results');
+    el.innerHTML = results.map((r, i) =>
+      `<div class="flex items-center justify-between border rounded-lg px-4 py-3 ${i === 0 ? 'bg-green-50 border-green-300' : 'bg-white'}">
+        <div>
+          ${i === 0 ? '<span class="text-xs font-medium text-green-700 bg-green-100 rounded px-1.5 mr-2">Cheapest</span>' : ''}
+          <span class="font-medium text-sm">${r.method.name}</span>
+          <span class="text-xs text-gray-500 ml-2">${r.method.transitDays}</span>
+        </div>
+        <span class="font-bold ${i === 0 ? 'text-green-700' : 'text-gray-900'}">$${r.cost.toFixed(2)}</span>
+      </div>`
+    ).join('');
+
+    el.classList.remove('hidden');
+  });
+</script>
