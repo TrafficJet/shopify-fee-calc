@@ -1,0 +1,52 @@
+---
+import Base from '../../layouts/Base.astro';
+import { feePages } from '../../data/fee-pages';
+
+const byCategory = {
+  'By Business Type': ['dropshipping','print-on-demand','digital-products','jewelry','clothing','food'],
+  'By Country': ['uk','canada','australia'],
+  'By Plan': ['basic-plan','advanced-plan','plus'],
+  'Comparisons': ['vs-etsy','vs-woocommerce','vs-bigcommerce','vs-squarespace'],
+  'Cost Guides': ['transaction-fees','monthly-cost','annual-cost'],
+};
+---
+<Base
+  title="Shopify Fees — All Fee Calculators & Cost Guides 2026"
+  description="Calculate Shopify fees by plan, business type, and country. Free calculators for transaction fees, monthly costs, and comparisons with Etsy, WooCommerce, and more."
+>
+  <h1 class="text-3xl font-bold mb-3">Shopify Fee Calculators</h1>
+  <p class="text-gray-600 dark:text-gray-400 mb-10 max-w-2xl text-lg">
+    Every Shopify fee calculator in one place — by business type, plan, country, and comparison. All free, no signup.
+  </p>
+
+  <div class="space-y-10">
+    {Object.entries(byCategory).map(([category, slugs]) => {
+      const pages = slugs.map(s => feePages.find(p => p.slug === s)).filter(Boolean);
+      return (
+        <div>
+          <h2 class="text-sm font-semibold uppercase tracking-widest text-blue-600 dark:text-blue-400 mb-4">{category}</h2>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+            {pages.map(p => (
+              <a href={`/shopify-fees/${p!.slug}/`}
+                class="border dark:border-gray-700 rounded-xl p-4 hover:border-blue-400 dark:hover:border-blue-500 hover:shadow-sm transition group bg-white dark:bg-gray-900">
+                <div class="font-semibold text-sm text-gray-900 dark:text-gray-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 leading-snug mb-1">
+                  {p!.h1.replace(' — ', ' ')}
+                </div>
+                <div class="text-xs text-gray-500 dark:text-gray-400 line-clamp-2">{p!.intro.slice(0, 90)}…</div>
+              </a>
+            ))}
+          </div>
+        </div>
+      );
+    })}
+  </div>
+
+  <div class="mt-14 bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 rounded-xl p-6 max-w-2xl">
+    <h2 class="font-semibold mb-2 dark:text-gray-100">Not sure where to start?</h2>
+    <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">The full P&amp;L calculator covers all fees in one place — plan cost, transaction fees, payment processing, apps, and shipping.</p>
+    <a href="/shopify-profit-calculator/"
+      class="inline-block bg-blue-700 text-white text-sm font-semibold px-5 py-2.5 rounded-lg hover:bg-blue-800 transition">
+      Open Real Profit Calculator →
+    </a>
+  </div>
+</Base>
