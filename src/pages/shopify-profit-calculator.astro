@@ -129,10 +129,11 @@ const faqs = [
         </div>
         <div class="flex items-center gap-3">
           <span class="text-sm text-gray-600 dark:text-gray-400">Billing:</span>
-          <div class="flex rounded-lg border dark:border-gray-600 overflow-hidden text-sm">
+          <div id="billing-wrap" class="flex rounded-lg border dark:border-gray-600 overflow-hidden text-sm">
             <button data-billing="monthly" class="billing-btn px-4 py-1.5 transition">Monthly</button>
             <button data-billing="annual" class="billing-btn px-4 py-1.5 transition">Annual (−25%)</button>
           </div>
+          <span id="billing-plus-note" class="hidden text-xs text-gray-500 dark:text-gray-400">Plus pricing is fixed — no annual discount</span>
         </div>
         <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">
           Plan cost: <span id="d-plan" class="font-semibold text-gray-700 dark:text-gray-300">$39/mo</span>
@@ -402,6 +403,13 @@ function activatePlan(p: string) {
       ? 'plan-btn border-2 border-blue-600 dark:border-blue-500 bg-blue-50 dark:bg-blue-950 rounded-xl p-3 text-left transition'
       : 'plan-btn border dark:border-gray-600 rounded-xl p-3 text-left transition hover:border-blue-400';
   });
+  // Plus has no annual discount — hide billing toggle
+  const isPlus = p === 'plus';
+  const wrap = document.getElementById('billing-wrap')!;
+  const note = document.getElementById('billing-plus-note')!;
+  wrap.classList.toggle('hidden', isPlus);
+  note.classList.toggle('hidden', !isPlus);
+  if (isPlus) billing = 'monthly'; // reset to monthly (annual = monthly anyway)
   // update penalty labels
   const penalty = PLANS[p].penalty;
   ['stripe','paypal','square'].forEach(k => {
