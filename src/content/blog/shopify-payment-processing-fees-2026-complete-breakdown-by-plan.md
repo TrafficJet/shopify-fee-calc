@@ -13,11 +13,11 @@ Every dollar you collect through your Shopify store gets touched by fees before 
 
 ## What Are Shopify Payment Processing Fees?
 
-Two distinct fee types apply to every Shopify store. Mixing them up is one of the most common — and costly — mistakes merchants make.
+Two distinct fee types apply to every Shopify store. Confusing them is one of the most common — and costly — mistakes merchants make.
 
-**Credit card processing fees** hit every sale, regardless of which payment gateway you use. They cover the actual cost of running the card. **Shopify's additional transaction fee** is a separate charge. Shopify applies it only when you use a third-party gateway instead of Shopify Payments.
+**Credit card processing fees** are charged on every sale, regardless of which payment gateway you use. These cover the actual cost of running the card. **Shopify's additional transaction fee** is a separate charge. Shopify applies it only when you use a third-party gateway instead of Shopify Payments.
 
-Enable Shopify Payments and that additional transaction fee disappears. You still pay credit card processing rates, but the second layer of cost is gone. PCI compliance, fraud analysis tools, and chargeback management are all included in Shopify Payments at no extra charge (Shopify, 2026).
+Enable Shopify Payments and the additional transaction fee disappears entirely. You still pay credit card processing rates. But that second layer of cost is gone. PCI compliance, fraud analysis tools, and chargeback management are all bundled into Shopify Payments at no extra charge (Shopify, 2026).
 
 Your actual effective rate depends on your plan tier, whether the sale happens online or in person via Shopify POS, and the card type used. Accelerated checkouts like Shop Pay, Apple Pay, and Google Pay add no surcharge beyond the standard card rate.
 
@@ -39,14 +39,14 @@ Pay annually instead of monthly and you save roughly 25% on your subscription ac
 
 ## Shopify Basic Plan Fees: Best for Stores Under ~$22K/Month
 
-On Basic at $39/month, your online credit card rate through Shopify Payments is **2.9% + $0.30** per transaction. In-person sales through Shopify POS come in lower at **2.6% + $0.10**. Use a third-party gateway and Shopify adds a **2.0%** surcharge on top of whatever your gateway already charges (Shopify, 2026).
+On Basic at $39/month, your online credit card rate through Shopify Payments is **2.9% + $0.30** per transaction. In-person sales through Shopify POS come in lower at **2.6% + $0.10**. Use a third-party gateway instead and Shopify adds a **2.0%** surcharge on top of whatever your gateway already charges (Shopify, 2026).
 
 Here's the math on $10,000/month in online sales, assuming a $50 average order value and 200 transactions:
 
 - **With Shopify Payments:** ($10,000 × 2.9%) + (200 × $0.30) = $290 + $60 = **$350 total**
 - **With a third-party gateway:** You pay the gateway's own rate *plus* ($10,000 × 2.0%) = **$200 additional** to Shopify
 
-That $200 difference makes the choice easy for most sellers. Basic typically suits stores doing under roughly $22,000/month in gross merchandise volume (GMV). That's the point where upgrading to Standard starts saving money on processing fees alone.
+That $200 difference makes the decision easy for most sellers. Basic typically suits stores doing under roughly $22,000/month in gross merchandise volume (GMV). That's the point where upgrading to Standard starts saving money on processing fees alone.
 
 Merchants moving from marketplace selling to their own storefront often start here. A small handmade jewelry shop leaving Etsy for a standalone Shopify store, for example, keeps fixed costs low on Basic while testing direct-to-consumer demand.
 
@@ -79,7 +79,7 @@ A mid-size DTC skincare brand doing $80,000/month might choose Advanced for the 
 
 Shopify Plus starts at **$2,300/month** and uses a variable pricing model that scales with revenue at higher tiers. The biggest advantage for payment processing: your Shopify Payments card rate is **negotiable**. It typically lands around **2.15% + $0.30** or lower, depending on your monthly volume and average order value (Shopify Plus, 2026).
 
-The third-party gateway surcharge on Plus is just **0.15%** — the lowest available. Plus merchants can also accept payments in multiple currencies natively through Shopify Payments. That cuts out the friction and added cost of currency conversion apps.
+The third-party gateway surcharge on Plus is just **0.15%** — the lowest available. Plus merchants can also accept payments in multiple currencies natively through Shopify Payments, which cuts out the friction and added cost of currency conversion apps.
 
 Plus gives you access to Checkout Extensibility for custom checkout experiences. That doesn't change your processing rate, but it can meaningfully lift conversion. Your Merchant Success Manager can renegotiate rates as volume grows past agreed thresholds.
 
@@ -95,7 +95,7 @@ Here's how that plays out on the Basic plan using Stripe:
 - **Shopify's additional fee:** 2.0%
 - **Your effective rate:** 4.9% + $0.30 per transaction
 
-On $10,000 in monthly sales, that's roughly **$520 in total processing costs** — compared to about $350 with Shopify Payments alone. That's a $170/month difference. Over a year, that's more than $2,000.
+On $10,000 in monthly sales, that's roughly **$520 in total processing costs** — compared to about $350 with Shopify Payments alone. That's a $170/month difference, which compounds over a year into more than $2,000.
 
 Common third-party gateway base rates for US merchants as of 2026:
 
@@ -104,7 +104,7 @@ Common third-party gateway base rates for US merchants as of 2026:
 - **Authorize.net:** 2.9% + $0.30 plus a $25/month gateway fee
 - **Square:** 2.9% + $0.30 for online transactions
 
-For most US-based merchants, Shopify Payments is the cheaper path. But real exceptions exist. Stores selling [high-risk products](/best-payment-gateways-for-shopify) that Shopify Payments won't support — CBD, certain supplements — need a third-party option. So do subscription-heavy businesses using platforms like ReCharge that require direct gateway access. Merchants in countries where Shopify Payments isn't available yet have no choice either.
+For most US-based merchants, Shopify Payments is the cheaper path. But there are real exceptions. Stores selling [high-risk products](/best-payment-gateways-for-shopify) that Shopify Payments won't support — CBD, certain supplements — need a third-party option. So do subscription-heavy businesses using platforms like ReCharge that require direct gateway access. Merchants in countries where Shopify Payments isn't available yet have no choice either.
 
 ## Shopify Payments: What to Know About Card Types and Chargebacks
 
@@ -128,11 +128,11 @@ Chargebacks carry a **$15 fee** per dispute. Win the dispute and Shopify refunds
 
 ## Shopify Fees vs. Competitors: No Single Platform Is Cheapest for Everyone
 
-**WooCommerce + Stripe** charges no platform transaction fee. But you pay for hosting ($25–$100+/month), SSL certificates, security plugins, and PCI compliance management. For stores under $20,000/month in GMV, those infrastructure costs often equal or exceed what you'd save by avoiding Shopify's platform fees (WooCommerce, 2026). WooCommerce also demands more hands-on work. Plugin updates, security patches, and server optimization are all your problem.
+**WooCommerce + Stripe** charges no platform transaction fee. But you pay for hosting ($25–$100+/month), SSL certificates, security plugins, and PCI compliance management. For stores under $20,000/month in GMV, those infrastructure costs often equal or exceed the savings from avoiding Shopify's platform fees (WooCommerce, 2026). WooCommerce also demands more hands-on work — plugin updates, security patches, and server optimization are all your problem.
 
 **BigCommerce** charges zero additional transaction fees on every plan. That's a genuine advantage for merchants using third-party gateways. BigCommerce's recommended processors — Braintree, Stripe — charge similar credit card rates to Shopify Payments, so the savings come mainly from avoiding the platform surcharge layer. See our [Shopify vs. BigCommerce comparison](/shopify-vs-bigcommerce) for the full breakdown.
 
-**Wix eCommerce** processes payments through Wix Payments starting at 2.9% + $0.30 on their Business plan (Wix, 2026). Wix doesn't charge additional transaction fees. But its app ecosystem and fulfillment integrations are less mature than Shopify's. That becomes a real problem for merchants scaling past six figures annually.
+**Wix eCommerce** processes payments through Wix Payments starting at 2.9% + $0.30 on their Business plan (Wix, 2026). Wix doesn't charge additional transaction fees. But its app ecosystem and fulfillment integrations are less mature than Shopify's, which can become a real problem for merchants scaling past six figures annually.
 
 The honest takeaway: no single platform has the cheapest fees across all situations. Shopify's bundled fraud tools, Shop Pay's conversion lift, and Shopify Balance for faster payouts create a total cost of ownership that's typically competitive at mid-market volumes ($10K–$500K/month). Merchants who want gateway flexibility without surcharges may prefer BigCommerce. Those who want full infrastructure control may prefer WooCommerce, despite the added maintenance burden.
 
