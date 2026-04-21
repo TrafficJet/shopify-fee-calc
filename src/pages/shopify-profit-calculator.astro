@@ -1,0 +1,638 @@
+---
+import Base from '../layouts/Base.astro';
+
+const faqSchema = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    { "@type": "Question", "name": "What is a good profit margin for a Shopify store?",
+      "acceptedAnswer": { "@type": "Answer", "text": "A healthy Shopify store net margin is 10–20%. Above 20% is strong. Below 10% signals cost structure problems. Average ecommerce margins run 7–15% net, though digital products and high-AOV stores often hit 30%+." } },
+    { "@type": "Question", "name": "How do I calculate my true Shopify profit?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Net profit = Revenue − COGS − Payment processing fees − Shipping costs − Shopify plan fee − App subscriptions − Marketing spend − Return handling costs. This calculator does all that math using 2026 rates." } },
+    { "@type": "Question", "name": "What percentage does Shopify take per sale in 2026?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Shopify Payments rates: Basic 2.9% + $0.30, Shopify plan 2.7% + $0.30, Advanced 2.5% + $0.30, Plus 1.8% + $0.30. Use a third-party processor and Shopify adds extra: 2% (Basic), 1% (Shopify plan), 0.5% (Advanced)." } },
+    { "@type": "Question", "name": "How much do Shopify apps cost per month?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Average Shopify merchants spend $100–$300/month on apps. Stores at $10K+/mo often spend $200–$500/month across email, reviews, upsells, and analytics. That is typically 1–3% of revenue." } },
+    { "@type": "Question", "name": "What is Shopify's 3rd-party transaction fee?",
+      "acceptedAnswer": { "@type": "Answer", "text": "If you don't use Shopify Payments, Shopify charges: 2% extra on Basic, 1% on Shopify plan, 0.5% on Advanced, 0.15% on Plus. On a $50K/mo store on Basic with Stripe, that is $1,000/month in extra fees." } },
+  ]
+});
+
+const appSchema = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Shopify Profit Calculator",
+  "description": "Free calculator for Shopify store net profit, gross margin, and cost breakdown. Includes 2026 rates for all plans and processors.",
+  "applicationCategory": "BusinessApplication",
+  "operatingSystem": "Web",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+  "url": "https://shopify-fee-calc.com/shopify-profit-calculator/"
+});
+
+const faqs = [
+  { q: "What is a good profit margin for a Shopify store?",
+    a: "A healthy Shopify net margin is 10–20%. Above 20% is strong. Below 10% signals cost structure problems. Average ecommerce margins run 7–15% net, though digital products and high-AOV stores often hit 30%+." },
+  { q: "How do I calculate my true Shopify profit?",
+    a: "Net profit = Revenue − COGS − Payment fees − Shipping − Plan fee − Apps − Marketing − Returns. This calculator handles all of that using 2026 rates automatically." },
+  { q: "What percentage does Shopify take per sale in 2026?",
+    a: "Shopify Payments rates in 2026: Basic 2.9%+30¢, Shopify plan 2.7%+30¢, Advanced 2.5%+30¢, Plus 1.8%+30¢. Use a third-party processor and Shopify adds extra: 2% on Basic, 1% on Shopify plan, 0.5% on Advanced." },
+  { q: "How much do Shopify apps cost per month on average?",
+    a: "Average Shopify merchants spend $100–$300/month on apps. Stores doing $10K+/mo often spend $200–$500/month across email marketing, reviews, upsells, and analytics. Typically 1–3% of revenue." },
+  { q: "What is Shopify's 3rd-party transaction fee?",
+    a: "If you don't use Shopify Payments, Shopify charges: 2% extra on Basic, 1% on Shopify plan, 0.5% on Advanced, 0.15% on Plus. On a $50K/mo store with Stripe on Basic plan, that's $1,000/month in extra fees alone." },
+];
+---
+<Base
+  title="Shopify Profit Calculator — Real Net Profit After All Fees (Free 2026)"
+  description="Calculate your Shopify store's true net profit: COGS, payment fees, plan cost, apps, shipping, returns, and marketing. Free, instant, 2026 rates."
+>
+  <script type="application/ld+json" set:html={faqSchema} />
+  <script type="application/ld+json" set:html={appSchema} />
+
+  <!-- Tailwind safelist for dynamically applied classes -->
+  <div class="hidden bg-blue-50 dark:bg-blue-950 border-2 border-blue-600 dark:border-blue-500 bg-blue-600 text-white text-gray-600 dark:text-gray-300 bg-gray-50 dark:bg-gray-800 bg-orange-50 dark:bg-orange-950 text-orange-700 dark:text-orange-400 bg-yellow-50 dark:bg-yellow-950 text-yellow-700 dark:text-yellow-400 bg-green-50 dark:bg-green-950 text-green-700 dark:text-green-400 bg-red-50 dark:bg-red-950 text-red-700 dark:text-red-400 text-green-600 dark:text-green-400 text-red-600 dark:text-red-400 text-blue-600 dark:text-blue-400 border dark:border-gray-600 font-semibold text-gray-800 dark:text-gray-200 text-gray-600 dark:text-gray-400 text-gray-700 dark:text-gray-300 text-red-500 text-orange-500"></div>
+
+  <h1 class="text-3xl font-bold mb-2">Shopify Profit Calculator</h1>
+  <p class="text-gray-600 dark:text-gray-400 mb-8 max-w-2xl">
+    Your real monthly P&amp;L — revenue minus COGS, payment fees, plan cost, apps, marketing, shipping, and returns.
+    See exactly where every dollar goes. Uses 2026 Shopify rates.
+  </p>
+
+  <div class="flex flex-col lg:flex-row gap-8 items-start">
+
+    <!-- ── LEFT: Inputs ──────────────────────────────────────── -->
+    <div class="flex-1 min-w-0 space-y-4">
+
+      <!-- Block 1: Revenue -->
+      <div class="border dark:border-gray-700 rounded-xl p-5 bg-white dark:bg-gray-900">
+        <h2 class="font-semibold text-xs uppercase tracking-widest text-blue-600 dark:text-blue-400 mb-4">1 — Revenue</h2>
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-medium mb-1 dark:text-gray-300" for="inp-rev">Monthly Revenue ($)</label>
+            <input id="inp-rev" type="number" min="0" step="100" value="50000"
+              class="w-full border dark:border-gray-600 rounded-lg px-3 py-2 text-sm bg-white dark:bg-gray-800 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-1 dark:text-gray-300" for="inp-aov">
+              Avg Order Value ($)
+              <span class="tip" data-tip="Average revenue per order. Used to estimate number of orders per month.">?</span>
+            </label>
+            <input id="inp-aov" type="number" min="1" step="1" value="85"
+              class="w-full border dark:border-gray-600 rounded-lg px-3 py-2 text-sm bg-white dark:bg-gray-800 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+          </div>
+        </div>
+        <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">
+          Orders/month: <span id="d-orders" class="font-semibold text-gray-700 dark:text-gray-300">588</span>
+        </p>
+      </div>
+
+      <!-- Block 2: COGS -->
+      <div class="border dark:border-gray-700 rounded-xl p-5 bg-white dark:bg-gray-900">
+        <h2 class="font-semibold text-xs uppercase tracking-widest text-blue-600 dark:text-blue-400 mb-4">2 — Cost of Goods (COGS)</h2>
+        <label class="block text-sm font-medium mb-2 dark:text-gray-300">
+          COGS % of Revenue
+          <span class="tip" data-tip="Product cost as % of revenue. Typical: apparel 30-45%, electronics 50-65%, beauty 25-40%.">?</span>
+        </label>
+        <div class="flex items-center gap-3">
+          <input id="inp-cogs-range" type="range" min="0" max="90" step="1" value="35" class="flex-1 accent-blue-600" />
+          <div class="flex items-center border dark:border-gray-600 rounded-lg overflow-hidden shrink-0">
+            <input id="inp-cogs" type="number" min="0" max="90" step="1" value="35"
+              class="w-14 px-2 py-1.5 text-sm text-right bg-white dark:bg-gray-800 dark:text-gray-100 focus:outline-none" />
+            <span class="px-2 py-1.5 text-sm bg-gray-50 dark:bg-gray-700 dark:text-gray-400 border-l dark:border-gray-600">%</span>
+          </div>
+        </div>
+        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1.5">
+          COGS this month: <span id="d-cogs" class="font-semibold text-gray-700 dark:text-gray-300">$17,500</span>
+        </p>
+      </div>
+
+      <!-- Block 3: Plan -->
+      <div class="border dark:border-gray-700 rounded-xl p-5 bg-white dark:bg-gray-900">
+        <h2 class="font-semibold text-xs uppercase tracking-widest text-blue-600 dark:text-blue-400 mb-4">3 — Shopify Plan</h2>
+        <div class="grid grid-cols-2 gap-2 mb-4">
+          <button data-plan="basic" class="plan-btn border dark:border-gray-600 rounded-xl p-3 text-left transition hover:border-blue-400">
+            <div class="font-semibold text-sm dark:text-gray-100">Basic</div>
+            <div class="text-xs text-gray-500 dark:text-gray-400">$39/mo · 2.9%+30¢</div>
+          </button>
+          <button data-plan="shopify" class="plan-btn border dark:border-gray-600 rounded-xl p-3 text-left transition hover:border-blue-400">
+            <div class="font-semibold text-sm dark:text-gray-100">Shopify</div>
+            <div class="text-xs text-gray-500 dark:text-gray-400">$105/mo · 2.7%+30¢</div>
+          </button>
+          <button data-plan="advanced" class="plan-btn border dark:border-gray-600 rounded-xl p-3 text-left transition hover:border-blue-400">
+            <div class="font-semibold text-sm dark:text-gray-100">Advanced</div>
+            <div class="text-xs text-gray-500 dark:text-gray-400">$399/mo · 2.5%+30¢</div>
+          </button>
+          <button data-plan="plus" class="plan-btn border dark:border-gray-600 rounded-xl p-3 text-left transition hover:border-blue-400">
+            <div class="font-semibold text-sm dark:text-gray-100">Plus</div>
+            <div class="text-xs text-gray-500 dark:text-gray-400">$2,300/mo · 1.8%+30¢</div>
+          </button>
+        </div>
+        <div class="flex items-center gap-3">
+          <span class="text-sm text-gray-600 dark:text-gray-400">Billing:</span>
+          <div class="flex rounded-lg border dark:border-gray-600 overflow-hidden text-sm">
+            <button data-billing="monthly" class="billing-btn px-4 py-1.5 transition">Monthly</button>
+            <button data-billing="annual" class="billing-btn px-4 py-1.5 transition">Annual (−25%)</button>
+          </div>
+        </div>
+        <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">
+          Plan cost: <span id="d-plan" class="font-semibold text-gray-700 dark:text-gray-300">$39/mo</span>
+        </p>
+      </div>
+
+      <!-- Block 4: Payment -->
+      <div class="border dark:border-gray-700 rounded-xl p-5 bg-white dark:bg-gray-900">
+        <h2 class="font-semibold text-xs uppercase tracking-widest text-blue-600 dark:text-blue-400 mb-4">4 — Payment Processor</h2>
+        <div class="space-y-2">
+          <button data-proc="shopify" class="proc-btn w-full text-left border dark:border-gray-600 rounded-xl px-4 py-3 transition hover:border-blue-400">
+            <div class="flex justify-between">
+              <span class="font-medium text-sm dark:text-gray-100">Shopify Payments</span>
+              <span class="text-xs text-green-600 dark:text-green-400 font-medium">No extra fee</span>
+            </div>
+            <div class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Rate from your plan · no 3rd-party penalty</div>
+          </button>
+          <button data-proc="stripe" class="proc-btn w-full text-left border dark:border-gray-600 rounded-xl px-4 py-3 transition hover:border-blue-400">
+            <div class="flex justify-between">
+              <span class="font-medium text-sm dark:text-gray-100">Stripe</span>
+              <span id="label-stripe" class="text-xs text-orange-500 font-medium">+2% penalty</span>
+            </div>
+            <div class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">2.9% + $0.30/order + Shopify 3rd-party penalty</div>
+          </button>
+          <button data-proc="paypal" class="proc-btn w-full text-left border dark:border-gray-600 rounded-xl px-4 py-3 transition hover:border-blue-400">
+            <div class="flex justify-between">
+              <span class="font-medium text-sm dark:text-gray-100">PayPal</span>
+              <span id="label-paypal" class="text-xs text-orange-500 font-medium">+2% penalty</span>
+            </div>
+            <div class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">3.49% + $0.49/order + Shopify 3rd-party penalty</div>
+          </button>
+          <button data-proc="square" class="proc-btn w-full text-left border dark:border-gray-600 rounded-xl px-4 py-3 transition hover:border-blue-400">
+            <div class="flex justify-between">
+              <span class="font-medium text-sm dark:text-gray-100">Square</span>
+              <span id="label-square" class="text-xs text-orange-500 font-medium">+2% penalty</span>
+            </div>
+            <div class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">2.9% + $0.30/order + Shopify 3rd-party penalty</div>
+          </button>
+        </div>
+        <p class="text-xs text-gray-500 dark:text-gray-400 mt-3">
+          Total payment fees: <span id="d-payment" class="font-semibold text-gray-700 dark:text-gray-300">—</span>
+        </p>
+      </div>
+
+      <!-- Block 5: Apps -->
+      <div class="border dark:border-gray-700 rounded-xl p-5 bg-white dark:bg-gray-900">
+        <h2 class="font-semibold text-xs uppercase tracking-widest text-blue-600 dark:text-blue-400 mb-4">5 — Apps &amp; Subscriptions</h2>
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-medium mb-1 dark:text-gray-300" for="inp-apps">
+              Paid Apps/month ($)
+              <span class="tip" data-tip="Total monthly cost of all paid Shopify apps. Average store: $75–200/mo.">?</span>
+            </label>
+            <input id="inp-apps" type="number" min="0" step="5" value="75"
+              class="w-full border dark:border-gray-600 rounded-lg px-3 py-2 text-sm bg-white dark:bg-gray-800 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-1 dark:text-gray-300" for="inp-subs">Other Subscriptions ($)</label>
+            <input id="inp-subs" type="number" min="0" step="5" value="50"
+              class="w-full border dark:border-gray-600 rounded-lg px-3 py-2 text-sm bg-white dark:bg-gray-800 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+          </div>
+        </div>
+      </div>
+
+      <!-- Block 6: Marketing -->
+      <div class="border dark:border-gray-700 rounded-xl p-5 bg-white dark:bg-gray-900">
+        <h2 class="font-semibold text-xs uppercase tracking-widest text-blue-600 dark:text-blue-400 mb-4">6 — Marketing</h2>
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-medium mb-1 dark:text-gray-300" for="inp-ads">Ad Spend/month ($)</label>
+            <input id="inp-ads" type="number" min="0" step="100" value="5000"
+              class="w-full border dark:border-gray-600 rounded-lg px-3 py-2 text-sm bg-white dark:bg-gray-800 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-1 dark:text-gray-300" for="inp-influencer">
+              Influencer / Content ($)
+              <span class="tip" data-tip="Monthly spend on influencers, content creators, affiliates, and content production.">?</span>
+            </label>
+            <input id="inp-influencer" type="number" min="0" step="50" value="500"
+              class="w-full border dark:border-gray-600 rounded-lg px-3 py-2 text-sm bg-white dark:bg-gray-800 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+          </div>
+        </div>
+      </div>
+
+      <!-- Block 7: Operations -->
+      <div class="border dark:border-gray-700 rounded-xl p-5 bg-white dark:bg-gray-900">
+        <h2 class="font-semibold text-xs uppercase tracking-widest text-blue-600 dark:text-blue-400 mb-4">7 — Operations</h2>
+        <div class="grid grid-cols-2 gap-4 mb-4">
+          <div>
+            <label class="block text-sm font-medium mb-1 dark:text-gray-300" for="inp-ship">
+              Shipping/Order ($)
+              <span class="tip" data-tip="Average outbound shipping cost per order. Enter 0 if you offer free shipping absorbed into price.">?</span>
+            </label>
+            <input id="inp-ship" type="number" min="0" step="0.5" value="8"
+              class="w-full border dark:border-gray-600 rounded-lg px-3 py-2 text-sm bg-white dark:bg-gray-800 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-1 dark:text-gray-300" for="inp-ret-pct">
+              Returns Rate (%)
+              <span class="tip" data-tip="% of orders returned. Avg ecommerce: 5–10%. Fashion: 15–30%.">?</span>
+            </label>
+            <input id="inp-ret-pct" type="number" min="0" max="50" step="0.5" value="5"
+              class="w-full border dark:border-gray-600 rounded-lg px-3 py-2 text-sm bg-white dark:bg-gray-800 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+          </div>
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-1 dark:text-gray-300" for="inp-ret-cost">
+            Return Handling Cost/Return ($)
+            <span class="tip" data-tip="Cost to process each return: labor, restocking, return shipping. Typically $8–20.">?</span>
+          </label>
+          <input id="inp-ret-cost" type="number" min="0" step="1" value="12"
+            class="w-full border dark:border-gray-600 rounded-lg px-3 py-2 text-sm bg-white dark:bg-gray-800 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+        </div>
+      </div>
+
+      <!-- Share -->
+      <div class="flex items-center gap-3">
+        <button id="share-btn"
+          class="flex items-center gap-2 text-sm text-blue-600 dark:text-blue-400 border border-blue-300 dark:border-blue-700 rounded-lg px-4 py-2 hover:bg-blue-50 dark:hover:bg-blue-950 transition">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/>
+          </svg>
+          Copy shareable link
+        </button>
+        <span id="share-confirm" class="hidden text-xs text-green-600 dark:text-green-400">✓ Copied!</span>
+      </div>
+    </div>
+
+    <!-- ── RIGHT: Sticky results ──────────────────────────────── -->
+    <div class="w-full lg:w-[360px] shrink-0">
+      <div class="lg:sticky lg:top-6 space-y-4">
+
+        <!-- P&L card -->
+        <div class="border-2 border-blue-600 dark:border-blue-500 rounded-2xl overflow-hidden">
+          <div class="bg-blue-600 dark:bg-blue-700 px-5 py-3">
+            <h2 class="text-white font-semibold text-sm">Monthly P&amp;L</h2>
+          </div>
+          <div class="bg-white dark:bg-gray-900 px-5 py-4 text-sm space-y-1.5" id="results-breakdown">
+            <!-- filled by JS -->
+          </div>
+          <div class="bg-gray-50 dark:bg-gray-800 border-t dark:border-gray-700 px-5 py-4">
+            <div class="flex justify-between items-baseline mb-1">
+              <span class="font-semibold">Net Profit</span>
+              <span id="res-net" class="text-2xl font-bold text-blue-700 dark:text-blue-400">—</span>
+            </div>
+            <div class="flex justify-between text-sm text-gray-600 dark:text-gray-400 mb-1">
+              <span>Margin</span>
+              <span id="res-margin" class="font-semibold text-gray-800 dark:text-gray-200">—</span>
+            </div>
+            <div class="flex justify-between text-sm text-gray-600 dark:text-gray-400 mb-4">
+              <span>Per order</span>
+              <span id="res-per-order" class="font-medium text-gray-800 dark:text-gray-200">—</span>
+            </div>
+            <div id="res-benchmark" class="text-sm rounded-lg px-3 py-2 text-center font-medium"></div>
+          </div>
+        </div>
+
+        <!-- Pie chart card -->
+        <div class="border dark:border-gray-700 rounded-2xl p-5 bg-white dark:bg-gray-900">
+          <h2 class="text-sm font-semibold mb-4 text-gray-700 dark:text-gray-300">Where Your Revenue Goes</h2>
+          <div class="flex items-center gap-5">
+            <canvas id="pie-chart" width="120" height="120" class="shrink-0"></canvas>
+            <div id="pie-legend" class="text-xs space-y-1.5 flex-1 min-w-0"></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Related calculators -->
+  <div class="mt-14">
+    <h2 class="text-xl font-bold mb-5">Related Calculators</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+      {[
+        { href: '/break-even/', title: 'Break-Even Calculator', desc: 'Units needed to cover fixed costs' },
+        { href: '/profit-margin/', title: 'Profit Margin Calculator', desc: 'Per-product margin after all fees' },
+        { href: '/shopify-fees/', title: 'Shopify Fee Calculator', desc: 'Transaction fees by plan and processor' },
+        { href: '/free-shipping-threshold/', title: 'Free Shipping Threshold', desc: 'Find your break-even threshold' },
+        { href: '/shipping-calculator/', title: 'Shipping Rate Calculator', desc: 'Compare USPS, UPS, FedEx rates' },
+      ].map(({ href, title, desc }) => (
+        <a href={href} class="border dark:border-gray-700 rounded-xl p-4 hover:border-blue-400 dark:hover:border-blue-500 transition group">
+          <div class="font-semibold text-sm group-hover:text-blue-600 dark:group-hover:text-blue-400 dark:text-gray-100">{title}</div>
+          <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">{desc}</div>
+        </a>
+      ))}
+    </div>
+  </div>
+
+  <!-- FAQ -->
+  <div class="mt-14 max-w-3xl">
+    <h2 class="text-2xl font-bold mb-6">Frequently Asked Questions</h2>
+    <div class="space-y-3">
+      {faqs.map(({ q, a }) => (
+        <details class="border dark:border-gray-700 rounded-xl overflow-hidden group">
+          <summary class="flex justify-between items-center px-5 py-4 cursor-pointer font-medium text-sm hover:bg-gray-50 dark:hover:bg-gray-800 transition list-none">
+            <span>{q}</span>
+            <svg class="w-4 h-4 text-gray-400 shrink-0 ml-3 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+            </svg>
+          </summary>
+          <div class="px-5 pb-4 text-sm text-gray-600 dark:text-gray-400">{a}</div>
+        </details>
+      ))}
+    </div>
+  </div>
+</Base>
+
+<style>
+  .tip {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 14px; height: 14px; border-radius: 50%;
+    font-size: 9px; font-weight: 700; font-style: normal;
+    background: #d1d5db; color: #374151; cursor: help;
+    vertical-align: middle; margin-left: 3px;
+  }
+  :global(.dark) .tip { background: #374151; color: #d1d5db; }
+</style>
+
+<script>
+const PLANS: Record<string, { monthly: number; annual: number; rate: number; perTxn: number; penalty: number }> = {
+  basic:    { monthly: 39,   annual: 29,   rate: 0.029, perTxn: 0.30, penalty: 0.02 },
+  shopify:  { monthly: 105,  annual: 79,   rate: 0.027, perTxn: 0.30, penalty: 0.01 },
+  advanced: { monthly: 399,  annual: 299,  rate: 0.025, perTxn: 0.30, penalty: 0.005 },
+  plus:     { monthly: 2300, annual: 2300, rate: 0.018, perTxn: 0.30, penalty: 0.0015 },
+};
+
+const PROCS: Record<string, { rate: number | null; perTxn: number | null; penalty: boolean }> = {
+  shopify: { rate: null,   perTxn: null,  penalty: false },
+  stripe:  { rate: 0.029,  perTxn: 0.30,  penalty: true },
+  paypal:  { rate: 0.0349, perTxn: 0.49,  penalty: true },
+  square:  { rate: 0.029,  perTxn: 0.30,  penalty: true },
+};
+
+const PIE_SLICES = [
+  { key: 'cogs',    label: 'COGS',         color: '#3b82f6' },
+  { key: 'mkt',     label: 'Marketing',    color: '#ef4444' },
+  { key: 'ship',    label: 'Shipping',     color: '#a855f7' },
+  { key: 'payment', label: 'Payment fees', color: '#f97316' },
+  { key: 'apps',    label: 'Apps & subs',  color: '#eab308' },
+  { key: 'plan',    label: 'Plan fee',     color: '#ec4899' },
+  { key: 'returns', label: 'Returns',      color: '#14b8a6' },
+  { key: 'net',     label: 'Net Profit',   color: '#22c55e' },
+];
+
+let plan = 'basic', billing = 'monthly', proc = 'shopify';
+
+const ge = (id: string) => document.getElementById(id) as HTMLElement;
+const gv = (id: string) => parseFloat((document.getElementById(id) as HTMLInputElement).value) || 0;
+
+const fmt = (n: number) => '$' + Math.abs(n).toLocaleString('en-US', { maximumFractionDigits: 0 });
+const fmtS = (n: number) => (n < 0 ? '−' : '') + fmt(n);
+const pct = (n: number) => n.toFixed(1) + '%';
+
+// COGS range/number sync
+const cogsRange = document.getElementById('inp-cogs-range') as HTMLInputElement;
+const cogsNum   = document.getElementById('inp-cogs') as HTMLInputElement;
+cogsRange.addEventListener('input', () => { cogsNum.value = cogsRange.value; recalc(); });
+cogsNum.addEventListener('input',   () => { cogsRange.value = cogsNum.value; recalc(); });
+
+// Plan buttons
+function activatePlan(p: string) {
+  plan = p;
+  document.querySelectorAll<HTMLElement>('.plan-btn').forEach(btn => {
+    const on = btn.dataset.plan === p;
+    btn.className = on
+      ? 'plan-btn border-2 border-blue-600 dark:border-blue-500 bg-blue-50 dark:bg-blue-950 rounded-xl p-3 text-left transition'
+      : 'plan-btn border dark:border-gray-600 rounded-xl p-3 text-left transition hover:border-blue-400';
+  });
+  // update penalty labels
+  const penalty = PLANS[p].penalty;
+  ['stripe','paypal','square'].forEach(k => {
+    const el = document.getElementById(`label-${k}`);
+    if (el) el.textContent = `+${(penalty * 100)}% penalty`;
+  });
+}
+
+document.querySelectorAll<HTMLElement>('.plan-btn').forEach(btn =>
+  btn.addEventListener('click', () => { activatePlan(btn.dataset.plan!); recalc(); })
+);
+
+// Billing buttons
+function activateBilling(b: string) {
+  billing = b;
+  document.querySelectorAll<HTMLElement>('.billing-btn').forEach(btn => {
+    const on = btn.dataset.billing === b;
+    btn.className = on
+      ? 'billing-btn px-4 py-1.5 text-sm bg-blue-600 text-white transition'
+      : 'billing-btn px-4 py-1.5 text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition';
+  });
+}
+document.querySelectorAll<HTMLElement>('.billing-btn').forEach(btn =>
+  btn.addEventListener('click', () => { activateBilling(btn.dataset.billing!); recalc(); })
+);
+
+// Processor buttons
+function activateProc(p: string) {
+  proc = p;
+  document.querySelectorAll<HTMLElement>('.proc-btn').forEach(btn => {
+    const on = btn.dataset.proc === p;
+    btn.className = on
+      ? 'proc-btn w-full text-left border-2 border-blue-600 dark:border-blue-500 bg-blue-50 dark:bg-blue-950 rounded-xl px-4 py-3 transition'
+      : 'proc-btn w-full text-left border dark:border-gray-600 rounded-xl px-4 py-3 transition hover:border-blue-400';
+  });
+}
+document.querySelectorAll<HTMLElement>('.proc-btn').forEach(btn =>
+  btn.addEventListener('click', () => { activateProc(btn.dataset.proc!); recalc(); })
+);
+
+// Canvas setup (once, HiDPI-aware)
+const canvas = document.getElementById('pie-chart') as HTMLCanvasElement;
+const dpr = Math.min(window.devicePixelRatio || 1, 2);
+canvas.width  = 120 * dpr;
+canvas.height = 120 * dpr;
+canvas.style.width  = '120px';
+canvas.style.height = '120px';
+const ctx = canvas.getContext('2d')!;
+ctx.scale(dpr, dpr);
+
+function drawPie(vals: Record<string, number>, rev: number) {
+  const slices = PIE_SLICES.map(s => ({ ...s, value: Math.max(0, vals[s.key] || 0) })).filter(s => s.value > 0);
+  const total = slices.reduce((sum, s) => sum + s.value, 0);
+  if (total <= 0) return;
+
+  const cx = 60, cy = 60, r = 54, hole = 24;
+  ctx.clearRect(0, 0, 120, 120);
+
+  let angle = -Math.PI / 2;
+  slices.forEach(s => {
+    const sweep = (s.value / total) * 2 * Math.PI;
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.arc(cx, cy, r, angle, angle + sweep);
+    ctx.closePath();
+    ctx.fillStyle = s.color;
+    ctx.fill();
+    angle += sweep;
+  });
+
+  ctx.beginPath();
+  ctx.arc(cx, cy, hole, 0, 2 * Math.PI);
+  ctx.fillStyle = document.documentElement.classList.contains('dark') ? '#111827' : '#ffffff';
+  ctx.fill();
+
+  const legend = ge('pie-legend');
+  legend.innerHTML = slices.map(s => {
+    const p = Math.round(s.value / total * 100);
+    return `<div class="flex items-center gap-1.5 truncate">
+      <span style="background:${s.color}" class="w-2.5 h-2.5 rounded-sm shrink-0"></span>
+      <span class="text-gray-600 dark:text-gray-400 truncate">${s.label}</span>
+      <span class="ml-auto font-medium text-gray-800 dark:text-gray-200 shrink-0">${p}%</span>
+    </div>`;
+  }).join('');
+}
+
+function recalc() {
+  const rev   = gv('inp-rev');
+  const aov   = Math.max(gv('inp-aov'), 1);
+  const cogsPct = parseFloat(cogsNum.value) / 100;
+  const apps  = gv('inp-apps');
+  const subs  = gv('inp-subs');
+  const ads   = gv('inp-ads');
+  const inf   = gv('inp-influencer');
+  const ship  = gv('inp-ship');
+  const retP  = gv('inp-ret-pct') / 100;
+  const retC  = gv('inp-ret-cost');
+
+  const orders   = Math.round(rev / aov);
+  const pl       = PLANS[plan];
+  const pr       = PROCS[proc];
+  const planCost = billing === 'annual' ? pl.annual : pl.monthly;
+  const cogsAmt  = rev * cogsPct;
+
+  const payRate   = pr.rate  ?? pl.rate;
+  const payPerTxn = pr.perTxn ?? pl.perTxn;
+  const penaltyAmt = pr.penalty ? rev * pl.penalty : 0;
+  const paymentAmt = rev * payRate + orders * payPerTxn + penaltyAmt;
+
+  const shipAmt    = orders * ship;
+  const returnsAmt = orders * retP * retC;
+  const mktAmt     = ads + inf;
+  const appsAmt    = apps + subs;
+
+  const gross = rev - cogsAmt - paymentAmt - shipAmt;
+  const opex  = planCost + appsAmt + mktAmt + returnsAmt;
+  const net   = gross - opex;
+  const marginPct  = rev > 0 ? (net / rev * 100) : 0;
+  const perOrder   = orders > 0 ? net / orders : 0;
+
+  // Derived labels
+  ge('d-orders').textContent  = orders.toLocaleString();
+  ge('d-cogs').textContent    = fmt(cogsAmt);
+  ge('d-plan').textContent    = fmt(planCost) + '/mo';
+  ge('d-payment').textContent = fmt(paymentAmt) + ' (' + pct(paymentAmt / (rev || 1) * 100) + ')';
+
+  // Breakdown rows
+  const rows: Array<{ label?: string; value?: string; colorClass?: string; bold?: boolean; divider?: boolean }> = [
+    { label: 'Revenue', value: fmt(rev), bold: true },
+    { label: `COGS (${(cogsPct * 100).toFixed(0)}%)`, value: '−' + fmt(cogsAmt), colorClass: 'text-red-500' },
+    { label: 'Payment fees', value: '−' + fmt(paymentAmt), colorClass: 'text-red-500' },
+    { label: 'Shipping costs', value: '−' + fmt(shipAmt), colorClass: 'text-red-500' },
+    { divider: true },
+    { label: 'Gross Profit', value: fmtS(gross) + ' (' + pct(gross / (rev || 1) * 100) + ')', bold: true,
+      colorClass: gross >= 0 ? 'text-blue-600 dark:text-blue-400' : 'text-red-600 dark:text-red-400' },
+    { divider: true },
+    { label: 'Shopify plan', value: '−' + fmt(planCost), colorClass: 'text-orange-500' },
+    { label: 'Apps & subs', value: '−' + fmt(appsAmt), colorClass: 'text-orange-500' },
+    { label: 'Marketing', value: '−' + fmt(mktAmt), colorClass: 'text-orange-500' },
+    { label: 'Returns', value: '−' + fmt(returnsAmt), colorClass: 'text-orange-500' },
+  ];
+
+  ge('results-breakdown').innerHTML = rows.map(r => {
+    if (r.divider) return '<div class="border-t dark:border-gray-700 my-1"></div>';
+    return `<div class="flex justify-between items-center">
+      <span class="${r.bold ? 'font-semibold text-gray-800 dark:text-gray-200' : 'text-gray-600 dark:text-gray-400'}">${r.label}</span>
+      <span class="${r.bold ? 'font-semibold ' : ''}${r.colorClass || 'text-gray-700 dark:text-gray-300'}">${r.value}</span>
+    </div>`;
+  }).join('');
+
+  const netEl = ge('res-net');
+  netEl.textContent = fmtS(net);
+  netEl.className = net >= 0
+    ? 'text-2xl font-bold text-green-600 dark:text-green-400'
+    : 'text-2xl font-bold text-red-600 dark:text-red-400';
+
+  ge('res-margin').textContent   = pct(marginPct);
+  ge('res-per-order').textContent = fmtS(perOrder) + '/order';
+
+  const bench = ge('res-benchmark');
+  if (marginPct < 0) {
+    bench.textContent = '🔴 Operating at a loss — review all costs';
+    bench.className = 'text-sm rounded-lg px-3 py-2 text-center font-medium bg-red-50 dark:bg-red-950 text-red-700 dark:text-red-400';
+  } else if (marginPct < 10) {
+    bench.textContent = '🟠 Below 10% — below industry average';
+    bench.className = 'text-sm rounded-lg px-3 py-2 text-center font-medium bg-orange-50 dark:bg-orange-950 text-orange-700 dark:text-orange-400';
+  } else if (marginPct < 20) {
+    bench.textContent = '🟡 10–20% — average, room to optimize';
+    bench.className = 'text-sm rounded-lg px-3 py-2 text-center font-medium bg-yellow-50 dark:bg-yellow-950 text-yellow-700 dark:text-yellow-400';
+  } else {
+    bench.textContent = `🟢 ${pct(marginPct)} — strong margin, ready to scale`;
+    bench.className = 'text-sm rounded-lg px-3 py-2 text-center font-medium bg-green-50 dark:bg-green-950 text-green-700 dark:text-green-400';
+  }
+
+  drawPie({ cogs: cogsAmt, mkt: mktAmt, ship: shipAmt, payment: paymentAmt,
+            apps: appsAmt, plan: planCost, returns: returnsAmt, net: Math.max(0, net) }, rev);
+}
+
+// Share link
+ge('share-btn').addEventListener('click', () => {
+  const d = btoa(JSON.stringify({
+    rev: (document.getElementById('inp-rev') as HTMLInputElement).value,
+    aov: (document.getElementById('inp-aov') as HTMLInputElement).value,
+    cogs: cogsNum.value,
+    apps: (document.getElementById('inp-apps') as HTMLInputElement).value,
+    subs: (document.getElementById('inp-subs') as HTMLInputElement).value,
+    ads: (document.getElementById('inp-ads') as HTMLInputElement).value,
+    inf: (document.getElementById('inp-influencer') as HTMLInputElement).value,
+    ship: (document.getElementById('inp-ship') as HTMLInputElement).value,
+    ret: (document.getElementById('inp-ret-pct') as HTMLInputElement).value,
+    retc: (document.getElementById('inp-ret-cost') as HTMLInputElement).value,
+    plan, billing, proc,
+  }));
+  navigator.clipboard.writeText(location.origin + location.pathname + '?d=' + d).then(() => {
+    const c = ge('share-confirm');
+    c.classList.remove('hidden');
+    setTimeout(() => c.classList.add('hidden'), 2000);
+  });
+});
+
+// Load from URL
+const urlParam = new URLSearchParams(location.search).get('d');
+if (urlParam) {
+  try {
+    const data = JSON.parse(atob(urlParam));
+    const setVal = (id: string, v: string | undefined) => {
+      if (v !== undefined) (document.getElementById(id) as HTMLInputElement).value = v;
+    };
+    setVal('inp-rev', data.rev); setVal('inp-aov', data.aov);
+    setVal('inp-apps', data.apps); setVal('inp-subs', data.subs);
+    setVal('inp-ads', data.ads); setVal('inp-influencer', data.inf);
+    setVal('inp-ship', data.ship); setVal('inp-ret-pct', data.ret); setVal('inp-ret-cost', data.retc);
+    if (data.cogs) { cogsNum.value = data.cogs; cogsRange.value = data.cogs; }
+    if (data.plan)    activatePlan(data.plan);
+    if (data.billing) activateBilling(data.billing);
+    if (data.proc)    activateProc(data.proc);
+  } catch {}
+}
+
+// Input listeners
+let debounce: ReturnType<typeof setTimeout>;
+document.querySelectorAll<HTMLInputElement>('#inp-rev,#inp-aov,#inp-apps,#inp-subs,#inp-ads,#inp-influencer,#inp-ship,#inp-ret-pct,#inp-ret-cost').forEach(el =>
+  el.addEventListener('input', () => { clearTimeout(debounce); debounce = setTimeout(recalc, 200); })
+);
+
+// Redraw pie on dark mode toggle
+new MutationObserver(recalc).observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+
+// Init
+activatePlan('basic');
+activateBilling('monthly');
+activateProc('shopify');
+recalc();
+</script>
