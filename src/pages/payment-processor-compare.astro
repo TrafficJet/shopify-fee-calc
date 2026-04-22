@@ -1,0 +1,364 @@
+---
+import Base from '../layouts/Base.astro';
+
+const faqSchema = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    { "@type": "Question", "name": "Which payment processor is cheapest for Shopify?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Shopify Payments is almost always the cheapest option for Shopify stores because it eliminates the 0.5–2% Shopify transaction fee charged on all third-party processors. At $20,000/month on the Basic plan, using Stripe instead of Shopify Payments adds $400/month in transaction fees alone — even if Stripe's processing rate is identical. The exception: very high-volume merchants (1M+/month) who can negotiate sub-2% rates with enterprise processors." } },
+    { "@type": "Question", "name": "What is Shopify's transaction fee and which processors trigger it?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Shopify charges a transaction fee on every sale processed through a third-party payment provider: 2% on Basic, 1% on Shopify plan, 0.5% on Advanced, 0.15% on Plus. Every processor except Shopify Payments triggers this fee — including Stripe, PayPal, Authorize.net, Square, and Braintree. The only way to avoid it is to use Shopify Payments (or be on Shopify Plus with a negotiated gateway)." } },
+    { "@type": "Question", "name": "Can I use Stripe with Shopify without paying transaction fees?",
+      "acceptedAnswer": { "@type": "Answer", "text": "No — Shopify charges its transaction fee (0.5–2% depending on plan) on all Stripe sales. Stripe also charges its own processing fee (2.9%+30¢). On Shopify Basic, a $100 sale through Stripe costs $2.90+$0.30 (Stripe) + $2.00 (Shopify) = $5.20 in fees vs $2.90+$0.30 = $3.20 with Shopify Payments. The Shopify transaction fee makes Stripe significantly more expensive." } },
+    { "@type": "Question", "name": "When does PayPal make sense for Shopify?",
+      "acceptedAnswer": { "@type": "Answer", "text": "PayPal makes sense as a secondary checkout option (alongside Shopify Payments), not as your primary processor. Many buyers trust PayPal and prefer it — offering it can increase conversion by 5–15% for certain demographics. Since PayPal transactions also trigger Shopify's transaction fee, use it as an additive option rather than your sole processor." } },
+    { "@type": "Question", "name": "Is Authorize.net worth the monthly gateway fee for Shopify?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Almost never for standard Shopify stores. Authorize.net charges $25/month gateway fee plus 2.9%+30¢ processing, and still triggers Shopify's transaction fee. The monthly fee alone costs $300/year before any processing charges. It may make sense if you have specific B2B requirements, ACH/eCheck support, or are migrating a legacy enterprise system that already uses Authorize.net." } },
+    { "@type": "Question", "name": "What's the cheapest payment processor for high-volume Shopify stores?",
+      "acceptedAnswer": { "@type": "Answer", "text": "At high volume ($500K+/month), Shopify Plus + Shopify Payments is typically cheapest: Plus drops the Shopify Payments rate to 2.15%+30¢ and the third-party transaction fee to 0.15%. Some Plus merchants negotiate custom Shopify Payments rates below 2%. Enterprise processors like Braintree can offer sub-2% rates at very high volume, but even 0.15% Shopify transaction fee makes them competitive only above ~$1M/month." } },
+  ]
+});
+
+const appSchema = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Shopify Payment Processor Comparison Calculator",
+  "description": "Compare total payment processing costs for Shopify Payments, Stripe, PayPal, Authorize.net, Square, and Braintree at your revenue level. Includes Shopify transaction fees. Free 2026.",
+  "applicationCategory": "BusinessApplication",
+  "operatingSystem": "Web",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+  "url": "https://shopify-fee-calc.com/payment-processor-compare/"
+});
+
+const faqs = [
+  { q: "Which payment processor is cheapest for Shopify?",
+    a: "Shopify Payments is almost always cheapest because it eliminates the 0.5–2% Shopify transaction fee charged on all third-party processors. At $20,000/month on Basic plan, using Stripe instead of Shopify Payments adds $400/month in transaction fees — even with identical processing rates. The exception: very high-volume merchants who can negotiate sub-2% enterprise rates." },
+  { q: "What is Shopify's transaction fee and which processors trigger it?",
+    a: "Shopify charges 2% (Basic), 1% (Shopify plan), 0.5% (Advanced), or 0.15% (Plus) on every sale processed through a third-party provider. Every processor except Shopify Payments triggers this — Stripe, PayPal, Authorize.net, Square, and Braintree included. The only way to avoid it: use Shopify Payments." },
+  { q: "Can I use Stripe with Shopify without paying transaction fees?",
+    a: "No. On Shopify Basic, a $100 Stripe sale costs $2.90+$0.30 (Stripe) + $2.00 (Shopify) = $5.20 in total fees vs $3.20 with Shopify Payments. The Shopify transaction fee makes Stripe 63% more expensive at this plan level." },
+  { q: "When does PayPal make sense for Shopify?",
+    a: "As a secondary checkout option alongside Shopify Payments — not as primary processor. PayPal as an alternative can increase conversion 5–15% for certain buyers who prefer it. Since it still triggers Shopify's transaction fee, use it as additive rather than replacing Shopify Payments." },
+  { q: "Is Authorize.net worth the monthly gateway fee for Shopify?",
+    a: "Almost never for standard Shopify stores. Authorize.net costs $25/month gateway fee + 2.9%+30¢ + Shopify transaction fee. The $300/year gateway fee alone is significant. It makes sense only for specific B2B, ACH/eCheck, or legacy enterprise requirements." },
+  { q: "What's the cheapest processor for high-volume Shopify?",
+    a: "Shopify Plus + Shopify Payments: 2.15%+30¢ rate and only 0.15% third-party fee. Some Plus merchants negotiate custom rates below 2%. Enterprise processors like Braintree can offer sub-2% at very high volume, but the 0.15% Shopify Plus transaction fee makes them competitive only above ~$1M/month." },
+];
+
+const SHOPIFY_PLANS = [
+  { id: 'basic',    name: 'Basic',    txFee: 0.02,   spRate: 0.029, spFixed: 0.30 },
+  { id: 'shopify',  name: 'Shopify',  txFee: 0.01,   spRate: 0.026, spFixed: 0.30 },
+  { id: 'advanced', name: 'Advanced', txFee: 0.005,  spRate: 0.024, spFixed: 0.30 },
+  { id: 'plus',     name: 'Plus',     txFee: 0.0015, spRate: 0.0215,spFixed: 0.30 },
+];
+
+const PROCESSORS = [
+  { id: 'shopify',   name: 'Shopify Payments', rate: null,   fixed: null,  monthly: 0,  thirdParty: false, note: 'No Shopify tx fee' },
+  { id: 'stripe',    name: 'Stripe',           rate: 0.029,  fixed: 0.30,  monthly: 0,  thirdParty: true,  note: '2.9% + 30¢/order' },
+  { id: 'paypal',    name: 'PayPal Checkout',  rate: 0.0349, fixed: 0.49,  monthly: 0,  thirdParty: true,  note: '3.49% + 49¢/order' },
+  { id: 'paypal_adv',name: 'PayPal Advanced',  rate: 0.0299, fixed: 0.49,  monthly: 30, thirdParty: true,  note: '2.99% + 49¢ + $30/mo' },
+  { id: 'authnet',   name: 'Authorize.net',    rate: 0.029,  fixed: 0.30,  monthly: 25, thirdParty: true,  note: '2.9% + 30¢ + $25/mo' },
+  { id: 'square',    name: 'Square Online',    rate: 0.029,  fixed: 0.30,  monthly: 0,  thirdParty: true,  note: '2.9% + 30¢/order' },
+  { id: 'braintree', name: 'Braintree',        rate: 0.0259, fixed: 0.49,  monthly: 0,  thirdParty: true,  note: '2.59% + 49¢/order' },
+  { id: 'amazon',    name: 'Amazon Pay',       rate: 0.029,  fixed: 0.30,  monthly: 0,  thirdParty: true,  note: '2.9% + 30¢/order' },
+];
+---
+<Base
+  title="Shopify Payment Processor Comparison — Shopify Payments vs Stripe vs PayPal vs Others (2026)"
+  description="Compare total monthly payment processing costs for every major Shopify payment processor. Includes Shopify transaction fees. Find the cheapest option at your revenue level."
+  noWebAppSchema={true}
+>
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={faqSchema} />
+    <script type="application/ld+json" set:html={appSchema} />
+  </Fragment>
+
+  <!-- Tailwind safelist -->
+  <div class="hidden ring-2 ring-green-500 ring-offset-2 bg-green-50 dark:bg-green-950 text-green-700 dark:text-green-400 border-green-300 dark:border-green-700 bg-yellow-50 dark:bg-yellow-950 text-yellow-700 dark:text-yellow-400 bg-red-50 dark:bg-red-950 text-red-700 dark:text-red-400 bg-blue-50 dark:bg-blue-950 text-blue-700 dark:text-blue-400 border-blue-300 dark:border-blue-700 font-bold text-sm text-xs text-2xl"></div>
+
+  <h1 class="text-3xl font-bold mb-2">Payment Processor Comparison Calculator</h1>
+  <p class="text-gray-600 dark:text-gray-400 mb-8 max-w-2xl">
+    Compare real total costs for Shopify Payments, Stripe, PayPal, Authorize.net, Braintree, and more — including the often-missed Shopify transaction fee that applies to every third-party processor.
+  </p>
+
+  <!-- Inputs -->
+  <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+    <div>
+      <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Monthly Revenue ($)</label>
+      <input id="revenue" type="number" value="20000" min="0" step="1000"
+        class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+    </div>
+    <div>
+      <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Average Order Value ($)</label>
+      <input id="aov" type="number" value="85" min="1" step="5"
+        class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+    </div>
+    <div>
+      <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Shopify Plan</label>
+      <select id="plan"
+        class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500">
+        <option value="basic">Basic ($29/mo)</option>
+        <option value="shopify" selected>Shopify ($79/mo)</option>
+        <option value="advanced">Advanced ($299/mo)</option>
+        <option value="plus">Plus ($2,300/mo)</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Processor cards -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-8" id="processorCards"></div>
+
+  <!-- Winner banner -->
+  <div id="winnerBanner" class="hidden rounded-xl p-4 mb-8 border-2 border-green-300 dark:border-green-700 bg-green-50 dark:bg-green-950 text-green-700 dark:text-green-400 text-sm font-medium"></div>
+
+  <!-- Savings table -->
+  <div class="mb-8">
+    <h2 class="text-xl font-semibold mb-3">Full Cost Breakdown</h2>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm border-collapse">
+        <thead>
+          <tr class="bg-gray-50 dark:bg-gray-800">
+            <th class="text-left px-4 py-2 font-semibold border border-gray-200 dark:border-gray-700">Processor</th>
+            <th class="text-right px-4 py-2 font-semibold border border-gray-200 dark:border-gray-700">Processing Fee</th>
+            <th class="text-right px-4 py-2 font-semibold border border-gray-200 dark:border-gray-700">Shopify Tx Fee</th>
+            <th class="text-right px-4 py-2 font-semibold border border-gray-200 dark:border-gray-700">Gateway Fee</th>
+            <th class="text-right px-4 py-2 font-semibold border border-gray-200 dark:border-gray-700">Total/mo</th>
+            <th class="text-right px-4 py-2 font-semibold border border-gray-200 dark:border-gray-700">vs Best</th>
+          </tr>
+        </thead>
+        <tbody id="breakdownBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Revenue sensitivity -->
+  <div class="mb-8">
+    <h2 class="text-xl font-semibold mb-3">Cheapest Processor by Revenue Level</h2>
+    <p class="text-sm text-gray-500 dark:text-gray-400 mb-3">Excludes Plus-only options. Shows top 3 cheapest at each revenue tier for your selected plan.</p>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm border-collapse">
+        <thead>
+          <tr class="bg-gray-50 dark:bg-gray-800">
+            <th class="text-left px-4 py-2 font-semibold border border-gray-200 dark:border-gray-700">Revenue/mo</th>
+            <th class="text-center px-4 py-2 font-semibold border border-gray-200 dark:border-gray-700">🥇 Cheapest</th>
+            <th class="text-right px-4 py-2 font-semibold border border-gray-200 dark:border-gray-700">Cost</th>
+            <th class="text-center px-4 py-2 font-semibold border border-gray-200 dark:border-gray-700">🥈 2nd</th>
+            <th class="text-right px-4 py-2 font-semibold border border-gray-200 dark:border-gray-700">Cost</th>
+            <th class="text-right px-4 py-2 font-semibold border border-gray-200 dark:border-gray-700">Extra vs Best</th>
+          </tr>
+        </thead>
+        <tbody id="sensitivityBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Annual savings highlight -->
+  <div id="annualSavings" class="hidden mb-8 rounded-xl p-6 border-2 border-blue-300 dark:border-blue-700 bg-blue-50 dark:bg-blue-950"></div>
+
+  <!-- Static feature comparison -->
+  <div class="mb-10">
+    <h2 class="text-xl font-semibold mb-3">Processor Feature Comparison</h2>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm border-collapse">
+        <thead>
+          <tr class="bg-gray-50 dark:bg-gray-800">
+            <th class="text-left px-4 py-3 font-semibold border border-gray-200 dark:border-gray-700 w-36">Feature</th>
+            <th class="text-center px-3 py-3 font-semibold border border-gray-200 dark:border-gray-700">Shopify Pmts</th>
+            <th class="text-center px-3 py-3 font-semibold border border-gray-200 dark:border-gray-700">Stripe</th>
+            <th class="text-center px-3 py-3 font-semibold border border-gray-200 dark:border-gray-700">PayPal</th>
+            <th class="text-center px-3 py-3 font-semibold border border-gray-200 dark:border-gray-700">Auth.net</th>
+            <th class="text-center px-3 py-3 font-semibold border border-gray-200 dark:border-gray-700">Braintree</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
+          {[
+            ['Shopify tx fee', 'None ✓', '0.5–2%', '0.5–2%', '0.5–2%', '0.5–2%'],
+            ['Chargeback fee', '$15', '$15', '$20', '$25', '$15'],
+            ['Intl card surcharge', '+1.5%', '+1.5%', '+1.5%', '+1.5%', '+1%'],
+            ['Saved cards / wallets', '✓', '✓', '✓', '✓', '✓'],
+            ['Shop Pay acceleration', '✓', '✗', '✗', '✗', '✗'],
+            ['Shopify analytics sync', 'Full ✓', 'Partial', 'Partial', 'Partial', 'Partial'],
+            ['Fraud protection', 'Shopify Protect', 'Radar', 'Fraud tools', 'Adv. fraud', 'Fraud tools'],
+            ['ACH / bank debit', '✗', '✓', '✗', '✓', '✓'],
+            ['Buy now pay later', '✓ Shop Pay', '✗', '✓ Pay Later', '✗', '✗'],
+            ['Monthly fee', 'None', 'None', 'None or $30', '$25', 'None'],
+          ].map(row => (
+            <tr class="hover:bg-gray-50 dark:hover:bg-gray-800">
+              <td class="px-4 py-2 font-medium text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700">{row[0]}</td>
+              {row.slice(1).map((cell, i) => (
+                <td class={`px-3 py-2 text-center border border-gray-200 dark:border-gray-700 ${i === 0 ? 'text-green-700 dark:text-green-400 font-medium' : 'text-gray-600 dark:text-gray-400'}`}>{cell}</td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- FAQ -->
+  <section class="mb-10">
+    <h2 class="text-2xl font-bold mb-6">Frequently Asked Questions</h2>
+    <div class="space-y-4">
+      {faqs.map(({q, a}) => (
+        <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-5">
+          <h3 class="font-semibold text-gray-900 dark:text-gray-100 mb-2">{q}</h3>
+          <p class="text-gray-600 dark:text-gray-400 text-sm">{a}</p>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- Content -->
+  <section class="text-sm text-gray-600 dark:text-gray-400 space-y-4 mb-10">
+    <h2 class="text-xl font-bold text-gray-900 dark:text-gray-100">The Hidden Cost of Third-Party Payment Processors on Shopify</h2>
+    <p>Most Shopify sellers compare payment processor rates directly — 2.9%+30¢ for Stripe vs 2.9%+30¢ for Shopify Payments — and assume they're equivalent. They're not. Shopify adds an invisible surcharge on every sale processed through a non-Shopify provider: 2% on Basic, 1% on Shopify plan, 0.5% on Advanced, 0.15% on Plus.</p>
+    <p>At $20,000/month revenue on Shopify Basic, this means Stripe actually costs $5.20 per $100 sale (2.9%+30¢ Stripe + 2% Shopify) vs $3.20 with Shopify Payments. That's 63% more in fees — $400/month purely from the hidden transaction fee.</p>
+    <p><strong class="text-gray-900 dark:text-gray-100">The only exception: Shopify Plus.</strong> Plus drops the third-party transaction fee to 0.15% and also offers negotiated Shopify Payments rates. At very high volume with Plus, enterprise processors like Braintree (2.59%+49¢) with 0.15% Shopify fee can occasionally beat Shopify Payments — but only above roughly $800K/month.</p>
+    <p><strong class="text-gray-900 dark:text-gray-100">When to use multiple processors:</strong> Offer Shopify Payments as primary + PayPal as secondary. PayPal's buyer trust can increase conversion rate for the 20–30% of buyers who prefer it. Since both trigger their respective fees only when used, the effective additional cost of offering PayPal is the marginal volume it adds × its higher rate — often net positive.</p>
+  </section>
+
+  <!-- Cross-links -->
+  <section class="border-t border-gray-200 dark:border-gray-700 pt-6">
+    <p class="text-sm text-gray-500 dark:text-gray-400 mb-3">Related calculators:</p>
+    <div class="flex flex-wrap gap-3">
+      <a href="/shopify-plan-comparison/" class="text-sm text-blue-600 dark:text-blue-400 hover:underline">Plan Comparison Calculator</a>
+      <a href="/shopify-profit-calculator/" class="text-sm text-blue-600 dark:text-blue-400 hover:underline">Real Profit Calculator</a>
+      <a href="/shopify-hidden-fees-audit/" class="text-sm text-blue-600 dark:text-blue-400 hover:underline">Hidden Fees Audit</a>
+      <a href="/breakeven-roas-calculator/" class="text-sm text-blue-600 dark:text-blue-400 hover:underline">Breakeven ROAS Calculator</a>
+    </div>
+  </section>
+
+  <script>
+    const SHOPIFY_PLANS = [
+      { id: 'basic',    name: 'Basic',    txFee: 0.02,   spRate: 0.029,  spFixed: 0.30 },
+      { id: 'shopify',  name: 'Shopify',  txFee: 0.01,   spRate: 0.026,  spFixed: 0.30 },
+      { id: 'advanced', name: 'Advanced', txFee: 0.005,  spRate: 0.024,  spFixed: 0.30 },
+      { id: 'plus',     name: 'Plus',     txFee: 0.0015, spRate: 0.0215, spFixed: 0.30 },
+    ];
+
+    const PROCESSORS = [
+      { id: 'shopify',    name: 'Shopify Payments', icon: '🏪', rate: null,   fixed: null,  monthly: 0,  thirdParty: false },
+      { id: 'stripe',     name: 'Stripe',           icon: '⚡', rate: 0.029,  fixed: 0.30,  monthly: 0,  thirdParty: true  },
+      { id: 'paypal',     name: 'PayPal',           icon: '🅿️', rate: 0.0349, fixed: 0.49,  monthly: 0,  thirdParty: true  },
+      { id: 'paypal_adv', name: 'PayPal Advanced',  icon: '🅿️', rate: 0.0299, fixed: 0.49,  monthly: 30, thirdParty: true  },
+      { id: 'authnet',    name: 'Authorize.net',    icon: '🔐', rate: 0.029,  fixed: 0.30,  monthly: 25, thirdParty: true  },
+      { id: 'square',     name: 'Square Online',    icon: '⬛', rate: 0.029,  fixed: 0.30,  monthly: 0,  thirdParty: true  },
+      { id: 'braintree',  name: 'Braintree',        icon: '🌿', rate: 0.0259, fixed: 0.49,  monthly: 0,  thirdParty: true  },
+      { id: 'amazon',     name: 'Amazon Pay',       icon: '📦', rate: 0.029,  fixed: 0.30,  monthly: 0,  thirdParty: true  },
+    ];
+
+    function fmt(n, dec=2) { return '$' + n.toLocaleString('en-US', { minimumFractionDigits: dec, maximumFractionDigits: dec }); }
+    function fmtK(n) { return n >= 1000 ? '$' + (n/1000).toFixed(0) + 'K' : '$' + Math.round(n); }
+
+    function calcCost(proc, plan, revenue, aov) {
+      const orders = aov > 0 ? revenue / aov : 0;
+      let procFee, txFee;
+
+      if (!proc.thirdParty) {
+        procFee = revenue * plan.spRate + orders * plan.spFixed;
+        txFee = 0;
+      } else {
+        procFee = revenue * proc.rate + orders * proc.fixed;
+        txFee = revenue * plan.txFee;
+      }
+
+      return {
+        procFee,
+        txFee,
+        monthly: proc.monthly,
+        total: procFee + txFee + proc.monthly,
+      };
+    }
+
+    function calculate() {
+      const revenue = parseFloat(document.getElementById('revenue').value) || 0;
+      const aov = parseFloat(document.getElementById('aov').value) || 85;
+      const planId = document.getElementById('plan').value;
+      const plan = SHOPIFY_PLANS.find(p => p.id === planId);
+
+      const results = PROCESSORS.map(proc => ({
+        ...proc,
+        ...calcCost(proc, plan, revenue, aov),
+      })).sort((a, b) => a.total - b.total);
+
+      const best = results[0];
+
+      // Processor cards (top 4 sorted)
+      const cardsEl = document.getElementById('processorCards');
+      cardsEl.innerHTML = results.slice(0, 4).map((r, i) => {
+        const isWinner = i === 0;
+        const savings = r.total - best.total;
+        return `<div class="rounded-xl border-2 p-5 ${isWinner ? 'border-green-300 dark:border-green-700 bg-green-50 dark:bg-green-950 ring-2 ring-green-500 ring-offset-2 dark:ring-offset-gray-950' : 'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900'}">
+          <div class="flex items-center gap-2 mb-3">
+            <span class="text-xl">${r.icon}</span>
+            <span class="font-bold ${isWinner ? 'text-green-700 dark:text-green-400' : 'text-gray-900 dark:text-gray-100'}">${r.name}</span>
+            ${isWinner ? '<span class="ml-auto text-xs font-semibold bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 px-2 py-0.5 rounded-full">✓ Cheapest</span>' : ''}
+          </div>
+          <div class="text-2xl font-bold ${isWinner ? 'text-green-700 dark:text-green-400' : 'text-gray-900 dark:text-gray-100'} mb-3">${fmt(r.total)}<span class="text-sm font-normal text-gray-500">/mo</span></div>
+          <div class="space-y-1 text-xs text-gray-600 dark:text-gray-400">
+            <div class="flex justify-between"><span>Processing</span><span>${fmt(r.procFee)}</span></div>
+            <div class="flex justify-between"><span>Shopify tx fee</span><span class="${r.txFee > 0 ? 'text-red-600 dark:text-red-400' : 'text-green-600 dark:text-green-400'}">${r.txFee > 0 ? fmt(r.txFee) : 'None ✓'}</span></div>
+            ${r.monthly > 0 ? `<div class="flex justify-between"><span>Gateway fee</span><span>${fmt(r.monthly, 0)}</span></div>` : ''}
+          </div>
+          ${!isWinner ? `<div class="mt-3 pt-2 border-t border-gray-200 dark:border-gray-700 text-xs text-red-600 dark:text-red-400 font-medium">+${fmt(savings)}/mo vs Shopify Payments</div>` : ''}
+        </div>`;
+      }).join('');
+
+      // Winner banner
+      const bannerEl = document.getElementById('winnerBanner');
+      const annualSaving = (results[1].total - best.total) * 12;
+      bannerEl.innerHTML = `<strong>${best.icon} ${best.name}</strong> is cheapest at ${fmtK(revenue)}/mo — saving ${fmt((results[1].total - best.total))}/mo (${fmt(annualSaving, 0)}/yr) vs the next cheapest option.`;
+      bannerEl.classList.remove('hidden');
+
+      // Full breakdown table
+      document.getElementById('breakdownBody').innerHTML = results.map((r, i) => {
+        const extra = r.total - best.total;
+        return `<tr class="${i === 0 ? 'bg-green-50 dark:bg-green-950 font-medium' : 'hover:bg-gray-50 dark:hover:bg-gray-800'}">
+          <td class="px-4 py-2 border border-gray-200 dark:border-gray-700">${r.icon} ${r.name}</td>
+          <td class="px-4 py-2 text-right border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400">${fmt(r.procFee)}</td>
+          <td class="px-4 py-2 text-right border border-gray-200 dark:border-gray-700 ${r.txFee > 0 ? 'text-red-600 dark:text-red-400' : 'text-green-600 dark:text-green-400'}">${r.txFee > 0 ? fmt(r.txFee) : '—'}</td>
+          <td class="px-4 py-2 text-right border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400">${r.monthly > 0 ? fmt(r.monthly, 0) : '—'}</td>
+          <td class="px-4 py-2 text-right border border-gray-200 dark:border-gray-700 font-semibold">${fmt(r.total)}</td>
+          <td class="px-4 py-2 text-right border border-gray-200 dark:border-gray-700 ${i === 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}">${i === 0 ? '—' : '+' + fmt(extra)}</td>
+        </tr>`;
+      }).join('');
+
+      // Sensitivity table
+      const tiers = [1000, 5000, 10000, 25000, 50000, 100000, 250000, 500000];
+      document.getElementById('sensitivityBody').innerHTML = tiers.map(rev => {
+        const tierResults = PROCESSORS.map(proc => ({
+          ...proc,
+          total: calcCost(proc, plan, rev, aov).total,
+        })).sort((a, b) => a.total - b.total);
+        const t1 = tierResults[0], t2 = tierResults[1];
+        const isCurrentTier = Math.abs(rev - revenue) / Math.max(revenue, 1) < 0.5;
+        return `<tr class="${isCurrentTier ? 'bg-blue-50 dark:bg-blue-950' : 'hover:bg-gray-50 dark:hover:bg-gray-800'}">
+          <td class="px-4 py-2 border border-gray-200 dark:border-gray-700 font-medium">${fmtK(rev)}</td>
+          <td class="px-4 py-2 text-center border border-gray-200 dark:border-gray-700 text-green-700 dark:text-green-400 font-semibold">${t1.icon} ${t1.name}</td>
+          <td class="px-4 py-2 text-right border border-gray-200 dark:border-gray-700 font-semibold">${fmt(t1.total)}</td>
+          <td class="px-4 py-2 text-center border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400">${t2.icon} ${t2.name}</td>
+          <td class="px-4 py-2 text-right border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400">${fmt(t2.total)}</td>
+          <td class="px-4 py-2 text-right border border-gray-200 dark:border-gray-700 text-red-600 dark:text-red-400">+${fmt(t2.total - t1.total)}</td>
+        </tr>`;
+      }).join('');
+
+      // Annual savings box
+      const annualEl = document.getElementById('annualSavings');
+      if (annualSaving > 100) {
+        annualEl.innerHTML = `<div class="text-blue-700 dark:text-blue-300 font-bold text-lg mb-1">Switching to ${best.name} saves ${fmt(annualSaving, 0)}/year</div>
+          <p class="text-sm text-blue-600 dark:text-blue-400">At your current revenue of ${fmtK(revenue)}/mo, using ${results[1].name} instead costs an extra ${fmt(results[1].total - best.total)}/mo — ${fmt(annualSaving, 0)} wasted per year in unnecessary fees.</p>`;
+        annualEl.classList.remove('hidden');
+      } else {
+        annualEl.classList.add('hidden');
+      }
+    }
+
+    document.querySelectorAll('#revenue, #aov, #plan').forEach(el => {
+      el.addEventListener('input', calculate);
+      el.addEventListener('change', calculate);
+    });
+
+    calculate();
+  </script>
+</Base>
