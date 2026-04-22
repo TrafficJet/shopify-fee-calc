@@ -1,0 +1,520 @@
+---
+import Base from '../layouts/Base.astro';
+
+const faqSchema = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    { "@type": "Question", "name": "How much should I spend on Shopify apps per month?",
+      "acceptedAnswer": { "@type": "Answer", "text": "A healthy Shopify app budget depends on revenue stage. Early stores (<$10K/mo) should target under 3–5% of revenue in apps — roughly $300–$500/mo maximum. Mid-size stores ($10K–$100K/mo) typically spend 2–4% ($200–$4,000). High-volume stores ($100K+/mo) often spend 1–2% because fixed-cost apps dilute as a percentage. If your app spend exceeds 5% of revenue, audit each app for measurable ROI." } },
+    { "@type": "Question", "name": "Which Shopify apps are worth the money?",
+      "acceptedAnswer": { "@type": "Answer", "text": "The highest-ROI app categories for most Shopify stores are: (1) Email marketing — Klaviyo/Omnisend typically returns $40–$80 per dollar spent via automated flows; (2) Reviews — Judge.me or Stamped increase conversion 10–20%; (3) Upsell apps — ReConvert and similar return 5–15× their cost in added AOV. Low-ROI categories to audit: page builders (replace with Shopify's native sections), redundant analytics tools, and apps that duplicate native Shopify features." } },
+    { "@type": "Question", "name": "How do I find and cancel unused Shopify apps?",
+      "acceptedAnswer": { "@type": "Answer", "text": "In your Shopify admin, go to Apps → scroll to see all installed apps. Check the billing date for each — apps billing monthly you rarely open are candidates for removal. Also check Settings → Billing → Bills to see the exact app charges on your last invoice. Uninstalling an app cancels future charges immediately; Shopify doesn't prorate refunds for the current billing period." } },
+    { "@type": "Question", "name": "What is a good alternative to Klaviyo for Shopify email marketing?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Omnisend ($16–$59/mo) is the best alternative at small-mid volume — it includes SMS, push notifications, and similar automation at lower cost. Shopify Email (built-in, $1/1,000 emails) works for basic campaigns. Drip and ActiveCampaign work well for stores needing advanced segmentation. Klaviyo's pricing scales with contacts — if you're on the $150+/mo tier, audit whether the advanced predictive features are driving measurable lift." } },
+    { "@type": "Question", "name": "Should I pay for a Shopify page builder like Shogun or PageFly?",
+      "acceptedAnswer": { "@type": "Answer", "text": "For most stores, no. Shopify's native theme editor with Online Store 2.0 sections covers 80–90% of landing page needs. Shogun ($39–$149/mo) and PageFly ($29–$99/mo) make sense if you run frequent promotional campaigns with unique layouts, or if you have a non-technical team that needs a visual editor. Before paying, check if your theme has a metafield-based section approach that covers your needs." } },
+    { "@type": "Question", "name": "Are Shopify app costs tax deductible?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Yes — Shopify app subscription fees are business expenses deductible as software/SaaS costs. Keep your Shopify billing statements as records. The total annual app spend (use this auditor to calculate it) can be deducted from business income. Consult a tax professional for your specific jurisdiction." } },
+  ]
+});
+
+const appSchema = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Shopify App Stack Cost Auditor",
+  "description": "Audit your entire Shopify app stack costs. Select apps you use, enter monthly costs, and see total spend vs revenue benchmarks. Find which apps to keep, optimize, or cut. Free 2026.",
+  "applicationCategory": "BusinessApplication",
+  "operatingSystem": "Web",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+  "url": "https://shopify-fee-calc.com/app-stack-cost-auditor/"
+});
+
+const faqs = [
+  { q: "How much should I spend on Shopify apps per month?",
+    a: "A healthy app budget: early stores (<$10K/mo revenue) should target under 3–5% of revenue, roughly $300–500/mo max. Mid-size stores ($10K–$100K/mo) typically spend 2–4%. High-volume stores ($100K+/mo) often spend 1–2% since fixed app costs dilute with scale. If app spend exceeds 5% of revenue, audit each app for measurable ROI." },
+  { q: "Which Shopify apps are worth the money?",
+    a: "Highest-ROI categories: (1) Email marketing — Klaviyo/Omnisend typically returns $40–80 per dollar spent via automated flows; (2) Reviews — Judge.me or Stamped increase conversion 10–20%; (3) Upsell apps — return 5–15× their cost in added AOV. Low-ROI candidates to audit: page builders (replace with native sections), redundant analytics, and apps duplicating built-in Shopify features." },
+  { q: "How do I find and cancel unused Shopify apps?",
+    a: "Shopify Admin → Apps → scroll all installed apps. Check Settings → Billing → Bills to see exact app charges on your last invoice. Uninstalling cancels future charges immediately. Shopify doesn't prorate refunds for the current billing period." },
+  { q: "What is a good alternative to Klaviyo for Shopify?",
+    a: "Omnisend ($16–59/mo) — SMS + email + push at lower cost. Shopify Email (built-in, $1/1,000 emails) for basic campaigns. Drip/ActiveCampaign for advanced segmentation. If on Klaviyo $150+/mo tier, audit whether predictive features are driving measurable lift vs cheaper tiers." },
+  { q: "Should I pay for a Shopify page builder?",
+    a: "For most stores, no. Shopify's native Online Store 2.0 editor covers 80–90% of needs. Shogun ($39–149/mo) or PageFly ($29–99/mo) make sense if you run frequent campaigns with unique layouts or have non-technical teams. Check your theme's metafield-based sections before paying." },
+  { q: "Are Shopify app costs tax deductible?",
+    a: "Yes — app subscription fees are business expenses deductible as software/SaaS costs. Your annual total from this auditor can be deducted from business income. Consult a tax professional for your specific jurisdiction." },
+];
+
+const APP_CATEGORIES = [
+  {
+    id: 'email', name: 'Email Marketing', icon: '📧', roiLabel: 'High ROI',
+    apps: [
+      { id: 'klaviyo',   name: 'Klaviyo',           cost: 45,  url: 'klaviyo.com',   note: 'Scales with contacts' },
+      { id: 'omnisend',  name: 'Omnisend',           cost: 16,  url: 'omnisend.com',  note: 'Email + SMS + push' },
+      { id: 'shopify_email', name: 'Shopify Email',  cost: 10,  url: 'shopify.com',   note: '$1/1K emails, ~10K = $10' },
+      { id: 'mailchimp', name: 'Mailchimp',          cost: 20,  url: 'mailchimp.com', note: '500 contacts free' },
+    ]
+  },
+  {
+    id: 'reviews', name: 'Reviews & UGC', icon: '⭐', roiLabel: 'High ROI',
+    apps: [
+      { id: 'judgeme',  name: 'Judge.me',   cost: 15,  url: 'judge.me',    note: 'Most affordable' },
+      { id: 'yotpo',    name: 'Yotpo',      cost: 79,  url: 'yotpo.com',   note: 'Reviews + UGC + loyalty' },
+      { id: 'stamped',  name: 'Stamped.io', cost: 19,  url: 'stamped.io',  note: 'Reviews + NPS' },
+      { id: 'okendo',   name: 'Okendo',     cost: 29,  url: 'okendo.com',  note: 'Premium reviews + Q&A' },
+    ]
+  },
+  {
+    id: 'upsell', name: 'Upsell & Cross-sell', icon: '🛒', roiLabel: 'High ROI',
+    apps: [
+      { id: 'reconvert',  name: 'ReConvert',         cost: 29,  url: 'reconvert.com',     note: 'Post-purchase upsell' },
+      { id: 'zipify',     name: 'Zipify OneClickUpsell', cost: 35, url: 'zipify.com',      note: 'Pre/post purchase' },
+      { id: 'frequently', name: 'Frequently Bought Together', cost: 10, url: 'shopify.com', note: 'Product bundles' },
+      { id: 'bold_upsell',name: 'Bold Upsell',       cost: 19,  url: 'boldcommerce.com',  note: 'Classic upsell' },
+    ]
+  },
+  {
+    id: 'loyalty', name: 'Loyalty & Rewards', icon: '🎁', roiLabel: 'Medium ROI',
+    apps: [
+      { id: 'smile',      name: 'Smile.io',       cost: 49,  url: 'smile.io',       note: 'Points + referrals' },
+      { id: 'loyaltylion',name: 'LoyaltyLion',    cost: 159, url: 'loyaltylion.com',note: 'Enterprise loyalty' },
+      { id: 'growave',    name: 'Growave',         cost: 49,  url: 'growave.io',     note: 'Loyalty + wishlist + reviews' },
+    ]
+  },
+  {
+    id: 'shipping', name: 'Shipping & Fulfillment', icon: '📦', roiLabel: 'Medium ROI',
+    apps: [
+      { id: 'shipstation', name: 'ShipStation',   cost: 30,  url: 'shipstation.com', note: '50 shipments/mo plan' },
+      { id: 'shippo',      name: 'Shippo',         cost: 0,   url: 'goshippo.com',    note: 'Per-label pricing' },
+      { id: 'easypost',    name: 'EasyPost',       cost: 0,   url: 'easypost.com',    note: 'Pay-per-use' },
+      { id: 'parcelhunt',  name: 'Parcel Panel',   cost: 9,   url: 'parcelpanel.com', note: 'Tracking page' },
+    ]
+  },
+  {
+    id: 'support', name: 'Customer Support', icon: '💬', roiLabel: 'Medium ROI',
+    apps: [
+      { id: 'gorgias',  name: 'Gorgias',   cost: 60,  url: 'gorgias.com', note: 'eCommerce helpdesk' },
+      { id: 'tidio',    name: 'Tidio',     cost: 29,  url: 'tidio.com',   note: 'Live chat + chatbot' },
+      { id: 'reamaze',  name: 'Re:amaze',  cost: 29,  url: 'reamaze.com', note: 'Helpdesk + chat' },
+      { id: 'zendesk',  name: 'Zendesk',   cost: 55,  url: 'zendesk.com', note: 'Enterprise support' },
+    ]
+  },
+  {
+    id: 'analytics', name: 'Analytics & Attribution', icon: '📊', roiLabel: 'Low-Med ROI',
+    apps: [
+      { id: 'triplewhale', name: 'Triple Whale',  cost: 129, url: 'triplewhale.com', note: 'Pixel + attribution' },
+      { id: 'northbeam',   name: 'Northbeam',     cost: 300, url: 'northbeam.io',    note: 'Enterprise attribution' },
+      { id: 'glew',        name: 'Glew.io',        cost: 79,  url: 'glew.io',         note: 'Multi-channel analytics' },
+      { id: 'lucky_orange',name: 'Lucky Orange',   cost: 18,  url: 'luckyorange.com', note: 'Heatmaps + sessions' },
+    ]
+  },
+  {
+    id: 'seo', name: 'SEO & Content', icon: '🔍', roiLabel: 'Low-Med ROI',
+    apps: [
+      { id: 'plug_seo',   name: 'Plug In SEO',    cost: 29,  url: 'pluginseo.com',  note: 'SEO audit + fixes' },
+      { id: 'smart_seo',  name: 'Smart SEO',      cost: 9,   url: 'smartseo.app',   note: 'Meta + schema auto' },
+      { id: 'schema_plus',name: 'Schema Plus',    cost: 14,  url: 'schemaapp.com',  note: 'Rich snippets' },
+      { id: 'tapita',     name: 'Tapita SEO',     cost: 9,   url: 'tapita.io',      note: 'Speed + SEO combo' },
+    ]
+  },
+  {
+    id: 'pagebuilder', name: 'Page Builder', icon: '🎨', roiLabel: 'Low ROI (audit)',
+    apps: [
+      { id: 'shogun',    name: 'Shogun',       cost: 39,  url: 'getshogun.com', note: 'Drag-drop builder' },
+      { id: 'pagefly',   name: 'PageFly',      cost: 29,  url: 'pagefly.io',    note: 'Visual editor' },
+      { id: 'gempages',  name: 'GemPages',     cost: 29,  url: 'gempages.net',  note: 'Landing pages' },
+    ]
+  },
+  {
+    id: 'subscriptions', name: 'Subscriptions', icon: '🔁', roiLabel: 'High ROI (if subs)',
+    apps: [
+      { id: 'recharge',   name: 'ReCharge',          cost: 99,  url: 'rechargepayments.com', note: '+ 1% tx fee on some plans' },
+      { id: 'seal_subs',  name: 'Seal Subscriptions', cost: 0,   url: 'sealsubscriptions.com', note: 'Free plan available' },
+      { id: 'bold_subs',  name: 'Bold Subscriptions', cost: 49,  url: 'boldcommerce.com',     note: 'Platform-level subs' },
+    ]
+  },
+];
+---
+<Base
+  title="Shopify App Stack Cost Auditor — Find & Cut Wasted App Spend (Free 2026)"
+  description="Audit your entire Shopify app stack. Select the apps you use, enter costs, and see total monthly spend vs revenue benchmarks. Identify which apps to keep, optimize, or cancel."
+  noWebAppSchema={true}
+>
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={faqSchema} />
+    <script type="application/ld+json" set:html={appSchema} />
+  </Fragment>
+
+  <!-- Tailwind safelist -->
+  <div class="hidden bg-green-50 dark:bg-green-950 text-green-700 dark:text-green-400 border-green-300 dark:border-green-700 bg-yellow-50 dark:bg-yellow-950 text-yellow-700 dark:text-yellow-400 bg-red-50 dark:bg-red-950 text-red-700 dark:text-red-400 bg-orange-100 dark:bg-orange-900 text-orange-700 dark:text-orange-400 font-semibold ring-2 ring-blue-500 text-xs text-sm"></div>
+
+  <h1 class="text-3xl font-bold mb-2">Shopify App Stack Cost Auditor</h1>
+  <p class="text-gray-600 dark:text-gray-400 mb-6 max-w-2xl">
+    Check the apps you use, enter your actual costs, and see your total monthly app spend vs revenue benchmarks. Find which categories are costing more than they're worth.
+  </p>
+
+  <!-- Revenue input + summary bar -->
+  <div class="flex flex-col sm:flex-row gap-4 mb-8 items-start sm:items-center">
+    <div class="flex-shrink-0">
+      <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Monthly Revenue ($)</label>
+      <input id="revenue" type="number" value="20000" min="0" step="1000"
+        class="w-44 border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+    </div>
+    <div id="summaryBar" class="flex flex-wrap gap-4 mt-4 sm:mt-6">
+      <div class="text-center">
+        <div class="text-2xl font-bold text-gray-900 dark:text-gray-100" id="totalCost">$0</div>
+        <div class="text-xs text-gray-500">Total/month</div>
+      </div>
+      <div class="text-center">
+        <div class="text-2xl font-bold text-gray-900 dark:text-gray-100" id="annualCost">$0</div>
+        <div class="text-xs text-gray-500">Annual cost</div>
+      </div>
+      <div class="text-center">
+        <div class="text-2xl font-bold" id="pctRevenue">0%</div>
+        <div class="text-xs text-gray-500">% of revenue</div>
+      </div>
+      <div class="text-center">
+        <div class="text-2xl font-bold text-gray-900 dark:text-gray-100" id="appCount">0</div>
+        <div class="text-xs text-gray-500">Apps active</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Health verdict -->
+  <div id="verdict" class="hidden rounded-xl p-4 mb-6 border-2 text-sm"></div>
+
+  <!-- App categories -->
+  <div class="space-y-6 mb-10" id="categoryList"></div>
+
+  <!-- Add custom app -->
+  <div class="border border-dashed border-gray-300 dark:border-gray-600 rounded-xl p-5 mb-10">
+    <h3 class="font-semibold text-gray-900 dark:text-gray-100 mb-3">+ Add Custom App</h3>
+    <div class="flex flex-wrap gap-3">
+      <input id="customName" type="text" placeholder="App name" maxlength="40"
+        class="border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 w-48" />
+      <input id="customCost" type="number" placeholder="$/mo" min="0" step="1"
+        class="border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 w-28" />
+      <button id="addCustomBtn"
+        class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition">
+        Add App
+      </button>
+    </div>
+    <div id="customApps" class="mt-3 space-y-2"></div>
+  </div>
+
+  <!-- Category breakdown chart (text-based) -->
+  <div class="mb-10">
+    <h2 class="text-xl font-semibold mb-3">Spend by Category</h2>
+    <div id="categoryChart" class="space-y-2"></div>
+  </div>
+
+  <!-- Benchmark table -->
+  <div class="mb-10">
+    <h2 class="text-xl font-semibold mb-3">App Spend Benchmarks by Revenue Stage</h2>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm border-collapse">
+        <thead>
+          <tr class="bg-gray-50 dark:bg-gray-800">
+            <th class="text-left px-4 py-2 font-semibold border border-gray-200 dark:border-gray-700">Revenue Stage</th>
+            <th class="text-right px-4 py-2 font-semibold border border-gray-200 dark:border-gray-700">Healthy App % of Revenue</th>
+            <th class="text-right px-4 py-2 font-semibold border border-gray-200 dark:border-gray-700">Typical Monthly Budget</th>
+            <th class="text-left px-4 py-2 font-semibold border border-gray-200 dark:border-gray-700">Priority Apps</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
+          {[
+            ['< $5K/mo',       '< 5%',   '$0–$250',    'Email, Reviews only'],
+            ['$5K–$20K/mo',   '3–5%',   '$150–$1K',   '+ Upsell, basic support'],
+            ['$20K–$100K/mo', '2–4%',   '$400–$4K',   '+ Loyalty, analytics, subscriptions'],
+            ['$100K–$500K/mo','1–3%',   '$1K–$15K',   'Full stack + custom integrations'],
+            ['$500K+/mo',     '< 1.5%', '$5K–$50K',   'Enterprise + negotiated rates'],
+          ].map(([stage, pct, budget, priority]) => (
+            <tr class="hover:bg-gray-50 dark:hover:bg-gray-800">
+              <td class="px-4 py-2 font-medium border border-gray-200 dark:border-gray-700">{stage}</td>
+              <td class="px-4 py-2 text-right border border-gray-200 dark:border-gray-700">{pct}</td>
+              <td class="px-4 py-2 text-right border border-gray-200 dark:border-gray-700">{budget}</td>
+              <td class="px-4 py-2 text-gray-600 dark:text-gray-400 border border-gray-200 dark:border-gray-700">{priority}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- FAQ -->
+  <section class="mb-10">
+    <h2 class="text-2xl font-bold mb-6">Frequently Asked Questions</h2>
+    <div class="space-y-4">
+      {faqs.map(({q, a}) => (
+        <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-5">
+          <h3 class="font-semibold text-gray-900 dark:text-gray-100 mb-2">{q}</h3>
+          <p class="text-gray-600 dark:text-gray-400 text-sm">{a}</p>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- Content -->
+  <section class="text-sm text-gray-600 dark:text-gray-400 space-y-4 mb-10">
+    <h2 class="text-xl font-bold text-gray-900 dark:text-gray-100">How to Audit Your Shopify App Stack</h2>
+    <p>Most Shopify stores accumulate apps slowly — one per problem — without ever reviewing the total cost. A store that added an email app at $45/mo, a reviews app at $79/mo, a page builder at $39/mo, a loyalty app at $49/mo, and a helpdesk at $60/mo is spending $272/mo ($3,264/year) before accounting for Shopify plan and processing fees.</p>
+    <p><strong class="text-gray-900 dark:text-gray-100">Step 1: Pull your current bill.</strong> Shopify Admin → Settings → Billing → Bills. Your most recent invoice itemizes every app charge. This is your source of truth — not what you think you're paying.</p>
+    <p><strong class="text-gray-900 dark:text-gray-100">Step 2: Score each app.</strong> For every app, ask: (a) Is it actively generating revenue or saving cost? (b) Do I know the specific ROI? (c) Does Shopify's native feature set now cover this? Apps that fail all three are candidates to remove.</p>
+    <p><strong class="text-gray-900 dark:text-gray-100">Step 3: Target ≤ 2–3% of revenue.</strong> If your total app spend exceeds this threshold, start cutting from the lowest-ROI categories first: redundant page builders, analytics tools you don't check, and loyalty programs for stores under $20K/mo (too early for loyalty economics to work).</p>
+    <p><strong class="text-gray-900 dark:text-gray-100">Step 4: Negotiate or consolidate.</strong> Apps like Growave bundle reviews + loyalty + wishlist into one price. Yotpo bundles reviews + UGC. These consolidations often cost less than the sum of individual apps and reduce integration maintenance.</p>
+  </section>
+
+  <!-- Cross-links -->
+  <section class="border-t border-gray-200 dark:border-gray-700 pt-6">
+    <p class="text-sm text-gray-500 dark:text-gray-400 mb-3">Related calculators:</p>
+    <div class="flex flex-wrap gap-3">
+      <a href="/shopify-hidden-fees-audit/" class="text-sm text-blue-600 dark:text-blue-400 hover:underline">Hidden Fees Audit</a>
+      <a href="/shopify-profit-calculator/" class="text-sm text-blue-600 dark:text-blue-400 hover:underline">Real Profit Calculator</a>
+      <a href="/shopify-plan-comparison/" class="text-sm text-blue-600 dark:text-blue-400 hover:underline">Plan Comparison Calculator</a>
+      <a href="/ltv-cac-calculator/" class="text-sm text-blue-600 dark:text-blue-400 hover:underline">LTV:CAC Calculator</a>
+    </div>
+  </section>
+
+  <script>
+    const APP_CATEGORIES = [
+      { id: 'email', name: 'Email Marketing', icon: '📧', roi: 'High ROI',
+        apps: [
+          { id: 'klaviyo',      name: 'Klaviyo',                    cost: 45  },
+          { id: 'omnisend',     name: 'Omnisend',                   cost: 16  },
+          { id: 'shopify_email',name: 'Shopify Email',              cost: 10  },
+          { id: 'mailchimp',    name: 'Mailchimp',                  cost: 20  },
+        ]
+      },
+      { id: 'reviews', name: 'Reviews & UGC', icon: '⭐', roi: 'High ROI',
+        apps: [
+          { id: 'judgeme',  name: 'Judge.me',   cost: 15 },
+          { id: 'yotpo',    name: 'Yotpo',      cost: 79 },
+          { id: 'stamped',  name: 'Stamped.io', cost: 19 },
+          { id: 'okendo',   name: 'Okendo',     cost: 29 },
+        ]
+      },
+      { id: 'upsell', name: 'Upsell & Cross-sell', icon: '🛒', roi: 'High ROI',
+        apps: [
+          { id: 'reconvert',   name: 'ReConvert',                  cost: 29 },
+          { id: 'zipify',      name: 'Zipify OneClickUpsell',      cost: 35 },
+          { id: 'frequently',  name: 'Frequently Bought Together', cost: 10 },
+          { id: 'bold_upsell', name: 'Bold Upsell',                cost: 19 },
+        ]
+      },
+      { id: 'loyalty', name: 'Loyalty & Rewards', icon: '🎁', roi: 'Medium ROI',
+        apps: [
+          { id: 'smile',       name: 'Smile.io',        cost: 49  },
+          { id: 'loyaltylion', name: 'LoyaltyLion',     cost: 159 },
+          { id: 'growave',     name: 'Growave',          cost: 49  },
+        ]
+      },
+      { id: 'shipping', name: 'Shipping & Fulfillment', icon: '📦', roi: 'Medium ROI',
+        apps: [
+          { id: 'shipstation', name: 'ShipStation',  cost: 30 },
+          { id: 'shippo',      name: 'Shippo',        cost: 0  },
+          { id: 'parcelhunt',  name: 'Parcel Panel',  cost: 9  },
+        ]
+      },
+      { id: 'support', name: 'Customer Support', icon: '💬', roi: 'Medium ROI',
+        apps: [
+          { id: 'gorgias', name: 'Gorgias',   cost: 60 },
+          { id: 'tidio',   name: 'Tidio',     cost: 29 },
+          { id: 'reamaze',  name: 'Re:amaze', cost: 29 },
+          { id: 'zendesk', name: 'Zendesk',   cost: 55 },
+        ]
+      },
+      { id: 'analytics', name: 'Analytics & Attribution', icon: '📊', roi: 'Low-Med ROI',
+        apps: [
+          { id: 'triplewhale',  name: 'Triple Whale',  cost: 129 },
+          { id: 'northbeam',    name: 'Northbeam',     cost: 300 },
+          { id: 'glew',         name: 'Glew.io',        cost: 79  },
+          { id: 'lucky_orange', name: 'Lucky Orange',   cost: 18  },
+        ]
+      },
+      { id: 'seo', name: 'SEO & Content', icon: '🔍', roi: 'Low-Med ROI',
+        apps: [
+          { id: 'plug_seo',    name: 'Plug In SEO', cost: 29 },
+          { id: 'smart_seo',   name: 'Smart SEO',   cost: 9  },
+          { id: 'schema_plus', name: 'Schema Plus', cost: 14 },
+        ]
+      },
+      { id: 'pagebuilder', name: 'Page Builder', icon: '🎨', roi: 'Low ROI — audit first',
+        apps: [
+          { id: 'shogun',   name: 'Shogun',   cost: 39 },
+          { id: 'pagefly',  name: 'PageFly',  cost: 29 },
+          { id: 'gempage',  name: 'GemPages', cost: 29 },
+        ]
+      },
+      { id: 'subscriptions', name: 'Subscriptions', icon: '🔁', roi: 'High ROI (if you sell subs)',
+        apps: [
+          { id: 'recharge',  name: 'ReCharge',           cost: 99 },
+          { id: 'seal_subs', name: 'Seal Subscriptions', cost: 0  },
+          { id: 'bold_subs', name: 'Bold Subscriptions', cost: 49 },
+        ]
+      },
+    ];
+
+    // state: { appId: cost | null } (null = not selected, number = active with cost)
+    const state = {};
+    const customApps = []; // { id, name, cost }
+    let customCounter = 0;
+
+    function fmt(n) { return '$' + n.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 }); }
+
+    function getTotalByCategory() {
+      const byCategory = {};
+      APP_CATEGORIES.forEach(cat => {
+        let sum = 0;
+        cat.apps.forEach(app => {
+          const cost = state[app.id];
+          if (cost != null) sum += cost;
+        });
+        byCategory[cat.id] = { name: cat.name, icon: cat.icon, roi: cat.roi, total: sum };
+      });
+      // custom
+      const customSum = customApps.reduce((s, a) => s + a.cost, 0);
+      if (customSum > 0) byCategory['custom'] = { name: 'Custom Apps', icon: '⚙️', roi: '', total: customSum };
+      return byCategory;
+    }
+
+    function updateSummary() {
+      const byCategory = getTotalByCategory();
+      const total = Object.values(byCategory).reduce((s, c) => s + c.total, 0);
+      const revenue = parseFloat(document.getElementById('revenue').value) || 0;
+      const pct = revenue > 0 ? (total / revenue * 100) : 0;
+      const count = Object.values(state).filter(v => v != null).length + customApps.length;
+
+      document.getElementById('totalCost').textContent = fmt(total);
+      document.getElementById('annualCost').textContent = fmt(total * 12);
+      document.getElementById('appCount').textContent = count;
+
+      const pctEl = document.getElementById('pctRevenue');
+      pctEl.textContent = pct.toFixed(1) + '%';
+      pctEl.className = 'text-2xl font-bold ' + (pct > 5 ? 'text-red-600 dark:text-red-400' : pct > 3 ? 'text-yellow-600 dark:text-yellow-400' : 'text-green-600 dark:text-green-400');
+
+      // Verdict
+      const verdictEl = document.getElementById('verdict');
+      if (count === 0) { verdictEl.classList.add('hidden'); return; }
+      let msg, cls;
+      if (pct <= 2) { msg = `✅ Healthy — app spend is ${pct.toFixed(1)}% of revenue (target: ≤ 2–3%). Your stack is lean.`; cls = 'border-green-300 dark:border-green-700 bg-green-50 dark:bg-green-950 text-green-700 dark:text-green-400'; }
+      else if (pct <= 4) { msg = `⚠️ Moderate — app spend is ${pct.toFixed(1)}% of revenue. Acceptable but review low-ROI categories.`; cls = 'border-yellow-300 dark:border-yellow-700 bg-yellow-50 dark:bg-yellow-950 text-yellow-700 dark:text-yellow-400'; }
+      else { msg = `🔴 High — app spend is ${pct.toFixed(1)}% of revenue (target: ≤ 3%). Cut or consolidate low-ROI apps to save ${fmt((total - revenue * 0.03) * 12)}/yr.`; cls = 'border-red-300 dark:border-red-700 bg-red-50 dark:bg-red-950 text-red-700 dark:text-red-400'; }
+      verdictEl.className = `rounded-xl p-4 mb-6 border-2 text-sm font-medium ${cls}`;
+      verdictEl.textContent = msg;
+      verdictEl.classList.remove('hidden');
+
+      // Category chart
+      const maxCost = Math.max(...Object.values(byCategory).map(c => c.total), 1);
+      document.getElementById('categoryChart').innerHTML = Object.values(byCategory)
+        .filter(c => c.total > 0)
+        .sort((a, b) => b.total - a.total)
+        .map(c => {
+          const w = Math.round(c.total / maxCost * 100);
+          return `<div class="flex items-center gap-3">
+            <div class="w-36 text-xs text-gray-600 dark:text-gray-400 truncate">${c.icon} ${c.name}</div>
+            <div class="flex-1 bg-gray-100 dark:bg-gray-800 rounded-full h-4 relative">
+              <div class="bg-blue-500 dark:bg-blue-600 h-4 rounded-full transition-all" style="width:${w}%"></div>
+            </div>
+            <div class="w-16 text-xs font-semibold text-right text-gray-800 dark:text-gray-200">${fmt(c.total)}/mo</div>
+          </div>`;
+        }).join('') || '<p class="text-sm text-gray-400">No apps selected yet.</p>';
+    }
+
+    function renderCategories() {
+      const el = document.getElementById('categoryList');
+      el.innerHTML = APP_CATEGORIES.map(cat => {
+        const roiColor = cat.roi.startsWith('High') ? 'text-green-600 dark:text-green-400' :
+                         cat.roi.startsWith('Medium') ? 'text-yellow-600 dark:text-yellow-400' :
+                         'text-orange-600 dark:text-orange-400';
+        const appsHtml = cat.apps.map(app => {
+          const isActive = state[app.id] != null;
+          const cost = state[app.id] ?? app.cost;
+          return `<div class="flex items-center gap-3 py-2 border-b border-gray-100 dark:border-gray-800 last:border-0">
+            <input type="checkbox" id="chk_${app.id}" data-id="${app.id}" ${isActive ? 'checked' : ''}
+              class="w-4 h-4 accent-blue-600 cursor-pointer flex-shrink-0" />
+            <label for="chk_${app.id}" class="flex-1 text-sm text-gray-800 dark:text-gray-200 cursor-pointer">${app.name}</label>
+            <span class="text-xs text-gray-400 mr-1">$/mo</span>
+            <input type="number" id="cost_${app.id}" value="${cost}" min="0" step="1"
+              class="w-20 border border-gray-200 dark:border-gray-700 rounded px-2 py-1 text-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-1 focus:ring-blue-500 ${!isActive ? 'opacity-40' : ''}"
+              ${!isActive ? 'disabled' : ''} data-id="${app.id}" />
+          </div>`;
+        }).join('');
+
+        return `<div class="border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden">
+          <div class="bg-gray-50 dark:bg-gray-800 px-5 py-3 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <span class="text-lg">${cat.icon}</span>
+              <span class="font-semibold text-gray-900 dark:text-gray-100">${cat.name}</span>
+            </div>
+            <span class="text-xs font-medium ${roiColor}">${cat.roi}</span>
+          </div>
+          <div class="px-5 py-1">${appsHtml}</div>
+        </div>`;
+      }).join('');
+
+      // Wire checkboxes
+      document.querySelectorAll('input[type=checkbox]').forEach(chk => {
+        chk.addEventListener('change', () => {
+          const id = chk.dataset.id;
+          const costInput = document.getElementById('cost_' + id);
+          if (chk.checked) {
+            state[id] = parseFloat(costInput.value) || 0;
+            costInput.disabled = false;
+            costInput.classList.remove('opacity-40');
+          } else {
+            state[id] = null;
+            costInput.disabled = true;
+            costInput.classList.add('opacity-40');
+          }
+          updateSummary();
+        });
+      });
+
+      // Wire cost inputs
+      document.querySelectorAll('input[type=number][data-id]').forEach(inp => {
+        inp.addEventListener('input', () => {
+          const id = inp.dataset.id;
+          if (state[id] != null) {
+            state[id] = parseFloat(inp.value) || 0;
+            updateSummary();
+          }
+        });
+      });
+    }
+
+    function renderCustomApps() {
+      document.getElementById('customApps').innerHTML = customApps.map((a, i) =>
+        `<div class="flex items-center gap-3 text-sm">
+          <span class="text-gray-700 dark:text-gray-300 flex-1">${a.name}</span>
+          <span class="font-semibold text-gray-900 dark:text-gray-100">$${a.cost}/mo</span>
+          <button data-idx="${i}" class="remove-custom text-red-500 hover:text-red-700 text-xs px-2 py-0.5 border border-red-200 dark:border-red-800 rounded">✕</button>
+        </div>`
+      ).join('');
+
+      document.querySelectorAll('.remove-custom').forEach(btn => {
+        btn.addEventListener('click', () => {
+          customApps.splice(parseInt(btn.dataset.idx), 1);
+          renderCustomApps();
+          updateSummary();
+        });
+      });
+    }
+
+    document.getElementById('addCustomBtn').addEventListener('click', () => {
+      const name = document.getElementById('customName').value.trim();
+      const cost = parseFloat(document.getElementById('customCost').value) || 0;
+      if (!name) return;
+      customApps.push({ id: 'custom_' + (++customCounter), name, cost });
+      document.getElementById('customName').value = '';
+      document.getElementById('customCost').value = '';
+      renderCustomApps();
+      updateSummary();
+    });
+
+    document.getElementById('revenue').addEventListener('input', updateSummary);
+
+    renderCategories();
+    updateSummary();
+  </script>
+</Base>
