@@ -6,6 +6,8 @@ description: "Boost your Shopify store speed in 2026. Practical steps to cut loa
 author: "Alex Morgan"
 tags: ["shopify speed optimization"]
 seoTitle: "Shopify Speed Optimization: Faster Stores in 2026"
+heroImage: "/images/shopify-speed-optimization/hero.jpg"
+heroImageAlt: "Shopify store loading quickly on mobile phone screen"
 ---
 
 # Shopify Speed Optimization: Faster Stores in 2026
