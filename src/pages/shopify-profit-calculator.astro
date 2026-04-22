@@ -317,6 +317,32 @@ const faqs = [
           </div>
         </div>
 
+        <!-- Email capture card -->
+        <div class="border border-blue-200 dark:border-blue-800 rounded-2xl p-5 bg-blue-50 dark:bg-blue-950">
+          <div id="ec-form-wrap-pc">
+            <p class="text-sm font-semibold text-blue-900 dark:text-blue-200 mb-1">📬 Shopify Profit Weekly</p>
+            <p class="text-xs text-blue-700 dark:text-blue-300 mb-3 leading-relaxed">One actionable margin tip per week. Free, unsubscribe any time.</p>
+            <form id="ec-form-pc" class="space-y-2">
+              <input type="email" id="ec-email-pc" required placeholder="you@yourbrand.com"
+                class="w-full px-3 py-2 text-sm rounded-lg border border-blue-300 dark:border-blue-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+              <label class="flex items-start gap-2 text-xs text-blue-800 dark:text-blue-200 cursor-pointer">
+                <input type="checkbox" id="ec-nl-pc" class="mt-0.5 accent-blue-600" />
+                <span>Also send me weekly profit tips (newsletter)</span>
+              </label>
+              <button type="submit" id="ec-btn-pc"
+                class="w-full py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition">
+                Save my results →
+              </button>
+            </form>
+            <p class="text-xs text-blue-500 dark:text-blue-400 mt-2">No spam · <a href="/privacy/" class="underline">Privacy policy</a></p>
+          </div>
+          <div id="ec-success-pc" class="hidden text-center py-2">
+            <p class="text-sm font-semibold text-green-700 dark:text-green-400">✓ Check your inbox!</p>
+            <p class="text-xs text-green-600 dark:text-green-400 mt-1">Results saved · confirmation sent</p>
+          </div>
+          <div id="ec-error-pc" class="hidden text-xs text-red-600 dark:text-red-400 mt-2"></div>
+        </div>
+
       </div>
     </div>
   </div>
@@ -895,4 +921,34 @@ activatePlan('basic');
 activateBilling('monthly');
 activateProc('shopify');
 recalc();
+
+// ── Email capture ──────────────────────────────────────────────────────────
+document.getElementById('ec-form-pc')!.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const emailEl = document.getElementById('ec-email-pc') as HTMLInputElement;
+  const nlEl = document.getElementById('ec-nl-pc') as HTMLInputElement;
+  const btnEl = document.getElementById('ec-btn-pc') as HTMLButtonElement;
+  const errEl = document.getElementById('ec-error-pc')!;
+  btnEl.disabled = true;
+  btnEl.textContent = 'Saving…';
+  errEl.classList.add('hidden');
+  try {
+    const res = await fetch('/api/subscribe', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: emailEl.value, source: 'profit-calculator', newsletter: nlEl.checked }),
+    });
+    if (res.ok) {
+      document.getElementById('ec-form-wrap-pc')!.classList.add('hidden');
+      document.getElementById('ec-success-pc')!.classList.remove('hidden');
+    } else {
+      throw new Error('Server error');
+    }
+  } catch {
+    btnEl.disabled = false;
+    btnEl.textContent = 'Save my results →';
+    errEl.textContent = 'Something went wrong — please try again.';
+    errEl.classList.remove('hidden');
+  }
+});
 </script>

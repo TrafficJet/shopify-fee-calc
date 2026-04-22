@@ -290,6 +290,34 @@ const faqs = [
       <div id="savings-rows" class="divide-y dark:divide-gray-700"></div>
     </div>
 
+    <!-- Email capture -->
+    <div class="border border-blue-200 dark:border-blue-800 rounded-xl p-5 mb-6 bg-blue-50 dark:bg-blue-950 print:hidden">
+      <div id="ec-form-wrap-hf">
+        <p class="text-sm font-semibold text-blue-900 dark:text-blue-200 mb-1">📧 Save this report + get weekly margin tips</p>
+        <p class="text-xs text-blue-700 dark:text-blue-300 mb-3 leading-relaxed">We'll note your audit results. Check the box to also get <strong>Shopify Profit Weekly</strong> — one tip per week, free.</p>
+        <form id="ec-form-hf" class="flex flex-col gap-2">
+          <div class="flex gap-2">
+            <input type="email" id="ec-email-hf" required placeholder="you@yourbrand.com"
+              class="flex-1 min-w-0 px-3 py-2 text-sm rounded-lg border border-blue-300 dark:border-blue-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+            <button type="submit" id="ec-btn-hf"
+              class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition shrink-0">
+              Save →
+            </button>
+          </div>
+          <label class="flex items-start gap-2 text-xs text-blue-800 dark:text-blue-200 cursor-pointer">
+            <input type="checkbox" id="ec-nl-hf" class="mt-0.5 accent-blue-600" />
+            <span>Also subscribe to Shopify Profit Weekly (1 email/week)</span>
+          </label>
+        </form>
+        <p class="text-xs text-blue-500 dark:text-blue-400 mt-2">No spam · <a href="/privacy/" class="underline">Privacy policy</a></p>
+      </div>
+      <div id="ec-success-hf" class="hidden">
+        <p class="text-sm font-semibold text-green-700 dark:text-green-400">✓ Done! Check your inbox.</p>
+        <p class="text-xs text-green-600 dark:text-green-400 mt-1">Audit noted · confirmation sent</p>
+      </div>
+      <div id="ec-error-hf" class="hidden text-xs text-red-600 dark:text-red-400 mt-2"></div>
+    </div>
+
     <!-- Actions -->
     <div class="flex gap-3 print:hidden">
       <button id="restart-btn" class="px-5 py-2.5 border dark:border-gray-600 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">← Start Over</button>
@@ -780,5 +808,35 @@ const faqs = [
     }
 
     loadFromUrl();
+
+    // ── Email capture ────────────────────────────────────────────────────────
+    document.getElementById('ec-form-hf')!.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const emailEl = document.getElementById('ec-email-hf') as HTMLInputElement;
+      const nlEl = document.getElementById('ec-nl-hf') as HTMLInputElement;
+      const btnEl = document.getElementById('ec-btn-hf') as HTMLButtonElement;
+      const errEl = document.getElementById('ec-error-hf')!;
+      btnEl.disabled = true;
+      btnEl.textContent = '…';
+      errEl.classList.add('hidden');
+      try {
+        const res = await fetch('/api/subscribe', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: emailEl.value, source: 'hidden-fees-audit', newsletter: nlEl.checked }),
+        });
+        if (res.ok) {
+          document.getElementById('ec-form-wrap-hf')!.classList.add('hidden');
+          document.getElementById('ec-success-hf')!.classList.remove('hidden');
+        } else {
+          throw new Error('Server error');
+        }
+      } catch {
+        btnEl.disabled = false;
+        btnEl.textContent = 'Save →';
+        errEl.textContent = 'Something went wrong — please try again.';
+        errEl.classList.remove('hidden');
+      }
+    });
   </script>
 </Base>
