@@ -1,0 +1,361 @@
+---
+import Base from '../layouts/Base.astro';
+
+const faqSchema = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    { "@type": "Question", "name": "What is a good LTV:CAC ratio for a Shopify store?",
+      "acceptedAnswer": { "@type": "Answer", "text": "A healthy LTV:CAC ratio for ecommerce is 3:1 or higher — meaning each customer generates 3× what it cost to acquire them. Below 1:1 you're losing money on every customer. Between 1:1 and 3:1 is marginal: you're profitable but have little room for error. Above 5:1 often means you're under-investing in acquisition and leaving growth on the table." } },
+    { "@type": "Question", "name": "How do I calculate LTV for my Shopify store?",
+      "acceptedAnswer": { "@type": "Answer", "text": "LTV = Average Order Value × Purchase Frequency (orders/year) × Gross Margin % × Customer Lifespan (years). Example: $85 AOV × 3 orders/year × 40% margin × 2 years = $204 LTV. Use your Shopify Analytics 'returning customers' data for purchase frequency, and cohort analysis for lifespan estimates." } },
+    { "@type": "Question", "name": "How do I calculate CAC for a Shopify store?",
+      "acceptedAnswer": { "@type": "Answer", "text": "CAC = Total Marketing Spend ÷ New Customers Acquired. Include all paid channels: Meta Ads, Google Ads, TikTok, influencer fees, and agency costs. Don't include organic or referral — those customers have a near-zero CAC. Shopify Analytics shows new vs returning customers; filter by first purchase date to isolate new acquisitions." } },
+    { "@type": "Question", "name": "What is CAC payback period and why does it matter?",
+      "acceptedAnswer": { "@type": "Answer", "text": "CAC payback period = CAC ÷ (Monthly gross profit per customer). It tells you how many months until a customer has paid back their acquisition cost. For bootstrapped Shopify stores, target under 6 months. Funded stores can tolerate 12–18 months. A 24-month payback strains cash flow — you're essentially lending money to customers at zero interest." } },
+    { "@type": "Question", "name": "How can I improve my LTV:CAC ratio on Shopify?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Three levers: (1) Increase LTV — email/SMS sequences to drive repeat purchases, subscriptions, AOV upsells. (2) Reduce CAC — improve conversion rate (better product pages, checkout optimization), improve ad creative, add referral programs. (3) Improve margin — negotiate COGS, switch to Shopify Payments, remove low-ROI apps. The fastest lever is usually email retention: a 5% increase in repeat purchase rate can boost LTV by 25–30%." } },
+    { "@type": "Question", "name": "Should I include Shopify plan fees in my CAC calculation?",
+      "acceptedAnswer": { "@type": "Answer", "text": "No — Shopify plan fees are fixed overhead, not variable acquisition costs. Include them in your gross margin or operating cost calculation instead. CAC should only include variable marketing spend directly tied to acquiring new customers. However, Shopify's transaction fees do affect your gross margin, which flows into LTV — so enter your true net margin after payment processing." } },
+  ]
+});
+
+const appSchema = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "LTV:CAC Calculator for Shopify",
+  "description": "Calculate Customer Lifetime Value and Customer Acquisition Cost ratio for your Shopify store. Find your payback period, net LTV, and benchmarks. Free 2026.",
+  "applicationCategory": "BusinessApplication",
+  "operatingSystem": "Web",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+  "url": "https://shopify-fee-calc.com/ltv-cac-calculator/"
+});
+
+const faqs = [
+  { q: "What is a good LTV:CAC ratio for a Shopify store?",
+    a: "A healthy LTV:CAC ratio for ecommerce is 3:1 or higher — each customer generates 3× their acquisition cost. Below 1:1 you're losing money on every customer. Between 1–3× is marginal. Above 5:1 often means you're under-investing in growth and leaving revenue on the table." },
+  { q: "How do I calculate LTV for my Shopify store?",
+    a: "LTV = AOV × Purchase Frequency (orders/year) × Gross Margin % × Customer Lifespan (years). Example: $85 AOV × 3 orders/year × 40% margin × 2 years = $204 LTV. Use Shopify Analytics 'returning customers' for frequency and cohort analysis for lifespan estimates." },
+  { q: "How do I calculate CAC for a Shopify store?",
+    a: "CAC = Total Marketing Spend ÷ New Customers Acquired per month. Include all paid channels (Meta, Google, TikTok, influencer fees). Don't include organic — those customers have near-zero CAC. Shopify Analytics shows new vs returning customers." },
+  { q: "What is CAC payback period and why does it matter?",
+    a: "CAC payback = CAC ÷ (Monthly gross profit per customer). It tells you how many months until a customer pays back their acquisition cost. Target under 6 months for bootstrapped stores; funded stores can tolerate 12–18 months. Beyond 24 months strains cash flow significantly." },
+  { q: "How can I improve my LTV:CAC ratio on Shopify?",
+    a: "Three levers: (1) Increase LTV — email/SMS sequences, subscriptions, AOV upsells. (2) Reduce CAC — improve conversion rate, ad creative, add referral programs. (3) Improve margin — negotiate COGS, switch to Shopify Payments, remove low-ROI apps. Email retention is usually the fastest lever." },
+  { q: "Should I include Shopify plan fees in my CAC calculation?",
+    a: "No — plan fees are fixed overhead, not variable acquisition costs. Include them in gross margin or operating costs. CAC should only include variable spend directly tied to acquiring new customers. However, payment processing fees do affect gross margin, which flows into LTV." },
+];
+---
+<Base
+  title="LTV:CAC Calculator for Shopify — Customer Lifetime Value vs Acquisition Cost (Free 2026)"
+  description="Calculate your Shopify store's LTV:CAC ratio, payback period, and net LTV. Enter AOV, purchase frequency, gross margin, and ad spend to benchmark your unit economics."
+  noWebAppSchema={true}
+>
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={faqSchema} />
+    <script type="application/ld+json" set:html={appSchema} />
+  </Fragment>
+
+  <!-- Tailwind safelist -->
+  <div class="hidden bg-red-50 dark:bg-red-950 border-red-300 dark:border-red-700 text-red-700 dark:text-red-400 bg-orange-50 dark:bg-orange-950 border-orange-300 dark:border-orange-700 text-orange-700 dark:text-orange-400 bg-yellow-50 dark:bg-yellow-950 border-yellow-300 dark:border-yellow-700 text-yellow-700 dark:text-yellow-400 bg-green-50 dark:bg-green-950 border-green-300 dark:border-green-700 text-green-700 dark:text-green-400 bg-blue-50 dark:bg-blue-950 border-blue-300 dark:border-blue-700 text-blue-700 dark:text-blue-400 text-gray-500 dark:text-gray-400 font-semibold text-sm text-xs text-3xl"></div>
+
+  <h1 class="text-3xl font-bold mb-2">LTV:CAC Calculator</h1>
+  <p class="text-gray-600 dark:text-gray-400 mb-8 max-w-2xl">
+    Calculate your Shopify store's Customer Lifetime Value (LTV), Customer Acquisition Cost (CAC), LTV:CAC ratio, and payback period. Benchmark your unit economics against ecommerce targets.
+  </p>
+
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+    <!-- LTV Inputs -->
+    <div class="border border-gray-200 dark:border-gray-700 rounded-xl p-6">
+      <h2 class="text-lg font-semibold mb-4 text-gray-900 dark:text-gray-100">📈 Lifetime Value Inputs</h2>
+      <div class="space-y-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Average Order Value ($)</label>
+          <input id="aov" type="number" value="85" min="1" step="5"
+            class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Purchase Frequency (orders/year)</label>
+          <input id="freq" type="number" value="2.5" min="0.1" step="0.1"
+            class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+          <p class="text-xs text-gray-400 mt-1">Shopify Analytics → Returning customers report</p>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Gross Margin (%)</label>
+          <input id="margin" type="number" value="40" min="1" max="100" step="1"
+            class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+          <p class="text-xs text-gray-400 mt-1">After COGS + payment fees, before marketing</p>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Average Customer Lifespan (years)</label>
+          <input id="lifespan" type="number" value="2" min="0.1" step="0.1"
+            class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Annual Discount Rate (%) <span class="text-gray-400 font-normal">optional</span></label>
+          <input id="discount" type="number" value="10" min="0" max="50" step="1"
+            class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+          <p class="text-xs text-gray-400 mt-1">Use 0 for simple LTV; 10% is a common SaaS/eCom default</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- CAC Inputs -->
+    <div class="border border-gray-200 dark:border-gray-700 rounded-xl p-6">
+      <h2 class="text-lg font-semibold mb-4 text-gray-900 dark:text-gray-100">💸 Acquisition Cost Inputs</h2>
+      <div class="space-y-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Monthly Marketing Spend ($)</label>
+          <input id="adSpend" type="number" value="5000" min="0" step="100"
+            class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+          <p class="text-xs text-gray-400 mt-1">All paid channels: Meta, Google, TikTok, influencers, etc.</p>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">New Customers Acquired / Month</label>
+          <input id="newCust" type="number" value="120" min="1" step="5"
+            class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+          <p class="text-xs text-gray-400 mt-1">Shopify Analytics → Customers → New customers</p>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Monthly Overhead Costs ($) <span class="text-gray-400 font-normal">optional</span></label>
+          <input id="overhead" type="number" value="500" min="0" step="50"
+            class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+          <p class="text-xs text-gray-400 mt-1">Plan fee, apps, staff — included in fully-loaded CAC</p>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Blended CAC Attribution</label>
+          <select id="attribution"
+            class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <option value="paid" selected>Paid only (ad spend ÷ new customers)</option>
+            <option value="fully">Fully-loaded (ad spend + overhead ÷ new customers)</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Results -->
+  <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6" id="metricCards"></div>
+
+  <!-- Verdict banner -->
+  <div id="verdict" class="hidden rounded-xl p-5 mb-8 border-2"></div>
+
+  <!-- Benchmarks -->
+  <div class="mb-8">
+    <h2 class="text-xl font-semibold mb-3">LTV:CAC Benchmark Guide</h2>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm border-collapse">
+        <thead>
+          <tr class="bg-gray-50 dark:bg-gray-800">
+            <th class="text-left px-4 py-2 font-semibold border border-gray-200 dark:border-gray-700">LTV:CAC Ratio</th>
+            <th class="text-left px-4 py-2 font-semibold border border-gray-200 dark:border-gray-700">Signal</th>
+            <th class="text-left px-4 py-2 font-semibold border border-gray-200 dark:border-gray-700">What It Means</th>
+            <th class="text-left px-4 py-2 font-semibold border border-gray-200 dark:border-gray-700">Action</th>
+          </tr>
+        </thead>
+        <tbody id="benchmarkBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- CAC sensitivity -->
+  <div class="mb-8">
+    <h2 class="text-xl font-semibold mb-3">LTV:CAC Sensitivity — CAC vs Margin</h2>
+    <p class="text-sm text-gray-500 dark:text-gray-400 mb-3">How your ratio changes as you vary gross margin (columns) at different CAC levels (rows). Your current values are highlighted.</p>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm border-collapse" id="sensitivityTable"></table>
+    </div>
+  </div>
+
+  <!-- Improvement tips -->
+  <div id="tipsSection" class="mb-10 border border-gray-200 dark:border-gray-700 rounded-xl p-6">
+    <h2 class="text-lg font-semibold mb-4 text-gray-900 dark:text-gray-100">Improvement Playbook</h2>
+    <div id="tipsContent" class="grid grid-cols-1 sm:grid-cols-3 gap-4"></div>
+  </div>
+
+  <!-- FAQ -->
+  <section class="mb-10">
+    <h2 class="text-2xl font-bold mb-6">Frequently Asked Questions</h2>
+    <div class="space-y-4">
+      {faqs.map(({q, a}) => (
+        <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-5">
+          <h3 class="font-semibold text-gray-900 dark:text-gray-100 mb-2">{q}</h3>
+          <p class="text-gray-600 dark:text-gray-400 text-sm">{a}</p>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- Content -->
+  <section class="text-sm text-gray-600 dark:text-gray-400 space-y-4 mb-10">
+    <h2 class="text-xl font-bold text-gray-900 dark:text-gray-100">Understanding LTV and CAC for Shopify Stores</h2>
+    <p>LTV (Customer Lifetime Value) and CAC (Customer Acquisition Cost) are the two most important metrics in ecommerce unit economics. Together, they tell you whether your business model is fundamentally profitable — regardless of revenue growth.</p>
+    <p><strong class="text-gray-900 dark:text-gray-100">The LTV formula:</strong> LTV = AOV × Purchase Frequency × Gross Margin × Customer Lifespan. A more sophisticated version applies a discount rate to account for the time value of money — a customer who buys over 5 years is worth less in today's dollars than a customer who buys the same amount in 1 year.</p>
+    <p><strong class="text-gray-900 dark:text-gray-100">Why gross margin matters so much:</strong> Increasing gross margin from 35% to 45% (by negotiating COGS or switching to Shopify Payments) increases LTV by 29% with no other changes. It's usually faster to improve margin than to increase purchase frequency.</p>
+    <p><strong class="text-gray-900 dark:text-gray-100">Blended vs channel-specific CAC:</strong> This calculator uses blended CAC (total spend ÷ total new customers). For channel optimization, calculate CAC per channel (Meta-only spend ÷ Meta-attributed new customers). Your blended CAC should be below LTV/3 to maintain healthy unit economics across your whole acquisition mix.</p>
+    <p><strong class="text-gray-900 dark:text-gray-100">Payback period for cash flow:</strong> A low LTV:CAC ratio isn't just about long-term profitability — it's about cash flow. If your CAC payback is 18 months, you're funding 18 months of customer value before you break even. That requires capital. Shortening payback to 6 months means you can reinvest revenue into acquisition much faster.</p>
+  </section>
+
+  <!-- Cross-links -->
+  <section class="border-t border-gray-200 dark:border-gray-700 pt-6">
+    <p class="text-sm text-gray-500 dark:text-gray-400 mb-3">Related calculators:</p>
+    <div class="flex flex-wrap gap-3">
+      <a href="/shopify-profit-calculator/" class="text-sm text-blue-600 dark:text-blue-400 hover:underline">Real Profit Calculator</a>
+      <a href="/breakeven-roas-calculator/" class="text-sm text-blue-600 dark:text-blue-400 hover:underline">Breakeven ROAS Calculator</a>
+      <a href="/shopify-plan-comparison/" class="text-sm text-blue-600 dark:text-blue-400 hover:underline">Plan Comparison Calculator</a>
+      <a href="/shopify-hidden-fees-audit/" class="text-sm text-blue-600 dark:text-blue-400 hover:underline">Hidden Fees Audit</a>
+    </div>
+  </section>
+
+  <script>
+    const BENCHMARKS = [
+      { min: 0,   max: 1,   label: '< 1:1',   signal: '🔴 Critical',  color: 'red',    meaning: 'Losing money on every customer acquired', action: 'Pause paid ads. Fix margin or retention first.' },
+      { min: 1,   max: 2,   label: '1–2:1',   signal: '🟠 Marginal', color: 'orange', meaning: 'Profitable but razor-thin — any cost increase breaks the model', action: 'Reduce CAC via CRO or improve retention urgently.' },
+      { min: 2,   max: 3,   label: '2–3:1',   signal: '🟡 Decent',   color: 'yellow', meaning: 'Sustainable but below ecommerce benchmark of 3:1', action: 'Optimize one lever: frequency, margin, or CAC.' },
+      { min: 3,   max: 5,   label: '3–5:1',   signal: '🟢 Healthy',  color: 'green',  meaning: 'Strong unit economics — invest in scaling acquisition', action: 'Scale paid channels. Maintain current margins.' },
+      { min: 5,   max: 999, label: '5:1+',    signal: '🔵 Excellent', color: 'blue',   meaning: 'Exceptional — possibly under-investing in growth', action: 'Increase ad spend. Test new acquisition channels.' },
+    ];
+
+    const colorCls = {
+      red:    { bg: 'bg-red-50 dark:bg-red-950',    border: 'border-red-300 dark:border-red-700',    text: 'text-red-700 dark:text-red-400' },
+      orange: { bg: 'bg-orange-50 dark:bg-orange-950', border: 'border-orange-300 dark:border-orange-700', text: 'text-orange-700 dark:text-orange-400' },
+      yellow: { bg: 'bg-yellow-50 dark:bg-yellow-950', border: 'border-yellow-300 dark:border-yellow-700', text: 'text-yellow-700 dark:text-yellow-400' },
+      green:  { bg: 'bg-green-50 dark:bg-green-950',  border: 'border-green-300 dark:border-green-700',  text: 'text-green-700 dark:text-green-400' },
+      blue:   { bg: 'bg-blue-50 dark:bg-blue-950',    border: 'border-blue-300 dark:border-blue-700',    text: 'text-blue-700 dark:text-blue-400' },
+    };
+
+    function fmt(n, dec=2) { return '$' + n.toLocaleString('en-US', { minimumFractionDigits: dec, maximumFractionDigits: dec }); }
+    function fmtR(n) { return n.toFixed(2) + ':1'; }
+
+    function calcLTV(aov, freq, margin, lifespan, discountRate) {
+      if (discountRate === 0) return aov * freq * (margin / 100) * lifespan;
+      // Discounted LTV: sum of annual cash flows
+      const annualCF = aov * freq * (margin / 100);
+      const r = discountRate / 100;
+      const n = lifespan;
+      // PV of annuity
+      return annualCF * (1 - Math.pow(1 + r, -n)) / r;
+    }
+
+    function getBenchmark(ratio) {
+      return BENCHMARKS.find(b => ratio >= b.min && ratio < b.max) || BENCHMARKS[BENCHMARKS.length - 1];
+    }
+
+    function calculate() {
+      const aov = parseFloat(document.getElementById('aov').value) || 0;
+      const freq = parseFloat(document.getElementById('freq').value) || 0;
+      const margin = parseFloat(document.getElementById('margin').value) || 0;
+      const lifespan = parseFloat(document.getElementById('lifespan').value) || 0;
+      const discount = parseFloat(document.getElementById('discount').value) || 0;
+      const adSpend = parseFloat(document.getElementById('adSpend').value) || 0;
+      const newCust = parseFloat(document.getElementById('newCust').value) || 1;
+      const overhead = parseFloat(document.getElementById('overhead').value) || 0;
+      const attribution = document.getElementById('attribution').value;
+
+      const ltv = calcLTV(aov, freq, margin, lifespan, discount);
+      const cac = attribution === 'paid'
+        ? adSpend / newCust
+        : (adSpend + overhead) / newCust;
+      const ratio = cac > 0 ? ltv / cac : 0;
+      const netLTV = ltv - cac;
+      const monthlyGP = aov * freq / 12 * (margin / 100);
+      const payback = monthlyGP > 0 ? cac / monthlyGP : 0;
+
+      const bench = getBenchmark(ratio);
+      const col = colorCls[bench.color];
+
+      // Metric cards
+      const cards = [
+        { label: 'Customer LTV', value: fmt(ltv), sub: discount > 0 ? `Discounted @ ${discount}%` : 'Simple LTV' },
+        { label: 'CAC', value: fmt(cac), sub: attribution === 'paid' ? 'Paid-only' : 'Fully-loaded' },
+        { label: 'LTV:CAC Ratio', value: fmtR(ratio), sub: bench.signal, highlight: true },
+        { label: 'Payback Period', value: payback.toFixed(1) + ' mo', sub: payback <= 6 ? '✓ Healthy' : payback <= 12 ? '⚠ Moderate' : '⚠ Long' },
+      ];
+
+      document.getElementById('metricCards').innerHTML = cards.map((c, i) => `
+        <div class="border-2 rounded-xl p-4 ${i === 2 ? col.border + ' ' + col.bg : 'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900'}">
+          <div class="text-xs text-gray-500 dark:text-gray-400 mb-1">${c.label}</div>
+          <div class="text-2xl font-bold ${i === 2 ? col.text : 'text-gray-900 dark:text-gray-100'}">${c.value}</div>
+          <div class="text-xs mt-1 ${i === 2 ? col.text : 'text-gray-400'}">${c.sub}</div>
+        </div>`).join('');
+
+      // Verdict
+      const verdictEl = document.getElementById('verdict');
+      verdictEl.className = `rounded-xl p-5 mb-8 border-2 ${col.border} ${col.bg}`;
+      verdictEl.innerHTML = `
+        <div class="font-bold text-lg ${col.text} mb-1">${bench.signal} — LTV:CAC ${fmtR(ratio)}</div>
+        <p class="text-sm ${col.text} mb-2">${bench.meaning}. ${bench.action}</p>
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-3 text-sm">
+          <div><span class="text-gray-500 dark:text-gray-400">LTV</span><br/><strong class="text-gray-900 dark:text-gray-100">${fmt(ltv)}</strong></div>
+          <div><span class="text-gray-500 dark:text-gray-400">CAC</span><br/><strong class="text-gray-900 dark:text-gray-100">${fmt(cac)}</strong></div>
+          <div><span class="text-gray-500 dark:text-gray-400">Net LTV</span><br/><strong class="${netLTV >= 0 ? 'text-green-700 dark:text-green-400' : 'text-red-700 dark:text-red-400'}">${fmt(netLTV)}</strong></div>
+          <div><span class="text-gray-500 dark:text-gray-400">Payback</span><br/><strong class="text-gray-900 dark:text-gray-100">${payback.toFixed(1)} months</strong></div>
+        </div>`;
+      verdictEl.classList.remove('hidden');
+
+      // Benchmark table
+      document.getElementById('benchmarkBody').innerHTML = BENCHMARKS.map(b => {
+        const isCurrent = ratio >= b.min && ratio < b.max;
+        const c = colorCls[b.color];
+        return `<tr class="${isCurrent ? c.bg : 'hover:bg-gray-50 dark:hover:bg-gray-800'}">
+          <td class="px-4 py-2 border border-gray-200 dark:border-gray-700 font-semibold ${isCurrent ? c.text : ''}">${b.label} ${isCurrent ? '← you' : ''}</td>
+          <td class="px-4 py-2 border border-gray-200 dark:border-gray-700">${b.signal}</td>
+          <td class="px-4 py-2 border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400">${b.meaning}</td>
+          <td class="px-4 py-2 border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400">${b.action}</td>
+        </tr>`;
+      }).join('');
+
+      // Sensitivity table: rows = CAC levels, cols = margin %
+      const cacLevels = [cac * 0.5, cac * 0.75, cac, cac * 1.25, cac * 1.5].map(v => Math.round(v));
+      const marginLevels = [20, 30, 40, 50, 60].filter(m => m > 0 && m <= 100);
+      const table = document.getElementById('sensitivityTable');
+      const thead = `<thead><tr class="bg-gray-50 dark:bg-gray-800">
+        <th class="px-3 py-2 text-left font-semibold border border-gray-200 dark:border-gray-700 text-xs">CAC \\ Margin</th>
+        ${marginLevels.map(m => `<th class="px-3 py-2 text-center font-semibold border border-gray-200 dark:border-gray-700 text-xs ${Math.abs(m - margin) < 5 ? 'bg-blue-100 dark:bg-blue-900' : ''}">${m}%</th>`).join('')}
+      </tr></thead>`;
+      const tbody = cacLevels.map(c2 => {
+        const isCurrentCAC = Math.abs(c2 - cac) < cac * 0.15;
+        return `<tr class="${isCurrentCAC ? 'bg-blue-50 dark:bg-blue-950' : 'hover:bg-gray-50 dark:hover:bg-gray-800'}">
+          <td class="px-3 py-2 border border-gray-200 dark:border-gray-700 font-medium text-xs">${fmt(c2, 0)}</td>
+          ${marginLevels.map(m => {
+            const ltvM = calcLTV(aov, freq, m, lifespan, discount);
+            const r = c2 > 0 ? ltvM / c2 : 0;
+            const bm = getBenchmark(r);
+            const cm = colorCls[bm.color];
+            return `<td class="px-3 py-2 text-center border border-gray-200 dark:border-gray-700 text-xs ${cm.text} font-medium">${fmtR(r)}</td>`;
+          }).join('')}
+        </tr>`;
+      }).join('');
+      table.innerHTML = thead + '<tbody>' + tbody + '</tbody>';
+
+      // Tips
+      const tips = [];
+      if (ratio < 3) {
+        tips.push({ icon: '📧', title: 'Add Email Retention', body: 'A post-purchase flow with 3–5 emails can increase repeat purchase rate by 20–30%, directly boosting LTV without any additional CAC.' });
+        tips.push({ icon: '💳', title: 'Reduce Processing Fees', body: `Switching to Shopify Payments or negotiating COGS can add 2–5% to gross margin. At your ${fmt(aov)} AOV and ${freq}x frequency, each margin point adds ~${fmt(aov * freq * lifespan * 0.01)} LTV.` });
+      }
+      if (payback > 6) {
+        tips.push({ icon: '🎯', title: 'Shorten Payback Period', body: 'Target customers with higher immediate AOV, or add a post-purchase upsell. Shortening payback from 12 to 6 months frees capital to reinvest in acquisition 2× faster.' });
+      }
+      if (ratio >= 3) {
+        tips.push({ icon: '📈', title: 'Scale Paid Acquisition', body: `Your LTV:CAC of ${fmtR(ratio)} is healthy. You can likely double ad spend without breaking unit economics — test new channels (TikTok, Pinterest) while monitoring CAC.` });
+      }
+      tips.push({ icon: '🔁', title: 'Add Subscriptions', body: 'Even 10% of customers on a monthly subscription increases purchase frequency significantly. Subscription LTV is typically 2–4× one-time buyer LTV.' });
+      tips.push({ icon: '🛒', title: 'Increase AOV', body: `Each $10 increase in AOV adds ~${fmt(10 * freq * (margin/100) * lifespan)} to LTV. Bundles, cross-sells, and free shipping thresholds are the fastest AOV levers.` });
+
+      document.getElementById('tipsContent').innerHTML = tips.slice(0, 3).map(t =>
+        `<div class="bg-gray-50 dark:bg-gray-800 rounded-lg p-4">
+          <div class="text-2xl mb-2">${t.icon}</div>
+          <div class="font-semibold text-sm text-gray-900 dark:text-gray-100 mb-1">${t.title}</div>
+          <p class="text-xs text-gray-600 dark:text-gray-400">${t.body}</p>
+        </div>`).join('');
+    }
+
+    document.querySelectorAll('#aov, #freq, #margin, #lifespan, #discount, #adSpend, #newCust, #overhead, #attribution').forEach(el => {
+      el.addEventListener('input', calculate);
+      el.addEventListener('change', calculate);
+    });
+
+    calculate();
+  </script>
+</Base>
