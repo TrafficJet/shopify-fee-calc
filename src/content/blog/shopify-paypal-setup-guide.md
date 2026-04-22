@@ -6,6 +6,8 @@ description: "Set up PayPal on Shopify in minutes. Our 2026 step-by-step guide c
 author: "Alex Morgan"
 tags: ["shopify paypal setup guide"]
 seoTitle: "Shopify PayPal Setup Guide: Step-by-Step (2026)"
+heroImage: "/images/shopify-paypal-setup-guide/hero.jpg"
+heroImageAlt: "Shopify admin dashboard showing payment settings configuration screen"
 ---
 
 # Shopify PayPal Setup Guide: Step-by-Step (2026)
