@@ -1,0 +1,380 @@
+---
+import Base from '../layouts/Base.astro';
+
+const faqSchema = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    { "@type": "Question", "name": "Which Shopify plan is cheapest overall?",
+      "acceptedAnswer": { "@type": "Answer", "text": "It depends on your monthly revenue. Basic ($29/mo annual) is cheapest at low volumes. Shopify ($79/mo) saves money once your monthly revenue exceeds ~$8,000 if using Shopify Payments, or ~$5,000 with a third-party processor. Advanced ($299/mo) makes sense above ~$100K/mo. Use this calculator to find your exact crossover point." } },
+    { "@type": "Question", "name": "When should I upgrade from Basic to Shopify plan?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Upgrade when the fee savings exceed the $50/mo cost difference. With Shopify Payments: Basic charges 2.9% vs Shopify's 2.6% — a 0.3% difference. The upgrade pays for itself at $50 ÷ 0.3% = ~$16,667/mo in revenue. With a third-party processor: Basic charges 2% vs Shopify's 1% — 1% difference. Upgrade pays off at $50 ÷ 1% = $5,000/mo." } },
+    { "@type": "Question", "name": "Does paying annually vs monthly matter for Shopify fees?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Yes. Annual billing saves 25% on plan fees: Basic goes from $39 to $29/mo, Shopify from $105 to $79/mo, Advanced from $399 to $299/mo. The transaction rates (Shopify Payments and 3rd-party fees) are identical regardless of billing cycle." } },
+    { "@type": "Question", "name": "What is Shopify's transaction fee and how do I avoid it?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Shopify charges a transaction fee (2% on Basic, 1% on Shopify, 0.5% on Advanced) when you use a third-party payment processor instead of Shopify Payments. To eliminate this fee entirely, use Shopify Payments. If Shopify Payments isn't available in your country or you need a specific processor, factor this fee into your plan decision — it often makes upgrading worthwhile at lower revenues." } },
+    { "@type": "Question", "name": "Is Shopify Plus worth the $2,300/month?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Shopify Plus becomes cost-competitive above ~$800K/mo in revenue. At that volume, the 0.15% third-party fee and 2.15% Shopify Payments rate save more than the price difference vs Advanced. Beyond cost, Plus includes unlimited staff, Shopify Flow automation, B2B features, and dedicated support — the non-fee benefits often justify it at $500K+/mo." } },
+    { "@type": "Question", "name": "What Shopify plan fees are included in the comparison?",
+      "acceptedAnswer": { "@type": "Answer", "text": "This calculator includes: plan subscription fee (annual or monthly billing), Shopify Payments processing rate (2.9%/2.6%/2.4%/2.15% + $0.30 per transaction), and third-party processor transaction fee (2%/1%/0.5%/0.15%). It does not include app subscriptions, custom domain, or shipping label costs, as those are the same across plans." } },
+  ]
+});
+
+const appSchema = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Shopify Plan Comparison Calculator",
+  "description": "Compare Shopify Basic, Shopify, Advanced, and Plus total monthly costs at your revenue level. Find the cheapest plan and exact upgrade break-even points. Free 2026.",
+  "applicationCategory": "BusinessApplication",
+  "operatingSystem": "Web",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+  "url": "https://shopify-fee-calc.com/shopify-plan-comparison/"
+});
+
+const faqs = [
+  { q: "Which Shopify plan is cheapest overall?",
+    a: "It depends on your monthly revenue. Basic ($29/mo annual) is cheapest at low volumes. Shopify ($79/mo) saves money once your revenue exceeds ~$8,000/mo with Shopify Payments, or ~$5,000/mo with a third-party processor. Advanced ($299/mo) makes sense above ~$100K/mo. Use this calculator to find your exact crossover point." },
+  { q: "When should I upgrade from Basic to Shopify plan?",
+    a: "Upgrade when fee savings exceed the $50/mo cost difference. With Shopify Payments (2.9% vs 2.6% = 0.3% gap): break-even at $50 ÷ 0.3% = ~$16,667/mo. With a third-party processor (2% vs 1% = 1% gap): break-even at $50 ÷ 1% = $5,000/mo revenue." },
+  { q: "Does paying annually vs monthly matter for Shopify fees?",
+    a: "Yes. Annual billing saves 25% on plan fees: Basic $39→$29/mo, Shopify $105→$79/mo, Advanced $399→$299/mo. Transaction and processing rates are identical regardless of billing cycle." },
+  { q: "What is Shopify's transaction fee and how do I avoid it?",
+    a: "Shopify charges 2% (Basic), 1% (Shopify), or 0.5% (Advanced) when you use a third-party processor. To eliminate this fee, use Shopify Payments. If unavailable in your country, factor this into your plan decision — it often makes upgrading worthwhile at lower revenues." },
+  { q: "Is Shopify Plus worth the $2,300/month?",
+    a: "Shopify Plus becomes cost-competitive above ~$800K/mo in revenue. Beyond cost, Plus includes unlimited staff, Shopify Flow automation, B2B features, and dedicated support — the non-fee benefits often justify it at $500K+/mo." },
+  { q: "What fees are included in this comparison?",
+    a: "Plan subscription fee (annual or monthly), Shopify Payments processing rate + $0.30/order, and third-party transaction fee. Not included: app subscriptions, custom domain, or shipping label costs (same across plans)." },
+];
+
+const PLANS = [
+  { id: 'basic',    name: 'Basic',    monthly: 39,  annual: 29,  spRate: 0.029, spFixed: 0.30, txRate: 0.02,   color: 'gray' },
+  { id: 'shopify',  name: 'Shopify',  monthly: 105, annual: 79,  spRate: 0.026, spFixed: 0.30, txRate: 0.01,   color: 'blue' },
+  { id: 'advanced', name: 'Advanced', monthly: 399, annual: 299, spRate: 0.024, spFixed: 0.30, txRate: 0.005,  color: 'purple' },
+  { id: 'plus',     name: 'Plus',     monthly: 2300,annual: 2300,spRate: 0.0215,spFixed: 0.30, txRate: 0.0015, color: 'green' },
+];
+---
+<Base
+  title="Shopify Plan Comparison Calculator — Basic vs Shopify vs Advanced vs Plus (2026)"
+  description="Compare total monthly costs for all Shopify plans at your revenue level. Enter your sales volume, AOV, and payment processor to find the cheapest plan and exact upgrade break-even points."
+  noWebAppSchema={true}
+>
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={faqSchema} />
+    <script type="application/ld+json" set:html={appSchema} />
+  </Fragment>
+
+  <!-- Tailwind safelist -->
+  <div class="hidden bg-gray-50 dark:bg-gray-900 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 bg-blue-50 dark:bg-blue-950 border-blue-300 dark:border-blue-600 text-blue-700 dark:text-blue-300 bg-purple-50 dark:bg-purple-950 border-purple-300 dark:border-purple-600 text-purple-700 dark:text-purple-300 bg-green-50 dark:bg-green-950 border-green-300 dark:border-green-600 text-green-700 dark:text-green-300 ring-2 ring-blue-500 ring-purple-500 ring-green-500 ring-gray-400 font-bold text-sm text-xs"></div>
+
+  <h1 class="text-3xl font-bold mb-2">Shopify Plan Comparison Calculator</h1>
+  <p class="text-gray-600 dark:text-gray-400 mb-8 max-w-2xl">
+    Enter your monthly revenue and order details to see total monthly cost for Basic, Shopify, Advanced, and Plus — including plan fees, payment processing, and transaction charges. Find your cheapest plan instantly.
+  </p>
+
+  <!-- Inputs -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+    <div>
+      <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Monthly Revenue ($)</label>
+      <input id="revenue" type="number" value="20000" min="0" step="1000"
+        class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+    </div>
+    <div>
+      <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Average Order Value ($)</label>
+      <input id="aov" type="number" value="85" min="1" step="5"
+        class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+    </div>
+    <div>
+      <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Billing Cycle</label>
+      <select id="billing"
+        class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500">
+        <option value="annual" selected>Annual (save 25%)</option>
+        <option value="monthly">Monthly</option>
+      </select>
+    </div>
+    <div>
+      <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Payment Processor</label>
+      <select id="processor"
+        class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500">
+        <option value="shopify" selected>Shopify Payments</option>
+        <option value="third">Third-Party (+ tx fee)</option>
+        <option value="third_ext">3rd Party, own processing rates</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Third-party own rate row -->
+  <div id="extRateRow" class="hidden mb-6">
+    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Your Processor Rate (%) + Fixed fee (¢)</label>
+    <div class="flex gap-3 max-w-xs">
+      <input id="extRate" type="number" value="2.9" step="0.01" min="0" max="10" placeholder="e.g. 2.9"
+        class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+      <input id="extFixed" type="number" value="30" step="1" min="0" placeholder="e.g. 30"
+        class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+    </div>
+  </div>
+
+  <!-- Plan cards -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-8" id="planCards"></div>
+
+  <!-- Recommendation banner -->
+  <div id="recommendation" class="hidden rounded-xl p-4 mb-8 border-2 text-sm font-medium"></div>
+
+  <!-- Break-even table -->
+  <div class="mb-8">
+    <h2 class="text-xl font-semibold mb-3">Plan Upgrade Break-Even Points</h2>
+    <p class="text-sm text-gray-500 dark:text-gray-400 mb-3">Monthly revenue at which upgrading to the next plan starts saving money.</p>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm border-collapse">
+        <thead>
+          <tr class="bg-gray-50 dark:bg-gray-800">
+            <th class="text-left px-4 py-2 font-semibold border border-gray-200 dark:border-gray-700">Upgrade</th>
+            <th class="text-right px-4 py-2 font-semibold border border-gray-200 dark:border-gray-700">Extra Plan Cost/mo</th>
+            <th class="text-right px-4 py-2 font-semibold border border-gray-200 dark:border-gray-700">Fee Rate Saved</th>
+            <th class="text-right px-4 py-2 font-semibold border border-gray-200 dark:border-gray-700">Break-Even Revenue</th>
+            <th class="text-center px-4 py-2 font-semibold border border-gray-200 dark:border-gray-700">Worth It?</th>
+          </tr>
+        </thead>
+        <tbody id="breakEvenBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Revenue sensitivity table -->
+  <div class="mb-8">
+    <h2 class="text-xl font-semibold mb-3">Cheapest Plan by Revenue Level</h2>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm border-collapse">
+        <thead>
+          <tr class="bg-gray-50 dark:bg-gray-800">
+            <th class="text-left px-4 py-2 font-semibold border border-gray-200 dark:border-gray-700">Monthly Revenue</th>
+            <th class="text-right px-4 py-2 font-semibold border border-gray-200 dark:border-gray-700">Basic</th>
+            <th class="text-right px-4 py-2 font-semibold border border-gray-200 dark:border-gray-700">Shopify</th>
+            <th class="text-right px-4 py-2 font-semibold border border-gray-200 dark:border-gray-700">Advanced</th>
+            <th class="text-center px-4 py-2 font-semibold border border-gray-200 dark:border-gray-700">Winner</th>
+          </tr>
+        </thead>
+        <tbody id="sensitivityBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Feature comparison table -->
+  <div class="mb-10">
+    <h2 class="text-xl font-semibold mb-3">Full Plan Feature Comparison</h2>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm border-collapse">
+        <thead>
+          <tr class="bg-gray-50 dark:bg-gray-800">
+            <th class="text-left px-4 py-3 font-semibold border border-gray-200 dark:border-gray-700 w-44">Feature</th>
+            <th class="text-center px-4 py-3 font-semibold border border-gray-200 dark:border-gray-700">Basic<br/><span class="font-normal text-xs text-gray-500">$29/mo annual</span></th>
+            <th class="text-center px-4 py-3 font-semibold border border-gray-200 dark:border-gray-700">Shopify<br/><span class="font-normal text-xs text-gray-500">$79/mo annual</span></th>
+            <th class="text-center px-4 py-3 font-semibold border border-gray-200 dark:border-gray-700">Advanced<br/><span class="font-normal text-xs text-gray-500">$299/mo annual</span></th>
+            <th class="text-center px-4 py-3 font-semibold border border-gray-200 dark:border-gray-700">Plus<br/><span class="font-normal text-xs text-gray-500">$2,300/mo</span></th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
+          {[
+            ['Shopify Payments rate', '2.9% + 30¢', '2.6% + 30¢', '2.4% + 30¢', '2.15% + 30¢'],
+            ['3rd-party tx fee', '2.0%', '1.0%', '0.5%', '0.15%'],
+            ['Staff accounts', '2', '5', '15', 'Unlimited'],
+            ['Inventory locations', '10', '10', '10', '200'],
+            ['Reports', 'Basic', 'Standard', 'Advanced', 'Custom'],
+            ['Shopify Flow', '✗', '✗', '✗', '✓'],
+            ['B2B / wholesale', '✗', '✗', '✗', '✓'],
+            ['Checkout extensibility', '✗', '✗', '✓', '✓'],
+            ['Dedicated support', '✗', '✗', '✗', '✓'],
+          ].map(row => (
+            <tr class="hover:bg-gray-50 dark:hover:bg-gray-800">
+              <td class="px-4 py-2 font-medium text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700">{row[0]}</td>
+              {row.slice(1).map(cell => (
+                <td class="px-4 py-2 text-center text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700">{cell}</td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- FAQ -->
+  <section class="mb-10">
+    <h2 class="text-2xl font-bold mb-6">Frequently Asked Questions</h2>
+    <div class="space-y-4">
+      {faqs.map(({q, a}) => (
+        <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-5">
+          <h3 class="font-semibold text-gray-900 dark:text-gray-100 mb-2">{q}</h3>
+          <p class="text-gray-600 dark:text-gray-400 text-sm">{a}</p>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- Content -->
+  <section class="prose prose-gray dark:prose-invert max-w-none mb-10 text-sm text-gray-600 dark:text-gray-400 space-y-4">
+    <h2 class="text-xl font-bold text-gray-900 dark:text-gray-100">How to Choose the Right Shopify Plan</h2>
+    <p>The right Shopify plan isn't about features — it's about fee math. Every plan has a fixed monthly cost and a variable rate (payment processing + transaction fee). As revenue grows, the savings from lower variable rates eventually outweigh the higher plan cost.</p>
+    <p><strong class="text-gray-900 dark:text-gray-100">Using Shopify Payments:</strong> The rate difference between Basic and Shopify is 0.3% (2.9% vs 2.6%). You'd need to save $50/mo (the cost difference) from 0.3% savings — meaning you need $50 ÷ 0.003 = $16,667/mo in revenue. Below that, Basic wins. Above it, Shopify plan wins.</p>
+    <p><strong class="text-gray-900 dark:text-gray-100">Using a third-party processor:</strong> Transaction fees matter more. Basic charges 2% extra on every order — Shopify charges only 1%. That 1% gap means upgrading pays off at just $50 ÷ 0.01 = $5,000/mo. This is why high-volume merchants on third-party processors should be on Shopify plan or higher.</p>
+    <p><strong class="text-gray-900 dark:text-gray-100">Annual vs monthly billing:</strong> If your Shopify store is established and you're confident in your volume, annual billing saves 25% on plan fees. The Basic plan drops from $39 to $29/mo, saving $120/year. For Shopify plan: $312/year savings. For Advanced: $1,200/year. Annual billing effectively lowers your break-even point for plan upgrades.</p>
+    <p><strong class="text-gray-900 dark:text-gray-100">When does Shopify Plus make sense?</strong> Plus costs $2,300/mo — $2,001 more than Advanced. At Plus's 2.15% vs Advanced's 2.4% (0.25% gap), you'd need $2,001 ÷ 0.0025 = $800,400/mo in revenue for the fee math to justify Plus on processing rates alone. For merchants below that, Plus is justified by features: unlimited staff, Shopify Flow, B2B, and dedicated merchant success manager.</p>
+  </section>
+
+  <!-- Cross-links -->
+  <section class="border-t border-gray-200 dark:border-gray-700 pt-6 mt-2">
+    <p class="text-sm text-gray-500 dark:text-gray-400 mb-3">Related calculators:</p>
+    <div class="flex flex-wrap gap-3">
+      <a href="/shopify-profit-calculator/" class="text-sm text-blue-600 dark:text-blue-400 hover:underline">Real Profit Calculator</a>
+      <a href="/shopify-hidden-fees-audit/" class="text-sm text-blue-600 dark:text-blue-400 hover:underline">Hidden Fees Audit</a>
+      <a href="/breakeven-roas-calculator/" class="text-sm text-blue-600 dark:text-blue-400 hover:underline">Breakeven ROAS Calculator</a>
+      <a href="/profit-margin/" class="text-sm text-blue-600 dark:text-blue-400 hover:underline">Profit Margin Calculator</a>
+    </div>
+  </section>
+
+  <script>
+    const PLANS = [
+      { id: 'basic',    name: 'Basic',    monthly: 39,   annual: 29,   spRate: 0.029,  spFixed: 0.30, txRate: 0.02,   color: 'gray' },
+      { id: 'shopify',  name: 'Shopify',  monthly: 105,  annual: 79,   spRate: 0.026,  spFixed: 0.30, txRate: 0.01,   color: 'blue' },
+      { id: 'advanced', name: 'Advanced', monthly: 399,  annual: 299,  spRate: 0.024,  spFixed: 0.30, txRate: 0.005,  color: 'purple' },
+      { id: 'plus',     name: 'Plus',     monthly: 2300, annual: 2300, spRate: 0.0215, spFixed: 0.30, txRate: 0.0015, color: 'green' },
+    ];
+
+    const colorMap = {
+      gray:   { card: 'bg-gray-50 dark:bg-gray-900 border-gray-300 dark:border-gray-600', badge: 'text-gray-700 dark:text-gray-300', ring: 'ring-gray-400' },
+      blue:   { card: 'bg-blue-50 dark:bg-blue-950 border-blue-300 dark:border-blue-600', badge: 'text-blue-700 dark:text-blue-300', ring: 'ring-blue-500' },
+      purple: { card: 'bg-purple-50 dark:bg-purple-950 border-purple-300 dark:border-purple-600', badge: 'text-purple-700 dark:text-purple-300', ring: 'ring-purple-500' },
+      green:  { card: 'bg-green-50 dark:bg-green-950 border-green-300 dark:border-green-600', badge: 'text-green-700 dark:text-green-300', ring: 'ring-green-500' },
+    };
+
+    function fmt(n) { return '$' + n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
+    function fmtK(n) { return n >= 1000 ? '$' + (n/1000).toFixed(0) + 'K' : '$' + Math.round(n).toLocaleString(); }
+
+    function calcPlanCost(plan, revenue, aov, billing, processor, extRate, extFixed) {
+      const planFee = billing === 'annual' ? plan.annual : plan.monthly;
+      const numOrders = aov > 0 ? revenue / aov : 0;
+
+      let processingFee = 0;
+      let txFee = 0;
+
+      if (processor === 'shopify') {
+        processingFee = revenue * plan.spRate + numOrders * plan.spFixed;
+      } else if (processor === 'third') {
+        processingFee = 0;
+        txFee = revenue * plan.txRate;
+      } else {
+        // third_ext: user's own processing rate + txFee
+        processingFee = revenue * (extRate / 100) + numOrders * (extFixed / 100);
+        txFee = revenue * plan.txRate;
+      }
+
+      return { planFee, processingFee, txFee, total: planFee + processingFee + txFee };
+    }
+
+    function calculate() {
+      const revenue = parseFloat(document.getElementById('revenue').value) || 0;
+      const aov = parseFloat(document.getElementById('aov').value) || 85;
+      const billing = document.getElementById('billing').value;
+      const processor = document.getElementById('processor').value;
+      const extRate = parseFloat(document.getElementById('extRate').value) || 2.9;
+      const extFixed = parseFloat(document.getElementById('extFixed').value) || 30;
+
+      document.getElementById('extRateRow').classList.toggle('hidden', processor !== 'third_ext');
+
+      const costs = PLANS.map(p => ({
+        ...p,
+        ...calcPlanCost(p, revenue, aov, billing, processor, extRate, extFixed),
+      }));
+
+      // Find cheapest (exclude Plus for recommendation unless it's actually cheaper)
+      const mainPlans = costs.slice(0, 3);
+      const minTotal = Math.min(...costs.map(c => c.total));
+      const cheapest = costs.find(c => c.total === minTotal);
+
+      // Render plan cards
+      const cardsEl = document.getElementById('planCards');
+      cardsEl.innerHTML = costs.map(c => {
+        const isWinner = c.total === minTotal;
+        const col = colorMap[c.color];
+        return `<div class="rounded-xl border-2 p-5 ${col.card} ${isWinner ? 'ring-2 ' + col.ring : ''}">
+          <div class="flex items-center justify-between mb-3">
+            <span class="font-bold text-lg ${col.badge}">${c.name}</span>
+            ${isWinner ? '<span class="text-xs font-semibold bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 px-2 py-0.5 rounded-full">✓ Best Value</span>' : ''}
+          </div>
+          <div class="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-4">${fmt(c.total)}<span class="text-sm font-normal text-gray-500">/mo</span></div>
+          <div class="space-y-1.5 text-sm text-gray-600 dark:text-gray-400">
+            <div class="flex justify-between"><span>Plan fee</span><span class="font-medium text-gray-800 dark:text-gray-200">${fmt(c.planFee)}</span></div>
+            ${processor !== 'third' ? `<div class="flex justify-between"><span>Processing</span><span class="font-medium text-gray-800 dark:text-gray-200">${fmt(c.processingFee)}</span></div>` : ''}
+            ${processor !== 'shopify' ? `<div class="flex justify-between"><span>Tx fee (${(c.txRate*100).toFixed(2)}%)</span><span class="font-medium text-gray-800 dark:text-gray-200">${fmt(c.txFee)}</span></div>` : ''}
+          </div>
+          <div class="mt-4 pt-3 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-500 dark:text-gray-400">
+            ${billing === 'annual' ? c.annual : c.monthly}$/mo plan &bull; ${(c.spRate*100).toFixed(2)}% SP &bull; ${(c.txRate*100).toFixed(2)}% tx
+          </div>
+        </div>`;
+      }).join('');
+
+      // Recommendation
+      const recEl = document.getElementById('recommendation');
+      recEl.className = 'rounded-xl p-4 mb-8 border-2 text-sm font-medium ' + colorMap[cheapest.color].card;
+      const savings = costs.reduce((acc, c) => Math.max(acc, c.total - cheapest.total), 0);
+      recEl.innerHTML = `<strong>${cheapest.name}</strong> is your cheapest plan at $${revenue.toLocaleString()}/mo revenue — saving up to ${fmt(savings)}/mo vs the most expensive option shown.`;
+      recEl.classList.remove('hidden');
+
+      // Break-even table
+      const pairs = [
+        { from: costs[0], to: costs[1] },
+        { from: costs[1], to: costs[2] },
+        { from: costs[2], to: costs[3] },
+      ];
+
+      const beRows = pairs.map(({ from, to }) => {
+        const planDiff = (billing === 'annual' ? to.annual : to.monthly) - (billing === 'annual' ? from.annual : from.monthly);
+        let rateSaved, beRevenue;
+
+        if (processor === 'shopify') {
+          rateSaved = from.spRate - to.spRate;
+        } else {
+          rateSaved = from.txRate - to.txRate;
+        }
+
+        beRevenue = rateSaved > 0 ? planDiff / rateSaved : Infinity;
+        const worthIt = revenue >= beRevenue;
+
+        return `<tr class="hover:bg-gray-50 dark:hover:bg-gray-800">
+          <td class="px-4 py-2 border border-gray-200 dark:border-gray-700">${from.name} → ${to.name}</td>
+          <td class="px-4 py-2 text-right border border-gray-200 dark:border-gray-700">${fmt(planDiff)}</td>
+          <td class="px-4 py-2 text-right border border-gray-200 dark:border-gray-700">${rateSaved > 0 ? (rateSaved*100).toFixed(3) + '%' : 'n/a'}</td>
+          <td class="px-4 py-2 text-right border border-gray-200 dark:border-gray-700 font-medium">${beRevenue === Infinity ? '—' : fmtK(beRevenue) + '/mo'}</td>
+          <td class="px-4 py-2 text-center border border-gray-200 dark:border-gray-700">
+            <span class="px-2 py-0.5 rounded-full text-xs font-semibold ${worthIt ? 'bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300' : 'bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400'}">
+              ${worthIt ? '✓ Worth it' : 'Not yet'}
+            </span>
+          </td>
+        </tr>`;
+      });
+      document.getElementById('breakEvenBody').innerHTML = beRows.join('');
+
+      // Sensitivity table
+      const tiers = [1000, 5000, 10000, 20000, 50000, 100000, 250000, 500000];
+      const sensRows = tiers.map(rev => {
+        const tierCosts = PLANS.slice(0, 3).map(p => calcPlanCost(p, rev, aov, billing, processor, extRate, extFixed).total);
+        const minTier = Math.min(...tierCosts);
+        const winnerIdx = tierCosts.indexOf(minTier);
+        const winnerName = PLANS[winnerIdx].name;
+        return `<tr class="${rev === Math.round(revenue/1000)*1000 ? 'bg-blue-50 dark:bg-blue-950' : 'hover:bg-gray-50 dark:hover:bg-gray-800'}">
+          <td class="px-4 py-2 border border-gray-200 dark:border-gray-700 font-medium">${fmtK(rev)}</td>
+          ${tierCosts.map((cost, i) => `<td class="px-4 py-2 text-right border border-gray-200 dark:border-gray-700 ${i === winnerIdx ? 'font-bold text-green-700 dark:text-green-400' : 'text-gray-600 dark:text-gray-400'}">${fmt(cost)}</td>`).join('')}
+          <td class="px-4 py-2 text-center border border-gray-200 dark:border-gray-700">
+            <span class="px-2 py-0.5 rounded-full text-xs font-semibold ${colorMap[PLANS[winnerIdx].color].badge} ${colorMap[PLANS[winnerIdx].color].card.split(' ')[0]}">${winnerName}</span>
+          </td>
+        </tr>`;
+      });
+      document.getElementById('sensitivityBody').innerHTML = sensRows.join('');
+    }
+
+    document.querySelectorAll('#revenue, #aov, #billing, #processor, #extRate, #extFixed').forEach(el => {
+      el.addEventListener('input', calculate);
+      el.addEventListener('change', calculate);
+    });
+
+    calculate();
+  </script>
+</Base>
