@@ -1,0 +1,400 @@
+---
+import Base from '../layouts/Base.astro';
+
+const faqSchema = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    { "@type": "Question", "name": "What is the average cart abandonment rate for Shopify stores?",
+      "acceptedAnswer": { "@type": "Answer", "text": "The global average cart abandonment rate is 70–75% across all ecommerce. Shopify stores typically see 65–72%. High-ticket categories (furniture, electronics) see 80–85% abandonment. Lower-ticket impulse-buy categories (beauty, accessories) see 60–65%. Your rate is calculated as: (checkouts initiated − orders completed) ÷ checkouts initiated × 100. Find it in Shopify Analytics → Overview → Checkout conversion rate." } },
+    { "@type": "Question", "name": "How much revenue am I losing to cart abandonment?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Revenue lost = Abandoned carts per month × AOV × estimated purchase intent rate. Not all abandoned carts represent lost sales — roughly 30–40% of abandoners were browsing and never intended to buy. A realistic lost-revenue estimate uses 35–50% of abandoned cart value as recoverable. This calculator uses your specific inputs to show the realistic recoverable opportunity." } },
+    { "@type": "Question", "name": "What is the best cart abandonment recovery tool for Shopify?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Email recovery is the highest-ROI channel: a 3-email abandonment sequence (1hr, 24hr, 72hr) typically recovers 5–10% of abandoned carts at near-zero marginal cost if you already pay for email marketing. SMS recovery is more aggressive at 10–20% recovery rates but costs more per message. Retargeting ads recover 2–5% of abandoners but require ad spend. The combination of email + SMS often achieves 15–25% total recovery." } },
+    { "@type": "Question", "name": "How do I reduce cart abandonment on Shopify?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Top proven tactics: (1) Offer guest checkout — forcing account creation causes 35% of abandonments. (2) Show shipping costs upfront — surprise costs at checkout are the #1 abandonment reason (49% of cases). (3) Add trust signals — SSL badges, return policy, and reviews near the checkout button. (4) Enable Shop Pay — accelerated checkout reduces friction and increases conversion by 18% on average. (5) Add a progress bar in multi-step checkout to reduce drop-off." } },
+    { "@type": "Question", "name": "Is a cart abandonment email sequence worth setting up?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Yes — it's the single highest-ROI automation for most Shopify stores. Setup time is 2–4 hours; ongoing cost is $0 if included in your email plan. At 5% recovery rate on $50K/mo in abandoned cart value, that's $2,500/mo in recovered revenue from a one-time setup. Most email platforms (Klaviyo, Omnisend) include abandonment flows in their base plans." } },
+    { "@type": "Question", "name": "What discount should I offer in cart abandonment emails?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Start with no discount in email #1 (urgency/reminder) and email #2 (social proof/value). Only add a discount in email #3 (72hr) if recovery is the goal. Typical discounts: 5–10% or free shipping. Avoid training customers to abandon carts expecting a discount — segment and only offer to customers who haven't responded to the first two emails." } },
+  ]
+});
+
+const appSchema = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Shopify Cart Abandonment Cost Calculator",
+  "description": "Calculate monthly revenue lost to cart abandonment and the ROI of email, SMS, and retargeting recovery strategies. Free 2026.",
+  "applicationCategory": "BusinessApplication",
+  "operatingSystem": "Web",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+  "url": "https://shopify-fee-calc.com/cart-abandonment-calculator/"
+});
+
+const faqs = [
+  { q: "What is the average cart abandonment rate for Shopify stores?",
+    a: "Global average is 70–75%. Shopify stores typically see 65–72%. High-ticket categories (furniture, electronics) see 80–85%; impulse-buy categories (beauty, accessories) see 60–65%. Find your rate in Shopify Analytics → Overview → Checkout conversion rate." },
+  { q: "How much revenue am I losing to cart abandonment?",
+    a: "Revenue lost = Abandoned carts/month × AOV × purchase intent rate. Not all abandoners intended to buy — roughly 30–40% were browsing. A realistic estimate uses 35–50% of abandoned cart value as recoverable. This calculator shows your specific recoverable opportunity." },
+  { q: "What is the best cart abandonment recovery tool for Shopify?",
+    a: "Email recovery is highest-ROI: a 3-email sequence (1hr, 24hr, 72hr) typically recovers 5–10% of abandoned carts at near-zero cost if you already pay for email marketing. SMS recovers 10–20% but costs more per message. Retargeting recovers 2–5% but requires ad spend. Email + SMS together achieves 15–25% total recovery." },
+  { q: "How do I reduce cart abandonment on Shopify?",
+    a: "Top tactics: (1) Offer guest checkout — forcing account creation causes 35% of abandonments. (2) Show shipping costs upfront — surprise costs are the #1 reason (49%). (3) Add trust signals near checkout. (4) Enable Shop Pay — accelerated checkout increases conversion 18% on average. (5) Add a progress bar in multi-step checkout." },
+  { q: "Is a cart abandonment email sequence worth setting up?",
+    a: "Yes — highest-ROI automation for most stores. Setup: 2–4 hours; ongoing cost: $0 if included in your email plan. At 5% recovery on $50K/mo in abandoned cart value, that's $2,500/mo recovered from a one-time setup. Klaviyo and Omnisend include abandonment flows in base plans." },
+  { q: "What discount should I offer in cart abandonment emails?",
+    a: "No discount in email #1 (urgency) or #2 (social proof). Only add 5–10% or free shipping in email #3 (72hr) for non-responders. Avoid training customers to expect a discount by always including one — it cannibalizes margin on customers who would have bought anyway." },
+];
+---
+<Base
+  title="Shopify Cart Abandonment Cost Calculator — Revenue Lost & Recovery ROI (Free 2026)"
+  description="Calculate monthly revenue lost to cart abandonment on your Shopify store. See the ROI of email, SMS, and retargeting recovery strategies. Includes industry benchmarks."
+  noWebAppSchema={true}
+>
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={faqSchema} />
+    <script type="application/ld+json" set:html={appSchema} />
+  </Fragment>
+
+  <!-- Tailwind safelist -->
+  <div class="hidden bg-red-50 dark:bg-red-950 border-red-300 dark:border-red-700 text-red-700 dark:text-red-400 bg-orange-50 dark:bg-orange-950 border-orange-300 dark:border-orange-700 text-orange-700 dark:text-orange-400 bg-green-50 dark:bg-green-950 border-green-300 dark:border-green-700 text-green-700 dark:text-green-400 bg-blue-50 dark:bg-blue-950 border-blue-300 dark:border-blue-700 text-blue-700 dark:text-blue-400 bg-yellow-50 dark:bg-yellow-950 text-yellow-700 dark:text-yellow-400 ring-2 ring-green-500 font-bold text-sm text-xs text-2xl text-3xl"></div>
+
+  <h1 class="text-3xl font-bold mb-2">Cart Abandonment Cost Calculator</h1>
+  <p class="text-gray-600 dark:text-gray-400 mb-8 max-w-2xl">
+    Find out exactly how much revenue your Shopify store loses to cart abandonment every month — and the ROI of email, SMS, and retargeting recovery strategies.
+  </p>
+
+  <!-- Inputs -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+    <div>
+      <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Monthly Store Sessions</label>
+      <input id="sessions" type="number" value="15000" min="100" step="500"
+        class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+      <p class="text-xs text-gray-400 mt-1">Shopify Analytics → Sessions</p>
+    </div>
+    <div>
+      <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Add-to-Cart Rate (%)</label>
+      <input id="atcRate" type="number" value="8" min="1" max="60" step="0.5"
+        class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+      <p class="text-xs text-gray-400 mt-1">Industry avg: 6–10%</p>
+    </div>
+    <div>
+      <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Cart Abandonment Rate (%)</label>
+      <input id="abandonRate" type="number" value="70" min="1" max="99" step="1"
+        class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+      <p class="text-xs text-gray-400 mt-1">Global avg: 70–75%</p>
+    </div>
+    <div>
+      <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Average Order Value ($)</label>
+      <input id="aov" type="number" value="85" min="1" step="5"
+        class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
+    <div>
+      <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Gross Margin (%)</label>
+      <input id="margin" type="number" value="40" min="1" max="100" step="1"
+        class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+      <p class="text-xs text-gray-400 mt-1">Used to calculate recovered gross profit</p>
+    </div>
+    <div>
+      <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Purchase Intent of Abandoners (%)</label>
+      <input id="intentRate" type="number" value="40" min="5" max="80" step="5"
+        class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+      <p class="text-xs text-gray-400 mt-1">% who actually intended to buy (avg: 35–45%)</p>
+    </div>
+  </div>
+
+  <!-- Key metrics -->
+  <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8" id="keyMetrics"></div>
+
+  <!-- Lost revenue alert -->
+  <div id="lostAlert" class="hidden rounded-xl p-5 mb-8 border-2 border-red-300 dark:border-red-700 bg-red-50 dark:bg-red-950"></div>
+
+  <!-- Recovery channels -->
+  <div class="mb-8">
+    <h2 class="text-xl font-semibold mb-4">Recovery Channel ROI</h2>
+    <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">Adjust recovery rates and costs to match your actual setup. Toggle channels on/off to compare.</p>
+
+    <div class="space-y-4" id="recoveryChannels">
+      <!-- rendered by JS -->
+    </div>
+  </div>
+
+  <!-- Recovery summary -->
+  <div id="recoverySummary" class="hidden mb-8 rounded-xl border-2 border-green-300 dark:border-green-700 bg-green-50 dark:bg-green-950 p-5"></div>
+
+  <!-- Abandonment rate benchmarks -->
+  <div class="mb-8">
+    <h2 class="text-xl font-semibold mb-3">Abandonment Rate Benchmarks by Category</h2>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm border-collapse">
+        <thead>
+          <tr class="bg-gray-50 dark:bg-gray-800">
+            <th class="text-left px-4 py-2 font-semibold border border-gray-200 dark:border-gray-700">Product Category</th>
+            <th class="text-center px-4 py-2 font-semibold border border-gray-200 dark:border-gray-700">Avg Abandonment Rate</th>
+            <th class="text-left px-4 py-2 font-semibold border border-gray-200 dark:border-gray-700">Primary Cause</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
+          {[
+            ['Fashion & Apparel', '68–72%', 'Size uncertainty, shipping cost'],
+            ['Beauty & Cosmetics', '62–67%', 'Comparison shopping'],
+            ['Electronics', '78–83%', 'Price comparison, research phase'],
+            ['Home & Furniture', '82–88%', 'Long decision cycle, high price'],
+            ['Sports & Outdoors', '70–75%', 'Size/fit uncertainty'],
+            ['Jewelry & Accessories', '72–78%', 'Trust, authenticity concerns'],
+            ['Food & Beverage', '55–63%', 'Perishable concerns, shipping'],
+            ['All eCommerce (avg)', '70–75%', 'Surprise shipping costs (#1 cause)'],
+          ].map(([cat, rate, cause]) => (
+            <tr class="hover:bg-gray-50 dark:hover:bg-gray-800">
+              <td class="px-4 py-2 font-medium border border-gray-200 dark:border-gray-700">{cat}</td>
+              <td class="px-4 py-2 text-center border border-gray-200 dark:border-gray-700">{rate}</td>
+              <td class="px-4 py-2 text-gray-600 dark:text-gray-400 border border-gray-200 dark:border-gray-700">{cause}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Abandonment rate sensitivity -->
+  <div class="mb-8">
+    <h2 class="text-xl font-semibold mb-3">Revenue Impact of Reducing Abandonment Rate</h2>
+    <p class="text-sm text-gray-500 dark:text-gray-400 mb-3">What each percentage point reduction in abandonment rate is worth at your current traffic and AOV.</p>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm border-collapse">
+        <thead>
+          <tr class="bg-gray-50 dark:bg-gray-800">
+            <th class="text-left px-4 py-2 font-semibold border border-gray-200 dark:border-gray-700">Abandonment Rate</th>
+            <th class="text-right px-4 py-2 font-semibold border border-gray-200 dark:border-gray-700">Orders/mo</th>
+            <th class="text-right px-4 py-2 font-semibold border border-gray-200 dark:border-gray-700">Revenue/mo</th>
+            <th class="text-right px-4 py-2 font-semibold border border-gray-200 dark:border-gray-700">vs Current</th>
+          </tr>
+        </thead>
+        <tbody id="sensitivityBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Reduction tactics -->
+  <div class="mb-10">
+    <h2 class="text-xl font-semibold mb-4">Top Abandonment Reduction Tactics</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      {[
+        { icon: '🚀', title: 'Enable Shop Pay', impact: '−18% abandonment', desc: 'Accelerated checkout with saved payment info. Shopify\'s native feature — free to enable.' },
+        { icon: '🚢', title: 'Show Shipping Costs Early', impact: '−15% abandonment', desc: 'Surprise shipping costs cause 49% of abandonments. Show rates on product page or cart.' },
+        { icon: '👤', title: 'Offer Guest Checkout', impact: '−12% abandonment', desc: 'Forced account creation causes 35% of abandonments. Guest checkout is now default in Shopify.' },
+        { icon: '🔒', title: 'Add Trust Signals', impact: '−8% abandonment', desc: 'SSL badge, return policy, and review count near checkout button reduce hesitation.' },
+        { icon: '📱', title: 'Optimize Mobile Checkout', impact: '−10% abandonment', desc: 'Mobile users abandon 10–15% more than desktop. Test on real devices; minimize form fields.' },
+        { icon: '⏳', title: 'Add Checkout Progress Bar', impact: '−6% abandonment', desc: 'Showing "Step 2 of 3" reduces drop-off in multi-step checkout by reducing perceived length.' },
+      ].map(({ icon, title, impact, desc }) => (
+        <div class="border border-gray-200 dark:border-gray-700 rounded-xl p-4">
+          <div class="text-2xl mb-2">{icon}</div>
+          <div class="font-semibold text-sm text-gray-900 dark:text-gray-100 mb-0.5">{title}</div>
+          <div class="text-xs font-medium text-green-700 dark:text-green-400 mb-2">{impact}</div>
+          <p class="text-xs text-gray-600 dark:text-gray-400">{desc}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+
+  <!-- FAQ -->
+  <section class="mb-10">
+    <h2 class="text-2xl font-bold mb-6">Frequently Asked Questions</h2>
+    <div class="space-y-4">
+      {faqs.map(({q, a}) => (
+        <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-5">
+          <h3 class="font-semibold text-gray-900 dark:text-gray-100 mb-2">{q}</h3>
+          <p class="text-gray-600 dark:text-gray-400 text-sm">{a}</p>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- Content -->
+  <section class="text-sm text-gray-600 dark:text-gray-400 space-y-4 mb-10">
+    <h2 class="text-xl font-bold text-gray-900 dark:text-gray-100">Understanding Cart Abandonment for Shopify Stores</h2>
+    <p>Cart abandonment is inevitable — but 70% is not a fixed number. Top-performing Shopify stores operate at 55–62% abandonment by systematically removing friction at each checkout step. The difference between 70% and 60% abandonment on a store with 1,200 carts/month at $85 AOV is 120 extra orders — $10,200 in additional monthly revenue.</p>
+    <p><strong class="text-gray-900 dark:text-gray-100">Two strategies work in parallel:</strong> (1) Reduce abandonment at the source — fix the checkout friction points that cause abandonment in the first place. (2) Recover abandoners after the fact — email, SMS, and retargeting sequences that bring undecided buyers back.</p>
+    <p><strong class="text-gray-900 dark:text-gray-100">The email sequence is non-negotiable.</strong> A 3-email abandonment flow is the single highest-ROI automation most Shopify stores can deploy: Email 1 (1hr) — simple reminder, no discount. Email 2 (24hr) — add social proof, address objections. Email 3 (72hr) — urgency or small incentive. Typical recovery: 5–12% of abandoners. At 7% on 840 abandoned carts at $85 AOV, that's $4,998/mo in recovered revenue from a one-time setup costing a few hours.</p>
+    <p><strong class="text-gray-900 dark:text-gray-100">Don't over-index on recovery over prevention.</strong> Recovery tools let you recapture already-lost revenue — but fixing the root cause (surprise shipping costs, forced account creation, slow mobile checkout) increases revenue without any ongoing cost. Fixing one checkout friction point is often worth more than an entire email recovery stack.</p>
+  </section>
+
+  <!-- Cross-links -->
+  <section class="border-t border-gray-200 dark:border-gray-700 pt-6">
+    <p class="text-sm text-gray-500 dark:text-gray-400 mb-3">Related calculators:</p>
+    <div class="flex flex-wrap gap-3">
+      <a href="/ltv-cac-calculator/" class="text-sm text-blue-600 dark:text-blue-400 hover:underline">LTV:CAC Calculator</a>
+      <a href="/breakeven-roas-calculator/" class="text-sm text-blue-600 dark:text-blue-400 hover:underline">Breakeven ROAS Calculator</a>
+      <a href="/shopify-profit-calculator/" class="text-sm text-blue-600 dark:text-blue-400 hover:underline">Real Profit Calculator</a>
+      <a href="/free-shipping-threshold/" class="text-sm text-blue-600 dark:text-blue-400 hover:underline">Free Shipping Threshold Calculator</a>
+    </div>
+  </section>
+
+  <script>
+    const CHANNELS = [
+      { id: 'email',      name: 'Email Recovery',    icon: '📧', defaultRate: 7,  defaultCost: 0,   costLabel: '$/mo (included in email plan)', rateLabel: 'Recovery rate (% of abandoners)', description: '3-email sequence: 1hr, 24hr, 72hr reminders' },
+      { id: 'sms',        name: 'SMS Recovery',      icon: '💬', defaultRate: 12, defaultCost: 50,  costLabel: '$/mo (SMS plan + message costs)', rateLabel: 'Recovery rate (% of abandoners)', description: '1–2 text messages to opted-in subscribers' },
+      { id: 'retargeting',name: 'Retargeting Ads',  icon: '🎯', defaultRate: 4,  defaultCost: 300, costLabel: '$/mo ad spend', rateLabel: 'Recovery rate (% of abandoners)', description: 'Meta/Google retargeting to abandoners' },
+    ];
+
+    const channelEnabled = { email: true, sms: false, retargeting: false };
+    const channelRate = {};
+    const channelCost = {};
+    CHANNELS.forEach(c => { channelRate[c.id] = c.defaultRate; channelCost[c.id] = c.defaultCost; });
+
+    function fmt(n, dec=0) { return '$' + n.toLocaleString('en-US', { minimumFractionDigits: dec, maximumFractionDigits: dec }); }
+    function fmtN(n) { return Math.round(n).toLocaleString(); }
+
+    function getInputs() {
+      return {
+        sessions: parseFloat(document.getElementById('sessions').value) || 0,
+        atcRate: parseFloat(document.getElementById('atcRate').value) / 100 || 0,
+        abandonRate: parseFloat(document.getElementById('abandonRate').value) / 100 || 0,
+        aov: parseFloat(document.getElementById('aov').value) || 0,
+        margin: parseFloat(document.getElementById('margin').value) / 100 || 0,
+        intentRate: parseFloat(document.getElementById('intentRate').value) / 100 || 0,
+      };
+    }
+
+    function calculate() {
+      const { sessions, atcRate, abandonRate, aov, margin, intentRate } = getInputs();
+
+      const cartsStarted = sessions * atcRate;
+      const cartsAbandoned = cartsStarted * abandonRate;
+      const cartsCompleted = cartsStarted * (1 - abandonRate);
+      const monthlyRevenue = cartsCompleted * aov;
+      const lostRevenue = cartsAbandoned * aov;
+      const recoverableRevenue = cartsAbandoned * intentRate * aov;
+
+      // Key metrics
+      document.getElementById('keyMetrics').innerHTML = [
+        { label: 'Carts Started/mo',   value: fmtN(cartsStarted) },
+        { label: 'Carts Abandoned/mo', value: fmtN(cartsAbandoned), highlight: true },
+        { label: 'Lost Revenue/mo',    value: fmt(lostRevenue), red: true },
+        { label: 'Recoverable/mo',     value: fmt(recoverableRevenue), green: true },
+      ].map(m => `<div class="border-2 rounded-xl p-4 ${m.highlight ? 'border-orange-300 dark:border-orange-700 bg-orange-50 dark:bg-orange-950' : m.red ? 'border-red-300 dark:border-red-700 bg-red-50 dark:bg-red-950' : m.green ? 'border-green-300 dark:border-green-700 bg-green-50 dark:bg-green-950' : 'border-gray-200 dark:border-gray-700'}">
+        <div class="text-xs text-gray-500 dark:text-gray-400 mb-1">${m.label}</div>
+        <div class="text-2xl font-bold ${m.red ? 'text-red-700 dark:text-red-400' : m.green ? 'text-green-700 dark:text-green-400' : m.highlight ? 'text-orange-700 dark:text-orange-400' : 'text-gray-900 dark:text-gray-100'}">${m.value}</div>
+      </div>`).join('');
+
+      // Lost alert
+      const alertEl = document.getElementById('lostAlert');
+      alertEl.innerHTML = `<div class="font-bold text-red-700 dark:text-red-400 text-lg mb-1">You're losing ${fmt(lostRevenue)}/mo to cart abandonment</div>
+        <p class="text-sm text-red-600 dark:text-red-400">At your ${(abandonRate*100).toFixed(0)}% abandonment rate and ${fmt(aov)} AOV, ${fmtN(cartsAbandoned)} carts are abandoned monthly. Of these, ~${fmtN(cartsAbandoned * intentRate)} (${(intentRate*100).toFixed(0)}%) likely intended to buy — ${fmt(recoverableRevenue)} in recoverable revenue. That's ${fmt(recoverableRevenue * 12)} per year left on the table.</p>`;
+      alertEl.classList.remove('hidden');
+
+      // Recovery channels
+      let totalRecovered = 0;
+      let totalRecoveryCost = 0;
+      let alreadyRecovered = 0;
+
+      const channelResults = CHANNELS.map(ch => {
+        const rate = channelRate[ch.id] / 100;
+        const cost = channelCost[ch.id];
+        const enabled = channelEnabled[ch.id];
+        const pool = Math.max(0, cartsAbandoned * intentRate - alreadyRecovered);
+        const recovered = enabled ? pool * Math.min(rate, 1) : 0;
+        if (enabled) { alreadyRecovered += recovered; totalRecovered += recovered; totalRecoveryCost += cost; }
+        const recoveredRev = recovered * aov;
+        const recoveredProfit = recoveredRev * margin;
+        const roi = cost > 0 ? ((recoveredProfit - cost) / cost * 100) : Infinity;
+
+        return { ...ch, enabled, rate, cost, recovered, recoveredRev, recoveredProfit, roi };
+      });
+
+      document.getElementById('recoveryChannels').innerHTML = channelResults.map(ch => {
+        const roiColor = ch.roi > 500 ? 'text-green-700 dark:text-green-400' : ch.roi > 100 ? 'text-blue-700 dark:text-blue-400' : ch.roi > 0 ? 'text-yellow-700 dark:text-yellow-400' : 'text-red-700 dark:text-red-400';
+        return `<div class="border-2 rounded-xl p-5 ${ch.enabled ? 'border-blue-300 dark:border-blue-700 bg-blue-50 dark:bg-blue-950' : 'border-gray-200 dark:border-gray-700'}">
+          <div class="flex items-center gap-3 mb-4">
+            <input type="checkbox" id="ch_${ch.id}" ${ch.enabled ? 'checked' : ''} class="w-4 h-4 accent-blue-600 cursor-pointer" />
+            <label for="ch_${ch.id}" class="font-semibold text-gray-900 dark:text-gray-100 cursor-pointer">${ch.icon} ${ch.name}</label>
+            <span class="ml-auto text-xs text-gray-400">${ch.description}</span>
+          </div>
+          <div class="grid grid-cols-2 gap-3 mb-4 ${!ch.enabled ? 'opacity-40' : ''}">
+            <div>
+              <label class="block text-xs text-gray-500 dark:text-gray-400 mb-1">${ch.rateLabel}</label>
+              <div class="flex items-center gap-1">
+                <input type="number" id="rate_${ch.id}" value="${channelRate[ch.id]}" min="0.1" max="50" step="0.5" ${!ch.enabled ? 'disabled' : ''}
+                  class="w-20 border border-gray-300 dark:border-gray-600 rounded px-2 py-1 text-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-1 focus:ring-blue-500" />
+                <span class="text-xs text-gray-400">%</span>
+              </div>
+            </div>
+            <div>
+              <label class="block text-xs text-gray-500 dark:text-gray-400 mb-1">${ch.costLabel}</label>
+              <div class="flex items-center gap-1">
+                <span class="text-xs text-gray-400">$</span>
+                <input type="number" id="cost_${ch.id}" value="${channelCost[ch.id]}" min="0" step="10" ${!ch.enabled ? 'disabled' : ''}
+                  class="w-24 border border-gray-300 dark:border-gray-600 rounded px-2 py-1 text-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-1 focus:ring-blue-500" />
+              </div>
+            </div>
+          </div>
+          <div class="grid grid-cols-3 gap-3 text-center ${!ch.enabled ? 'opacity-40' : ''}">
+            <div><div class="text-lg font-bold text-gray-900 dark:text-gray-100">${fmtN(ch.recovered)}</div><div class="text-xs text-gray-500">carts/mo</div></div>
+            <div><div class="text-lg font-bold text-gray-900 dark:text-gray-100">${fmt(ch.recoveredRev)}</div><div class="text-xs text-gray-500">revenue/mo</div></div>
+            <div><div class="text-lg font-bold ${roiColor}">${ch.roi === Infinity ? '∞' : ch.roi.toFixed(0) + '%'}</div><div class="text-xs text-gray-500">profit ROI</div></div>
+          </div>
+        </div>`;
+      }).join('');
+
+      // Wire channel controls
+      CHANNELS.forEach(ch => {
+        const chk = document.getElementById('ch_' + ch.id);
+        const rateInp = document.getElementById('rate_' + ch.id);
+        const costInp = document.getElementById('cost_' + ch.id);
+        if (!chk) return;
+        chk.addEventListener('change', () => { channelEnabled[ch.id] = chk.checked; calculate(); });
+        rateInp?.addEventListener('input', () => { channelRate[ch.id] = parseFloat(rateInp.value) || 0; calculate(); });
+        costInp?.addEventListener('input', () => { channelCost[ch.id] = parseFloat(costInp.value) || 0; calculate(); });
+      });
+
+      // Recovery summary
+      const totalRecoveredRev = totalRecovered * aov;
+      const totalRecoveredProfit = totalRecoveredRev * margin;
+      const netGain = totalRecoveredProfit - totalRecoveryCost;
+      const summaryEl = document.getElementById('recoverySummary');
+      if (totalRecovered > 0) {
+        summaryEl.innerHTML = `<div class="text-green-700 dark:text-green-400 font-bold text-lg mb-2">Recovery stack can capture ${fmt(totalRecoveredRev)}/mo</div>
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 text-sm">
+            <div><div class="text-2xl font-bold text-gray-900 dark:text-gray-100">${fmtN(totalRecovered)}</div><div class="text-xs text-gray-500">carts recovered/mo</div></div>
+            <div><div class="text-2xl font-bold text-gray-900 dark:text-gray-100">${fmt(totalRecoveredRev)}</div><div class="text-xs text-gray-500">revenue recovered/mo</div></div>
+            <div><div class="text-2xl font-bold ${netGain >= 0 ? 'text-green-700 dark:text-green-400' : 'text-red-700 dark:text-red-400'}">${fmt(netGain)}</div><div class="text-xs text-gray-500">net profit gain/mo</div></div>
+            <div><div class="text-2xl font-bold text-green-700 dark:text-green-400">${fmt(netGain * 12)}</div><div class="text-xs text-gray-500">net profit gain/yr</div></div>
+          </div>`;
+        summaryEl.classList.remove('hidden');
+      } else {
+        summaryEl.classList.add('hidden');
+      }
+
+      // Sensitivity table
+      const currentOrders = cartsCompleted;
+      const tiers = [80, 75, 70, 65, 60, 55, 50];
+      document.getElementById('sensitivityBody').innerHTML = tiers.map(rate => {
+        const abRate = rate / 100;
+        const { sessions: s, atcRate: a, aov: o } = getInputs();
+        const carts = s * a;
+        const completed = carts * (1 - abRate);
+        const revenue = completed * o;
+        const delta = completed - currentOrders;
+        const isCurrent = Math.abs(rate - abandonRate * 100) < 3;
+        return `<tr class="${isCurrent ? 'bg-blue-50 dark:bg-blue-950 font-semibold' : 'hover:bg-gray-50 dark:hover:bg-gray-800'}">
+          <td class="px-4 py-2 border border-gray-200 dark:border-gray-700">${rate}% ${isCurrent ? '← current' : ''}</td>
+          <td class="px-4 py-2 text-right border border-gray-200 dark:border-gray-700">${fmtN(completed)}</td>
+          <td class="px-4 py-2 text-right border border-gray-200 dark:border-gray-700">${fmt(revenue)}</td>
+          <td class="px-4 py-2 text-right border border-gray-200 dark:border-gray-700 ${delta > 0 ? 'text-green-700 dark:text-green-400' : delta < 0 ? 'text-red-700 dark:text-red-400' : ''}">
+            ${delta === 0 ? '—' : (delta > 0 ? '+' : '') + fmt(delta * o)}
+          </td>
+        </tr>`;
+      }).join('');
+    }
+
+    // Wire all main inputs
+    ['sessions','atcRate','abandonRate','aov','margin','intentRate'].forEach(id => {
+      document.getElementById(id)?.addEventListener('input', calculate);
+    });
+
+    calculate();
+  </script>
+</Base>
