@@ -1,1 +1,6 @@
 /sitemap.xml /sitemap-index.xml 301
+
+# Shipping pages → dedicated domain (topical consolidation)
+/shipping-calculator/ https://shopify-shipping-calc.com/shipping-calculator/ 301
+/shipping/* https://shopify-shipping-calc.com/shipping/:splat 301
+/china-shipping/* https://shopify-shipping-calc.com/china-shipping/:splat 301
