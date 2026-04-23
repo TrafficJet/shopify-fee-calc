@@ -6,6 +6,8 @@ description: "Learn how to set up Shopify collections step by step. Organize pro
 author: "Alex Morgan"
 tags: ["shopify collections setup"]
 seoTitle: "Shopify Collections Setup: Complete Guide (2026)"
+heroImage: "/images/shopify-collections-setup/hero.jpg"
+heroImageAlt: "Shopify admin dashboard showing organized product collections with filtering options"
 ---
 
 # Shopify Collections Setup: Complete Guide (2026)
