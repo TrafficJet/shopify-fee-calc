@@ -6,6 +6,8 @@ description: "Learn Shopify email marketing setup from domain authentication to 
 author: "Alex Morgan"
 tags: ["shopify email marketing setup"]
 seoTitle: "Shopify Email Marketing Setup: Step-by-Step Guide | Shopify Fee Calc"
+heroImage: "/images/shopify-email-marketing-setup/hero.jpg"
+heroImageAlt: "Shopify admin dashboard showing email marketing campaign setup interface"
 ---
 
 # Shopify Email Marketing Setup: Step-by-Step Guide
