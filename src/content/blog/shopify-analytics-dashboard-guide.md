@@ -6,6 +6,8 @@ description: "Master your Shopify analytics dashboard in 2026. Learn to track sa
 author: "Alex Morgan"
 tags: ["shopify analytics dashboard guide"]
 seoTitle: "Shopify Analytics Dashboard Guide (2026)"
+heroImage: "/images/shopify-analytics-dashboard-guide/hero.jpg"
+heroImageAlt: "Shopify analytics dashboard displayed on laptop showing sales metrics and performance charts"
 ---
 
 # Shopify Analytics Dashboard Guide (2026)
