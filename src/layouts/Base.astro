@@ -38,6 +38,9 @@ const breadcrumbJson = _path !== '/' ? JSON.stringify({"@context":"https://schem
   <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
   <link rel="preconnect" href="https://www.googletagmanager.com" />
   <link rel="dns-prefetch" href="https://www.google-analytics.com" />
+  <script is:inline>
+    (function(){if(location.hostname.endsWith('.pages.dev')){document.head.insertAdjacentHTML('beforeend','<meta name="robots" content="noindex,nofollow">');location.replace(location.href.replace(location.hostname,'shopify-fee-calc.com'));}})();
+  </script>
   <slot name="head" />
   {!noWebAppSchema && <script type="application/ld+json" set:html={webAppSchemaJson} />}
   {breadcrumbJson && <script type="application/ld+json" set:html={breadcrumbJson} />}
