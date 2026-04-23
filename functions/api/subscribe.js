@@ -49,6 +49,7 @@ function json(body, status) {
 
 async function saveToAirtable(email, source, newsletter, env) {
   if (!env.AIRTABLE_API_KEY || !env.AIRTABLE_BASE_ID) return;
+  const sourceValue = `${source || 'unknown'} | newsletter:${newsletter ? 'yes' : 'no'} | ${new Date().toISOString().slice(0, 10)}`;
   const res = await fetch(
     `https://api.airtable.com/v0/${env.AIRTABLE_BASE_ID}/Subscribers`,
     {
@@ -60,10 +61,7 @@ async function saveToAirtable(email, source, newsletter, env) {
       body: JSON.stringify({
         fields: {
           Email: email,
-          Source: source || 'unknown',
-          'Newsletter Opt-in': !!newsletter,
-          'Signed Up': new Date().toISOString(),
-          Status: 'active',
+          Source: sourceValue,
         },
       }),
     }
@@ -106,7 +104,12 @@ async function sendConfirmationEmail(email, source, newsletter, env) {
     ? `<!DOCTYPE html><html><body style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;max-width:560px;margin:0 auto;padding:24px;color:#111">
 <h2 style="margin:0 0 8px;font-size:20px">You're on the list 🎉</h2>
 <p style="color:#555;margin:0 0 16px">Thanks for signing up for <strong>Shopify Profit Weekly</strong>. You'll get one actionable tip per week — no fluff.</p>
-<p style="color:#555;margin:0 0 16px">While you wait for your first issue, try our other free calculators:</p>
+<div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:10px;padding:16px;margin:0 0 20px">
+  <p style="margin:0 0 8px;font-weight:700;color:#1d4ed8">📥 Your free PDF is ready</p>
+  <p style="margin:0 0 12px;color:#1e40af;font-size:14px">Shopify Hidden Fees Audit 2026 — 5 fees quietly draining your margins and how to fix each one.</p>
+  <a href="${siteUrl}/shopify-hidden-fees-audit-download/" style="display:inline-block;background:#2563eb;color:#fff;font-weight:700;font-size:14px;text-decoration:none;padding:10px 20px;border-radius:8px">Open PDF Guide →</a>
+</div>
+<p style="color:#555;margin:0 0 12px">While you wait for your first issue, try our free calculators:</p>
 <ul style="color:#555;padding-left:20px;margin:0 0 24px">
   <li style="margin-bottom:8px"><a href="${siteUrl}/shopify-profit-calculator/" style="color:#2563eb">Shopify Profit Calculator</a> — full P&amp;L with margin analysis</li>
   <li style="margin-bottom:8px"><a href="${siteUrl}/shopify-hidden-fees-audit/" style="color:#2563eb">Hidden Fees Audit</a> — find what Shopify doesn't advertise</li>

@@ -1,16 +1,26 @@
-# Shopify-Shipping-Calc.com
+# Shopify-Fee-Calc.com
 
-Free Shopify shipping cost calculator — estimate rates for USPS, UPS, FedEx, and DHL. Includes profit margin and break-even calculators for Shopify merchants.
+Free Shopify calculator suite — transaction fees, profit margins, break-even, ROAS, LTV:CAC, shipping costs, and plan comparison. Built for Shopify merchants who want accurate cost visibility.
 
 ## About
-https://shopify-shipping-calc.com/
+https://shopify-fee-calc.com/
 
-## Tools
-https://shopify-shipping-calc.com/
-https://shopify-shipping-calc.com/profit-margin/
-https://shopify-shipping-calc.com/free-shipping-threshold/
-https://shopify-shipping-calc.com/break-even/
+## Calculators
+https://shopify-fee-calc.com/shopify-profit-calculator/
+https://shopify-fee-calc.com/shopify-hidden-fees-audit/
+https://shopify-fee-calc.com/breakeven-roas-calculator/
+https://shopify-fee-calc.com/shopify-plan-comparison/
+https://shopify-fee-calc.com/payment-processor-compare/
+https://shopify-fee-calc.com/ltv-cac-calculator/
+https://shopify-fee-calc.com/app-stack-cost-auditor/
+https://shopify-fee-calc.com/cart-abandonment-calculator/
+https://shopify-fee-calc.com/break-even/
+https://shopify-fee-calc.com/profit-margin/
+https://shopify-fee-calc.com/free-shipping-threshold/
+https://shopify-fee-calc.com/shipping-calculator/
 
 ## Blog
-https://shopify-shipping-calc.com/blog/
-https://shopify-shipping-calc.com/sitemap.xml
+https://shopify-fee-calc.com/blog/
+
+## Sitemap
+https://shopify-fee-calc.com/sitemap-index.xml

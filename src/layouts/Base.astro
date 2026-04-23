@@ -11,6 +11,8 @@ const canon = canonicalUrl || Astro.url.href;
 const finalOgImage = ogImage || 'https://shopify-fee-calc.com/og-default.png';
 const GA_ID = 'G-3LG69MHKYE';
 const webAppSchemaJson = JSON.stringify({"@context":"https://schema.org","@type":"WebApplication","name":"Shopify Fee Calculator","url":"https://shopify-fee-calc.com/","description":"Free Shopify fee calculator. Estimate transaction fees, payment processing costs, and profit margins for your Shopify store.","applicationCategory":"UtilityApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}});
+const _path = new URL(canon).pathname;
+const breadcrumbJson = _path !== '/' ? JSON.stringify({"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"ShopifyCalc","item":"https://shopify-fee-calc.com/"},{"@type":"ListItem","position":2,"name":title.split(' — ')[0].split(' | ')[0].trim(),"item":canon}]}) : null;
 ---
 <!DOCTYPE html>
 <html lang="en">
@@ -38,6 +40,7 @@ const webAppSchemaJson = JSON.stringify({"@context":"https://schema.org","@type"
   <link rel="dns-prefetch" href="https://www.google-analytics.com" />
   <slot name="head" />
   {!noWebAppSchema && <script type="application/ld+json" set:html={webAppSchemaJson} />}
+  {breadcrumbJson && <script type="application/ld+json" set:html={breadcrumbJson} />}
   <!-- Anti-FOUC: apply dark mode before paint -->
   <script is:inline>
     (function() {
@@ -128,6 +131,104 @@ const webAppSchemaJson = JSON.stringify({"@context":"https://schema.org","@type"
         var isDark = document.documentElement.classList.toggle('dark');
         localStorage.setItem('theme', isDark ? 'dark' : 'light');
         syncIcons();
+      });
+    })();
+  </script>
+
+  <!-- Exit-intent popup -->
+  <div id="ei-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:1000;align-items:center;justify-content:center;padding:16px">
+    <div style="background:#fff;border-radius:16px;max-width:480px;width:100%;padding:32px;position:relative;color:#111">
+      <button id="ei-close" aria-label="Close" style="position:absolute;top:12px;right:16px;background:none;border:none;font-size:22px;cursor:pointer;color:#888;line-height:1">×</button>
+      <div style="font-size:13px;font-weight:700;color:#2563eb;text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px">Free PDF Guide</div>
+      <h2 style="margin:0 0 8px;font-size:22px;font-weight:800;line-height:1.2">Wait — get the Shopify Hidden Fees Audit before you go</h2>
+      <p style="color:#555;margin:0 0 20px;font-size:14px">12-page guide: 5 hidden fees draining your margins, how to calculate each one, and exactly how to fix them. Free.</p>
+      <div id="ei-form-wrap">
+        <form id="ei-form" style="display:flex;gap:8px;flex-wrap:wrap">
+          <input id="ei-email" type="email" placeholder="your@email.com" required autocomplete="email"
+            style="flex:1;min-width:200px;border:1.5px solid #d1d5db;border-radius:8px;padding:10px 14px;font-size:14px;outline:none" />
+          <button type="submit"
+            style="background:#2563eb;color:#fff;font-weight:700;font-size:14px;border:none;border-radius:8px;padding:10px 20px;cursor:pointer;white-space:nowrap">
+            Send me the PDF
+          </button>
+        </form>
+        <p style="color:#9ca3af;font-size:11px;margin:8px 0 0">No spam. Unsubscribe any time.</p>
+      </div>
+      <div id="ei-success" style="display:none;text-align:center;padding:12px 0">
+        <div style="font-size:32px;margin-bottom:8px">🎉</div>
+        <p style="font-weight:700;margin:0 0 4px">Check your inbox!</p>
+        <p style="color:#555;font-size:13px;margin:0">The guide is on its way. Also available here: <a href="/shopify-hidden-fees-audit-download/" style="color:#2563eb">open PDF guide →</a></p>
+      </div>
+      <div id="ei-error" style="display:none;color:#dc2626;font-size:13px;margin-top:8px"></div>
+    </div>
+  </div>
+
+  <script is:inline>
+    (function() {
+      var TRIGGER_PATHS = ['/', '/shopify-profit-calculator/', '/shopify-hidden-fees-audit/'];
+      var path = window.location.pathname;
+      if (!TRIGGER_PATHS.includes(path)) return;
+      if (sessionStorage.getItem('ei_seen')) return;
+
+      var overlay = document.getElementById('ei-overlay');
+      var form = document.getElementById('ei-form');
+      var emailInput = document.getElementById('ei-email');
+      var success = document.getElementById('ei-success');
+      var error = document.getElementById('ei-error');
+      var triggered = false;
+
+      function show() {
+        if (triggered) return;
+        triggered = true;
+        sessionStorage.setItem('ei_seen', '1');
+        overlay.style.display = 'flex';
+      }
+
+      function hide() {
+        overlay.style.display = 'none';
+      }
+
+      document.getElementById('ei-close').addEventListener('click', hide);
+      overlay.addEventListener('click', function(e) { if (e.target === overlay) hide(); });
+
+      // Desktop: mouse leaves top 10% of viewport
+      document.addEventListener('mouseleave', function(e) {
+        if (e.clientY < window.innerHeight * 0.1) show();
+      });
+
+      // Mobile: scrolled past 70%
+      window.addEventListener('scroll', function() {
+        var scrolled = (window.scrollY + window.innerHeight) / document.documentElement.scrollHeight;
+        if (scrolled > 0.7) show();
+      }, { passive: true });
+
+      // 30s fallback for slow readers
+      setTimeout(show, 30000);
+
+      form.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        var email = emailInput.value.trim();
+        var btn = form.querySelector('button[type=submit]');
+        btn.disabled = true;
+        btn.textContent = 'Sending…';
+        error.style.display = 'none';
+        try {
+          var res = await fetch('/api/subscribe', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email: email, source: 'exit-intent-pdf', newsletter: true }),
+          });
+          if (res.ok) {
+            document.getElementById('ei-form-wrap').style.display = 'none';
+            success.style.display = 'block';
+          } else {
+            throw new Error('Server error');
+          }
+        } catch(err) {
+          error.textContent = 'Something went wrong. Try again.';
+          error.style.display = 'block';
+          btn.disabled = false;
+          btn.textContent = 'Send me the PDF';
+        }
       });
     })();
   </script>
