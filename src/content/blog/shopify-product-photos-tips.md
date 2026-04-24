@@ -6,6 +6,8 @@ description: "Master Shopify product photography with expert tips on cameras, li
 author: "Alex Morgan"
 tags: ["shopify product photos tips"]
 seoTitle: "Shopify Product Photos Tips: Drive Sales with Better Images"
+heroImage: "/images/shopify-product-photos-tips/hero.jpg"
+heroImageAlt: "Smartphone mounted on tripod with professional lighting setup photographing jewelry product"
 ---
 
 # Shopify Product Photos Tips That Drive More Sales
