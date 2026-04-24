@@ -4,3 +4,5 @@
 /shipping-calculator/ https://shopify-shipping-calc.com/shipping-calculator/ 301
 /shipping/* https://shopify-shipping-calc.com/shipping/:splat 301
 /china-shipping/* https://shopify-shipping-calc.com/china-shipping/:splat 301
+/free-shipping-threshold/ https://shopify-shipping-calc.com/free-shipping-threshold/ 301
+/free-shipping-threshold/* https://shopify-shipping-calc.com/free-shipping-threshold/:splat 301
