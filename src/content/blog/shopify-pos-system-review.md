@@ -6,6 +6,8 @@ description: "Honest Shopify POS review covering hardware, pricing, features & r
 author: "Alex Morgan"
 tags: ["shopify pos system review"]
 seoTitle: "Shopify POS System Review 2026 | Pros, Cons & Pricing"
+heroImage: "/images/shopify-pos-system-review/hero.jpg"
+heroImageAlt: "Retail employee processing customer payment on iPad with Shopify POS system in boutique store"
 ---
 
 # Shopify POS System Review 2026: Honest Pros & Cons
