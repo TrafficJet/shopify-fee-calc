@@ -6,6 +6,8 @@ description: "Master Shopify inventory management with built-in tools, multi-loc
 author: "Alex Morgan"
 tags: ["shopify inventory management"]
 seoTitle: "Shopify Inventory Management: Complete 2026 Guide | Shopify Fee Calc"
+heroImage: "/images/shopify-inventory-management/hero.jpg"
+heroImageAlt: "Organized warehouse shelves with labeled inventory boxes and stock organization"
 ---
 
 # Shopify Inventory Management: Complete 2026 Guide
