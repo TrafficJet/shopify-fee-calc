@@ -6,6 +6,8 @@ description: "Oberlo is gone. Find the best Shopify Oberlo alternatives in 2025â
 author: "Alex Morgan"
 tags: ["shopify oberlo alternative 2025"]
 seoTitle: "Best Shopify Oberlo Alternatives 2025 | Top Dropshipping Apps"
+heroImage: "/images/shopify-oberlo-alternative-2025/hero.jpg"
+heroImageAlt: "Dropshipping store owner managing products and suppliers on laptop dashboard"
 ---
 
 # Best Shopify Oberlo Alternatives in 2025
