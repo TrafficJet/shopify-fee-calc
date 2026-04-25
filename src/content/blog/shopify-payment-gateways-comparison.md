@@ -6,6 +6,8 @@ description: "Compare Shopify Payments, Stripe, PayPal & more. Real fee data, tr
 author: "Alex Morgan"
 tags: ["shopify payment gateways comparison"]
 seoTitle: "Shopify Payment Gateways Comparison 2026 | Best Rates & Fees"
+heroImage: "/images/shopify-payment-gateways-comparison/hero.jpg"
+heroImageAlt: "Laptop screen displaying payment gateway pricing comparison dashboard with transaction fee charts"
 ---
 
 # Shopify Payment Gateways Compared: Best Picks for 2026
