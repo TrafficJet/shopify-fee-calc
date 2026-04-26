@@ -6,6 +6,8 @@ description: "Study 25 real Shopify store examples across fashion, beauty, and f
 author: "Alex Morgan"
 tags: ["shopify examples"]
 seoTitle: "25 Best Shopify Store Examples to Inspire You in 2026"
+heroImage: "/images/shopify-examples/hero.jpg"
+heroImageAlt: "Shopify product page displayed on laptop showing ecommerce store design and layout"
 ---
 
 # 25 Best Shopify Store Examples to Inspire You in 2026
