@@ -6,6 +6,8 @@ description: "Master Shopify best practices for 2026: speed, SEO, checkout optim
 author: "Alex Morgan"
 tags: ["shopify best practices"]
 seoTitle: "Shopify Best Practices to Grow Your Store in 2026 | Shopify Fee Calc"
+heroImage: "/images/shopify-best-practices/hero.jpg"
+heroImageAlt: "Shopify admin dashboard displayed on laptop showing product listings and store analytics"
 ---
 
 # Shopify Best Practices to Grow Your Store in 2026
