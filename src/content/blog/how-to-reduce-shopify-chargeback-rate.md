@@ -6,6 +6,8 @@ description: "Cut your Shopify chargeback rate with 7 proven strategies. Learn f
 author: "Alex Morgan"
 tags: ["how to reduce shopify chargeback rate"]
 seoTitle: "How to Reduce Shopify Chargeback Rate: 7 Steps in 2026"
+heroImage: "/images/how-to-reduce-shopify-chargeback-rate/hero.jpg"
+heroImageAlt: "Shopify merchant reviewing payment disputes and chargeback data on laptop"
 ---
 
 # How to Reduce Your Shopify Chargeback Rate in 2026
