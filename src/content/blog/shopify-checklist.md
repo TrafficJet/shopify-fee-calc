@@ -6,6 +6,8 @@ description: "Complete Shopify checklist for store launch: setup, design, produc
 author: "Alex Morgan"
 tags: ["shopify checklist"]
 seoTitle: "Shopify Checklist: Launch Your Store Right in 2026"
+heroImage: "/images/shopify-checklist/hero.jpg"
+heroImageAlt: "Shopify admin dashboard showing store setup checklist on computer screen"
 ---
 
 # Shopify Checklist: Launch Your Store Right in 2026
