@@ -6,6 +6,8 @@ description: "Learn a data-driven ecommerce strategy covering customer acquisiti
 author: "Alex Morgan"
 tags: ["ecommerce strategy"]
 seoTitle: "Ecommerce Strategy Guide 2026 | Practical Revenue-Driven Plan"
+heroImage: "/images/ecommerce-strategy/hero.jpg"
+heroImageAlt: "Person analyzing ecommerce metrics and sales data on computer dashboard"
 ---
 
 # Ecommerce Strategy: A Practical Guide for 2026
