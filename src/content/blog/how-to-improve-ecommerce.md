@@ -6,6 +6,8 @@ description: "Proven tactics to boost ecommerce sales: audit your store, speed u
 author: "Alex Morgan"
 tags: ["how to improve ecommerce"]
 seoTitle: "How to Improve Ecommerce Sales in 2026 | Shopify Fee Calc"
+heroImage: "/images/how-to-improve-ecommerce/hero.jpg"
+heroImageAlt: "Person analyzing ecommerce analytics dashboard on laptop showing conversion funnel data"
 ---
 
 # How to Improve Ecommerce Sales in 2026
