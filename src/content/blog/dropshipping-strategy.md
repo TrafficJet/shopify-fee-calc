@@ -6,6 +6,8 @@ description: "Learn a proven dropshipping strategy to build profitable stores in
 author: "Alex Morgan"
 tags: ["dropshipping strategy"]
 seoTitle: "Dropshipping Strategy: Build Profitable Stores in 2026 | Shopify Fee Calc"
+heroImage: "/images/dropshipping-strategy/hero.jpg"
+heroImageAlt: "Entrepreneur analyzing dropshipping orders and supplier inventory on laptop"
 ---
 
 # Dropshipping Strategy: Build a Profitable Store in 2026
