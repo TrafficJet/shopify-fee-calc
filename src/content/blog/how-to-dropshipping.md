@@ -6,6 +6,8 @@ description: "Learn how to start dropshipping in 2026 with our complete step-by-
 author: "Alex Morgan"
 tags: ["how to dropshipping"]
 seoTitle: "How to Start Dropshipping in 2026: Step-by-Step Guide | Shopify Fee Calc"
+heroImage: "/images/how-to-dropshipping/hero.jpg"
+heroImageAlt: "Person managing online store orders and inventory on laptop screen"
 ---
 
 # How to Start Dropshipping in 2026 (Step-by-Step)
