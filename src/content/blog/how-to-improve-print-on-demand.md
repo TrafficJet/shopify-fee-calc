@@ -6,6 +6,8 @@ description: "Learn 12 proven strategies to improve your print on demand busines
 author: "Alex Morgan"
 tags: ["how to improve print on demand"]
 seoTitle: "How to Improve Print on Demand: 12 Tips | Shopify Fee Calc"
+heroImage: "/images/how-to-improve-print-on-demand/hero.jpg"
+heroImageAlt: "Designer reviewing high-resolution print-ready artwork on laptop for t-shirt print on demand production"
 ---
 
 # How to Improve Print on Demand: 12 Proven Tips
