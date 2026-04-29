@@ -6,6 +6,8 @@ description: "Learn how to start a print on demand business in 2026. Choose a PO
 author: "Alex Morgan"
 tags: ["how to print on demand"]
 seoTitle: "How to Print on Demand: Start Selling in 2026 | Shopify Fee Calc"
+heroImage: "/images/how-to-print-on-demand/hero.jpg"
+heroImageAlt: "T-shirt being printed with custom design on professional print on demand machine"
 ---
 
 # How to Print on Demand: Start Selling in 2026
