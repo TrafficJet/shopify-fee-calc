@@ -6,6 +6,8 @@ description: "Learn the 4-pillar online store strategy to attract customers, con
 author: "Alex Morgan"
 tags: ["online store strategy"]
 seoTitle: "Online Store Strategy: Build a Profitable Shop in 2026 | Shopify Fee Calc"
+heroImage: "/images/online-store-strategy/hero.jpg"
+heroImageAlt: "Ecommerce store owner reviewing sales analytics and inventory on laptop dashboard"
 ---
 
 # Online Store Strategy: Build a Profitable Shop in 2026
