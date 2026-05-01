@@ -6,6 +6,8 @@ description: "Learn how to start an online store in 2026 with this complete guid
 author: "Alex Morgan"
 tags: ["how to online store"]
 seoTitle: "How to Start an Online Store in 2026 | Step-by-Step Guide"
+heroImage: "/images/how-to-online-store/hero.jpg"
+heroImageAlt: "Laptop displaying an online store dashboard with product images and inventory management"
 ---
 
 # How to Start an Online Store in 2026 (Step-by-Step)
