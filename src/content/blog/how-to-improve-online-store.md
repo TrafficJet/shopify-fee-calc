@@ -6,6 +6,8 @@ description: "9 proven ways to improve online store conversions: speed optimizat
 author: "Alex Morgan"
 tags: ["how to improve online store"]
 seoTitle: "How to Improve Your Online Store in 2026 | Shopify Fee Calc"
+heroImage: "/images/how-to-improve-online-store/hero.jpg"
+heroImageAlt: "Ecommerce analytics dashboard displaying conversion rates and performance metrics on desktop monitor"
 ---
 
 # How to Improve Your Online Store in 2026
