@@ -6,6 +6,8 @@ description: "Fix conversion rates with 9 actionable Shopify improvements: speed
 author: "Alex Morgan"
 tags: ["how to improve shopify store"]
 seoTitle: "How to Improve Your Shopify Store in 2026 | Shopify Fee Calc"
+heroImage: "/images/how-to-improve-shopify-store/hero.jpg"
+heroImageAlt: "Shopify analytics dashboard displaying conversion rates and traffic metrics on laptop screen"
 ---
 
 # How to Improve Your Shopify Store in 2026
