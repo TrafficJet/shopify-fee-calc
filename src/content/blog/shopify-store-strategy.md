@@ -6,6 +6,8 @@ description: "Master Shopify store strategy with proven tactics for traffic, con
 author: "Alex Morgan"
 tags: ["shopify store strategy"]
 seoTitle: "Shopify Store Strategy: Complete Growth Guide for 2026"
+heroImage: "/images/shopify-store-strategy/hero.jpg"
+heroImageAlt: "Shopify dashboard displaying sales analytics, traffic metrics, and growth charts on a laptop screen"
 ---
 
 # Shopify Store Strategy: Grow Sales in 2026
