@@ -6,6 +6,8 @@ description: "Learn how to set up a Shopify store step-by-step in 2026. Choose a
 author: "Alex Morgan"
 tags: ["how to shopify store"]
 seoTitle: "How to Set Up a Shopify Store in 2026 | Complete Guide"
+heroImage: "/images/how-to-shopify-store/hero.jpg"
+heroImageAlt: "Shopify admin dashboard displayed on laptop screen showing store setup interface"
 ---
 
 # How to Set Up a Shopify Store in 2026
