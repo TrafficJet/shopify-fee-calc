@@ -6,6 +6,8 @@ description: "Learn how to build a Shopify app from scratch. Step-by-step guide 
 author: "Alex Morgan"
 tags: ["how to shopify app"]
 seoTitle: "How to Build a Shopify App in 2026 | Step-by-Step Guide"
+heroImage: "/images/how-to-shopify-app/hero.jpg"
+heroImageAlt: "Developer working on Shopify app development with dashboard visible on laptop screen"
 ---
 
 # How to Build a Shopify App in 2026 (Step-by-Step)
