@@ -6,6 +6,8 @@ description: "Learn 12 data-driven tactics to improve your Shopify app's perform
 author: "Alex Morgan"
 tags: ["how to improve shopify app"]
 seoTitle: "How to Improve Shopify App: 12 Proven Tactics | Shopify Fee Calc"
+heroImage: "/images/how-to-improve-shopify-app/hero.jpg"
+heroImageAlt: "Developer analyzing Shopify app performance metrics and installation trends on laptop screen"
 ---
 
 # How to Improve Your Shopify App: 12 Proven Tactics
