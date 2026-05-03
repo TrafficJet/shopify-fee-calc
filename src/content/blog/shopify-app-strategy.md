@@ -6,6 +6,8 @@ description: "Learn a practical Shopify app strategy to audit, select, and maint
 author: "Alex Morgan"
 tags: ["shopify app strategy"]
 seoTitle: "Shopify App Strategy: Build a Winning Stack in 2026"
+heroImage: "/images/shopify-app-strategy/hero.jpg"
+heroImageAlt: "Shopify admin interface showing apps section with multiple installed applications and monthly costs displayed"
 ---
 
 # Shopify App Strategy: Build a Winning Stack in 2026
