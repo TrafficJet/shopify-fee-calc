@@ -1,15 +1,56 @@
 ---
 import Base from '../layouts/Base.astro';
+
+const schema = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Shopify Fee & Profit Calculator",
+  "url": "https://shopify-fee-calc.com",
+  "applicationCategory": "BusinessApplication",
+  "operatingSystem": "Web",
+  "description": "8 free calculators to find hidden Shopify fees, calculate true profit margins, and compare plans. No signup required.",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+});
+
+const faqSchema = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What fees does Shopify charge that most sellers miss?",
+      "acceptedAnswer": { "@type": "Answer", "text": "The most commonly missed fees are the transaction fee (0.5–2% on orders when not using Shopify Payments), currency conversion markup (1.5%), chargeback handling fees ($15 per dispute), and third-party app costs that add up to $100–$400/month for most mid-size stores." }
+    },
+    {
+      "@type": "Question",
+      "name": "How is the Shopify profit calculator different from Shopify's own analytics?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Shopify Analytics shows revenue and basic gross profit. It doesn't subtract platform fees, app costs, marketing spend, or returns. The Real Profit Calculator builds a complete P&L so you see net profit, not just gross margin." }
+    },
+    {
+      "@type": "Question",
+      "name": "Are these calculators free? Do I need to create an account?",
+      "acceptedAnswer": { "@type": "Answer", "text": "All 8 calculators are completely free with no signup required. Your data is processed in your browser and is never stored or shared." }
+    },
+    {
+      "@type": "Question",
+      "name": "When should I upgrade from Basic to the Shopify plan?",
+      "acceptedAnswer": { "@type": "Answer", "text": "The break-even point is typically around $35,000–$40,000/month in revenue, where the lower transaction fee (1% → 0.5%) saves more than the $39 monthly plan upgrade." }
+    }
+  ]
+});
 ---
 <Base
-  title="Shopify Fee Calculator — Free Business Tools for Shopify Sellers 2026"
-  description="8 free calculators for Shopify sellers: profit & loss, fee audit, breakeven ROAS, plan comparison, payment processors, LTV:CAC, cart abandonment, and app cost auditor. No signup."
+  title="Shopify Fee & Profit Calculator — Find Hidden Costs, See True Margins (Free, 2026)"
+  description="Find hidden Shopify fees, calculate real profit margins, and compare plans in 30 seconds. 8 free calculators — no signup, no ads."
 >
+  <script type="application/ld+json" slot="head" set:html={schema} />
+  <script type="application/ld+json" slot="head" set:html={faqSchema} />
+
   <!-- Hero -->
   <section class="text-center py-10 border-b border-gray-100 dark:border-gray-800 mb-8">
-    <h1 class="text-4xl font-bold mb-3">Free Shopify Business Calculators</h1>
+    <h1 class="text-4xl font-bold mb-3">Shopify Fee & Profit Calculator</h1>
     <p class="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto mb-6">
-      8 professional tools to understand your true costs, optimize fees, and grow your Shopify store. No signup, no ads.
+      Find every hidden fee, calculate your true profit margin, and compare Shopify plans — in 30 seconds. No signup, no ads.
     </p>
     <div class="flex flex-wrap gap-3 justify-center">
       <a href="/shopify-profit-calculator/" class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-lg text-sm font-semibold transition">Calculate Your Profit →</a>
@@ -107,6 +148,74 @@ import Base from '../layouts/Base.astro';
       </a>
     </div>
   </div>
+
+  <!-- Why these calculators -->
+  <section class="mt-10 border-t border-gray-100 dark:border-gray-800 pt-8">
+    <h2 class="text-2xl font-bold mb-4">Why Shopify Sellers Need These Calculators</h2>
+    <p class="text-gray-600 dark:text-gray-400 mb-4">
+      Shopify's advertised fees are only part of the story. The platform charges transaction fees (0.5–2%) on every order if you don't use Shopify Payments, plus currency conversion fees, chargeback fees, and third-party app costs that compound each month. Most sellers don't know their true margins until they run the numbers.
+    </p>
+    <p class="text-gray-600 dark:text-gray-400 mb-4">
+      These calculators give you the complete picture: the <a href="/shopify-hidden-fees-audit/" class="text-blue-600 hover:underline">Hidden Fees Audit</a> surfaces every charge category most dashboards hide, while the <a href="/shopify-profit-calculator/" class="text-blue-600 hover:underline">Real Profit Calculator</a> builds a full monthly P&amp;L — revenue minus COGS, fees, marketing, apps, and returns — so you know exactly where every dollar goes.
+    </p>
+    <p class="text-gray-600 dark:text-gray-400">
+      Unlike generic spreadsheet templates, each tool uses 2026 Shopify rates and includes sensitivity tables, so you can model "what if I upgrade to Advanced?" or "what if ROAS drops to 1.5x?" before it happens.
+    </p>
+  </section>
+
+  <!-- How each calculator helps -->
+  <section class="mt-8">
+    <h2 class="text-2xl font-bold mb-5">How Each Calculator Helps You</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div class="p-4 border border-gray-200 dark:border-gray-700 rounded-lg">
+        <h3 class="font-semibold mb-1">Real Profit Calculator</h3>
+        <p class="text-sm text-gray-600 dark:text-gray-400">Full P&amp;L breakdown — revenue, COGS, Shopify fees, app costs, marketing, returns. Shows the exact percentage each cost category takes.</p>
+      </div>
+      <div class="p-4 border border-gray-200 dark:border-gray-700 rounded-lg">
+        <h3 class="font-semibold mb-1">Hidden Fees Audit</h3>
+        <p class="text-sm text-gray-600 dark:text-gray-400">5-step audit of every Shopify charge: transaction fees, currency conversion, chargeback reserve, app subscriptions, theme licensing.</p>
+      </div>
+      <div class="p-4 border border-gray-200 dark:border-gray-700 rounded-lg">
+        <h3 class="font-semibold mb-1">Breakeven ROAS Calculator</h3>
+        <p class="text-sm text-gray-600 dark:text-gray-400">Enter your margin and ad costs to find the minimum ROAS required to stay profitable — with per-channel breakdowns for Meta, Google, and TikTok.</p>
+      </div>
+      <div class="p-4 border border-gray-200 dark:border-gray-700 rounded-lg">
+        <h3 class="font-semibold mb-1">Plan Comparison Tool</h3>
+        <p class="text-sm text-gray-600 dark:text-gray-400">Compares Basic, Shopify, Advanced, and Plus at your revenue level. Shows exact monthly savings and the break-even point for upgrading.</p>
+      </div>
+      <div class="p-4 border border-gray-200 dark:border-gray-700 rounded-lg">
+        <h3 class="font-semibold mb-1">Payment Processor Comparison</h3>
+        <p class="text-sm text-gray-600 dark:text-gray-400">Shopify Payments vs Stripe vs PayPal — true total cost including the hidden Shopify transaction fee on third-party processors.</p>
+      </div>
+      <div class="p-4 border border-gray-200 dark:border-gray-700 rounded-lg">
+        <h3 class="font-semibold mb-1">App Stack Auditor</h3>
+        <p class="text-sm text-gray-600 dark:text-gray-400">30+ preset apps across 10 categories. See total monthly app spend vs revenue benchmarks and find what to cut or consolidate.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="mt-8 mb-4">
+    <h2 class="text-2xl font-bold mb-5">Frequently Asked Questions</h2>
+    <div class="space-y-4">
+      <details class="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+        <summary class="font-semibold cursor-pointer">What fees does Shopify charge that most sellers miss?</summary>
+        <p class="mt-3 text-sm text-gray-600 dark:text-gray-400">The most commonly missed fees are the transaction fee (0.5–2% on orders when not using Shopify Payments), currency conversion markup (1.5%), chargeback handling fees ($15 per dispute), and third-party app costs that add up to $100–$400/month for most mid-size stores.</p>
+      </details>
+      <details class="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+        <summary class="font-semibold cursor-pointer">How is the Shopify profit calculator different from Shopify's own analytics?</summary>
+        <p class="mt-3 text-sm text-gray-600 dark:text-gray-400">Shopify Analytics shows revenue and basic gross profit. It doesn't subtract platform fees, app costs, marketing spend, or returns. The Real Profit Calculator builds a complete P&amp;L so you see net profit, not just gross margin.</p>
+      </details>
+      <details class="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+        <summary class="font-semibold cursor-pointer">Are these calculators free? Do I need to create an account?</summary>
+        <p class="mt-3 text-sm text-gray-600 dark:text-gray-400">All 8 calculators are completely free with no signup required. Your data is processed in your browser and is never stored or shared.</p>
+      </details>
+      <details class="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+        <summary class="font-semibold cursor-pointer">When should I upgrade from Basic to the Shopify plan?</summary>
+        <p class="mt-3 text-sm text-gray-600 dark:text-gray-400">The break-even point is typically around $35,000–$40,000/month in revenue, where the lower transaction fee (1% → 0.5%) saves more than the $39 monthly plan upgrade. Use the <a href="/shopify-plan-comparison/" class="text-blue-600 hover:underline">Plan Comparison tool</a> with your actual numbers to find your exact threshold.</p>
+      </details>
+    </div>
+  </section>
 
   <!-- Trust bar -->
   <div class="mt-8 flex flex-wrap gap-6 justify-center text-sm text-gray-400 dark:text-gray-500 border-t border-gray-100 dark:border-gray-800 pt-6">
