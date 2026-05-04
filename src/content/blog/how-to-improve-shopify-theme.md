@@ -6,6 +6,8 @@ description: "Improve your Shopify theme for speed, mobile UX, and conversions. 
 author: "Alex Morgan"
 tags: ["how to improve shopify theme"]
 seoTitle: "How to Improve Shopify Theme: 2026 SEO & Speed Guide | Shopify Fee Calc"
+heroImage: "/images/how-to-improve-shopify-theme/hero.jpg"
+heroImageAlt: "Shopify theme customization dashboard displayed on laptop screen showing theme editor"
 ---
 
 # How to Improve Your Shopify Theme (2026 Guide)
