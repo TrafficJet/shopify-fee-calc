@@ -6,6 +6,8 @@ description: "Master Shopify theme selection, optimization & conversion tactics.
 author: "Alex Morgan"
 tags: ["shopify theme strategy"]
 seoTitle: "Shopify Theme Strategy: Pick & Optimize for Sales | Shopify Fee Calc"
+heroImage: "/images/shopify-theme-strategy/hero.jpg"
+heroImageAlt: "Shopify store admin dashboard displayed on laptop and tablet showing theme customization options"
 ---
 
 # Shopify Theme Strategy: Pick & Optimize for Sales
