@@ -6,6 +6,8 @@ description: "Learn how to enable Shopify Payments in 10-15 minutes. Step-by-ste
 author: "Alex Morgan"
 tags: ["how to shopify payments"]
 seoTitle: "How to Set Up Shopify Payments in 2026 | Shopify Fee Calc"
+heroImage: "/images/how-to-shopify-payments/hero.jpg"
+heroImageAlt: "Shopify Payments dashboard displaying payment methods and transaction settings on merchant account"
 ---
 
 # How to Set Up Shopify Payments in 2026
