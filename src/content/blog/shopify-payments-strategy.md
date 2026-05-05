@@ -6,6 +6,8 @@ description: "Complete Shopify Payments strategy guide: optimize fees, choose th
 author: "Alex Morgan"
 tags: ["shopify payments strategy"]
 seoTitle: "Shopify Payments Strategy: Maximize Revenue & Fees in 2026"
+heroImage: "/images/shopify-payments-strategy/hero.jpg"
+heroImageAlt: "Payment processing dashboard showing transaction metrics and revenue analytics on laptop"
 ---
 
 # Shopify Payments Strategy: Maximize Revenue in 2026
