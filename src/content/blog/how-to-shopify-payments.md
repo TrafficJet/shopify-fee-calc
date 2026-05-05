@@ -6,6 +6,8 @@ description: "Complete guide to setting up Shopify Payments. Learn activation st
 author: "Alex Morgan"
 tags: ["how to shopify payments"]
 seoTitle: "How to Set Up Shopify Payments | 2026 Guide"
+heroImage: "/images/how-to-shopify-payments/hero.jpg"
+heroImageAlt: "Shopify admin interface showing Payments settings configuration panel"
 ---
 
 # How to Set Up Shopify Payments (2026 Guide)
