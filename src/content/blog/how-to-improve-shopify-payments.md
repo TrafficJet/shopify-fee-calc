@@ -6,6 +6,8 @@ description: "Reduce payment declines, lower fees & boost conversions. 7 actiona
 author: "Vladislav T."
 tags: ["how to improve shopify payments"]
 seoTitle: "How to Improve Shopify Payments: 7 Proven Steps | Shopify Fee Calc"
+heroImage: "/images/how-to-improve-shopify-payments/hero.jpg"
+heroImageAlt: "Shopify merchant reviewing payment settings and transaction details in admin dashboard"
 ---
 
 # How to Improve Shopify Payments: 7 Proven Steps
