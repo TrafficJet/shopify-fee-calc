@@ -6,6 +6,8 @@ description: "Master your Shopify shipping strategy with 5 proven steps to reduc
 author: "Vladislav T."
 tags: ["shopify shipping strategy"]
 seoTitle: "Shopify Shipping Strategy: Cut Costs & Win Customers | Shopify Fee Calc"
+heroImage: "/images/shopify-shipping-strategy/hero.jpg"
+heroImageAlt: "Shopify Admin dashboard displaying shipping zones and carrier rates configuration"
 ---
 
 # Shopify Shipping Strategy: Cut Costs & Win Customers
