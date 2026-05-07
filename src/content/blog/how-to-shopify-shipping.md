@@ -6,6 +6,8 @@ description: "Learn how to set up Shopify shipping from origin address to printi
 author: "Vladislav T."
 tags: ["how to shopify shipping"]
 seoTitle: "How to Set Up Shopify Shipping: Complete 2026 Guide | Shopify Fee Calc"
+heroImage: "/images/how-to-shopify-shipping/hero.jpg"
+heroImageAlt: "Shopify admin dashboard displaying shipping label management interface with USPS and UPS carrier options"
 ---
 
 # How to Set Up Shopify Shipping (2026 Guide)
