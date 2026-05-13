@@ -6,6 +6,8 @@ description: "Reduce cart abandonment and shipping costs. Audit settings, choose
 author: "Vladislav T."
 tags: ["how to improve shopify shipping"]
 seoTitle: "How to Improve Shopify Shipping in 2026 | Shopify Fee Calc"
+heroImage: "/images/how-to-improve-shopify-shipping/hero.jpg"
+heroImageAlt: "Shopify admin dashboard showing shipping zones and carrier rates configuration"
 ---
 
 # How to Improve Shopify Shipping in 2026
