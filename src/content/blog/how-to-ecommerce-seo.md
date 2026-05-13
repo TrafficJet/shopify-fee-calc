@@ -6,6 +6,8 @@ description: "Learn ecommerce SEO in 2026. Master keyword research, optimize pro
 author: "Vladislav T."
 tags: ["how to ecommerce seo"]
 seoTitle: "How to Ecommerce SEO: 2026 Guide for Shopify & WooCommerce | Shopify Fee Calc"
+heroImage: "/images/how-to-ecommerce-seo/hero.jpg"
+heroImageAlt: "E-commerce product page displayed on laptop with analytics metrics visible"
 ---
 
 # How to Do Ecommerce SEO: A Practical 2026 Guide
