@@ -6,6 +6,8 @@ description: "Cut shipping costs and speed up fulfillment. Learn proven tactics 
 author: "Vladislav T."
 tags: ["how to improve shopify shipping"]
 seoTitle: "How to Improve Shopify Shipping: 2026 Guide | Shopify Fee Calc"
+heroImage: "/images/how-to-improve-shopify-shipping/hero.jpg"
+heroImageAlt: "Shopify admin panel open to shipping and delivery settings on computer screen"
 ---
 
 # How to Improve Shopify Shipping (2026 Guide)
