@@ -6,6 +6,8 @@ description: "Learn how to create product listings that convert on Amazon, Shopi
 author: "Vladislav T."
 tags: ["how to product listing"]
 seoTitle: "How to Create a Product Listing That Sells | Shopify Fee Calc"
+heroImage: "/images/how-to-product-listing/hero.jpg"
+heroImageAlt: "E-commerce product listing displayed on laptop screen with images, title, and price"
 ---
 
 # How to Create a Product Listing That Sells (2026)
