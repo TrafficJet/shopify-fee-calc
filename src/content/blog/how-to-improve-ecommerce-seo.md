@@ -6,6 +6,8 @@ description: "Master ecommerce SEO in 2026 with technical audits, product optimi
 author: "Vladislav T."
 tags: ["how to improve ecommerce seo"]
 seoTitle: "How to Improve Ecommerce SEO: 2026 Playbook | Shopify Fee Calc"
+heroImage: "/images/how-to-improve-ecommerce-seo/hero.jpg"
+heroImageAlt: "Ecommerce analytics dashboard displaying traffic metrics and conversion data on laptop screen"
 ---
 
 # How to Improve Ecommerce SEO: 2026 Playbook
