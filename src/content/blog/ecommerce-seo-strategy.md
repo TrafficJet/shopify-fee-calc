@@ -6,6 +6,8 @@ description: "Learn actionable ecommerce SEO strategy for 2026: keyword research
 author: "Vladislav T."
 tags: ["ecommerce seo strategy"]
 seoTitle: "Ecommerce SEO Strategy: 2026 Playbook | Shopify Fee Calc"
+heroImage: "/images/ecommerce-seo-strategy/hero.jpg"
+heroImageAlt: "Ecommerce manager analyzing product pages and SEO metrics on laptop dashboard"
 ---
 
 # Ecommerce SEO Strategy: 2026 Playbook
