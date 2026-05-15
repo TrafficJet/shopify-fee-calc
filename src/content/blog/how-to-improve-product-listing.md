@@ -6,6 +6,8 @@ description: "Learn how to optimize product titles, images, descriptions & bulle
 author: "Vladislav T."
 tags: ["how to improve product listing"]
 seoTitle: "How to Improve Product Listings That Drive More Sales | Shopify Fee Calc"
+heroImage: "/images/how-to-improve-product-listing/hero.jpg"
+heroImageAlt: "E-commerce seller optimizing product listing with images and description on laptop"
 ---
 
 # How to Improve Product Listings That Drive More Sales
