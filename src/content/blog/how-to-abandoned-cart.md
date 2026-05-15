@@ -6,6 +6,8 @@ description: "Learn proven tactics to recover abandoned carts: email sequences, 
 author: "Vladislav T."
 tags: ["how to abandoned cart"]
 seoTitle: "How to Recover Abandoned Carts & Reduce Loss | Shopify Fee Calc"
+heroImage: "/images/how-to-abandoned-cart/hero.jpg"
+heroImageAlt: "Abandoned shopping cart on laptop screen showing unpurchased items during online checkout"
 ---
 
 # How to Recover Abandoned Carts and Win Back Sales
